@@ -1,0 +1,119 @@
+﻿{
+  "base_url": "http://127.0.0.1:8000",
+  "cases": [
+    {
+      "id": "E01",
+      "name": "基础历史文化规划",
+      "type": "plan",
+      "request": {
+        "city": "北京",
+        "start_date": "2026-09-02",
+        "end_date": "2026-09-03",
+        "travel_days": 2,
+        "transportation": "公共交通",
+        "accommodation": "经济型酒店",
+        "preferences": ["历史文化", "博物馆"],
+        "food_preference": "本地特色",
+        "free_text_input": "希望以历史文化和博物馆为主，每天安排合理，不要太赶。"
+      },
+      "checks": {
+        "hard_constraints": true
+      }
+    },
+    {
+      "id": "E02",
+      "name": "预算约束与 Auto-Replan",
+      "type": "budget",
+      "max_budget": 800,
+      "request": {
+        "city": "北京",
+        "start_date": "2026-09-02",
+        "end_date": "2026-09-03",
+        "travel_days": 2,
+        "transportation": "公共交通",
+        "accommodation": "经济型酒店",
+        "preferences": ["历史文化"],
+        "food_preference": "本地特色",
+        "free_text_input": "总预算不超过800元，请严格控制费用。"
+      }
+    },
+    {
+      "id": "E03",
+      "name": "排除景点约束",
+      "type": "exclude",
+      "excluded_keyword": "环球影城",
+      "request": {
+        "city": "北京",
+        "start_date": "2026-09-02",
+        "end_date": "2026-09-03",
+        "travel_days": 2,
+        "transportation": "公共交通",
+        "accommodation": "经济型酒店",
+        "preferences": ["历史文化"],
+        "food_preference": "本地特色",
+        "free_text_input": "不要安排环球影城，主要游览历史文化景点。"
+      }
+    },
+    {
+      "id": "E04",
+      "name": "轻松节奏与每日景点上限",
+      "type": "daily_limit",
+      "max_attractions_per_day": 2,
+      "request": {
+        "city": "北京",
+        "start_date": "2026-09-02",
+        "end_date": "2026-09-03",
+        "travel_days": 2,
+        "transportation": "公共交通",
+        "accommodation": "经济型酒店",
+        "preferences": ["历史文化"],
+        "food_preference": "本地特色",
+        "free_text_input": "老人同行，希望轻松游，每天最多安排2个景点，不要赶行程。"
+      }
+    },
+    {
+      "id": "E05",
+      "name": "局部修改保持",
+      "type": "edit",
+      "request": {
+        "city": "北京",
+        "start_date": "2026-09-02",
+        "end_date": "2026-09-03",
+        "travel_days": 2,
+        "transportation": "公共交通",
+        "accommodation": "经济型酒店",
+        "preferences": ["历史文化"],
+        "food_preference": "本地特色",
+        "free_text_input": "安排两天经典历史文化行程。"
+      },
+      "feedback": "把第二天改成以颐和园为核心的轻松行程，第一天不要改。"
+    },
+    {
+      "id": "E06",
+      "name": "长期 User Memory Recall",
+      "type": "memory",
+      "seed_request": {
+        "city": "北京",
+        "start_date": "2026-09-02",
+        "end_date": "2026-09-03",
+        "travel_days": 2,
+        "transportation": "公共交通",
+        "accommodation": "经济型酒店",
+        "preferences": ["博物馆", "历史文化"],
+        "food_preference": "本地特色",
+        "free_text_input": "喜欢博物馆和历史文化。"
+      },
+      "recall_request": {
+        "city": "北京",
+        "start_date": "2026-09-04",
+        "end_date": "2026-09-05",
+        "travel_days": 2,
+        "transportation": "",
+        "accommodation": "",
+        "preferences": [],
+        "food_preference": "无特殊要求",
+        "free_text_input": ""
+      }
+    }
+  ]
+}

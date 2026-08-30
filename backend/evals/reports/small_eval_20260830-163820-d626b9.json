@@ -1,0 +1,3313 @@
+{
+  "summary": {
+    "run_id": "20260830-163820-d626b9",
+    "created_at": "2026-08-30T16:45:46.976307",
+    "total_cases": 6,
+    "passed_cases": 6,
+    "failed_cases": 0,
+    "pass_rate": 100.0,
+    "core_regression_tests": {
+      "passed": 12,
+      "total": 12
+    },
+    "cases": [
+      {
+        "id": "E01",
+        "name": "基础历史文化规划",
+        "passed": true,
+        "metrics": {
+          "success": true,
+          "status": "completed",
+          "hard_violation_count": 0,
+          "revision_count": 0,
+          "plan_version": 0
+        }
+      },
+      {
+        "id": "E02",
+        "name": "预算约束与 Auto-Replan",
+        "passed": true,
+        "metrics": {
+          "final_budget": 765,
+          "max_budget": 800,
+          "budget_pass": true,
+          "revision_count": 0,
+          "auto_replan_triggered": false,
+          "hard_violation_count": 0
+        }
+      },
+      {
+        "id": "E03",
+        "name": "排除景点约束",
+        "passed": true,
+        "metrics": {
+          "excluded_keyword": "环球影城",
+          "excluded_absent": true,
+          "attractions": [
+            "故宫博物院",
+            "史家胡同博物馆",
+            "北京警察博物馆",
+            "八达岭长城"
+          ],
+          "hard_violation_count": 0
+        }
+      },
+      {
+        "id": "E04",
+        "name": "轻松节奏与每日景点上限",
+        "passed": true,
+        "metrics": {
+          "daily_counts": [
+            {
+              "day_index": 0,
+              "count": 2
+            },
+            {
+              "day_index": 1,
+              "count": 1
+            }
+          ],
+          "max_attractions_per_day": 2,
+          "daily_limit_pass": true,
+          "hard_violation_count": 0
+        }
+      },
+      {
+        "id": "E05",
+        "name": "局部修改保持",
+        "passed": true,
+        "metrics": {
+          "day1_preserved": true,
+          "day2_changed": true,
+          "version_before": 0,
+          "version_after": 1,
+          "version_increment_pass": true,
+          "revision_count": 1,
+          "hard_violation_count": 0
+        }
+      },
+      {
+        "id": "E06",
+        "name": "长期 User Memory Recall",
+        "passed": true,
+        "metrics": {
+          "memory_profile_present": true,
+          "recalled_transportation": "公共交通",
+          "recalled_accommodation": "经济型酒店",
+          "recalled_food": "本地特色",
+          "recalled_preferences": [
+            "博物馆",
+            "历史文化"
+          ],
+          "transport_pass": true,
+          "accommodation_pass": true,
+          "food_pass": true,
+          "preference_pass": true
+        }
+      }
+    ]
+  },
+  "results": [
+    {
+      "id": "E01",
+      "name": "基础历史文化规划",
+      "type": "plan",
+      "user_id": "eval-20260830-163820-d626b9-e01",
+      "passed": true,
+      "metrics": {
+        "success": true,
+        "status": "completed",
+        "hard_violation_count": 0,
+        "revision_count": 0,
+        "plan_version": 0
+      },
+      "response": {
+        "success": true,
+        "status": "completed",
+        "message": "旅行计划已完成",
+        "thread_id": "trip-06649e973214",
+        "data": {
+          "city": "北京",
+          "start_date": "2026-09-02",
+          "end_date": "2026-09-03",
+          "days": [
+            {
+              "date": "2026-09-02",
+              "day_index": 0,
+              "description": "第1天：游览故宫博物院、史家胡同博物馆和中国国家博物馆，感受北京深厚的历史文化底蕴。上午参观故宫，中午在故宫周边品尝北京烤鸭，下午游览史家胡同博物馆和中国国家博物馆。",
+              "transportation": "公共交通（地铁+公交）",
+              "accommodation": "经济型酒店",
+              "hotel": {
+                "name": "wohkoon者行孙酒店(北京国贸百子湾地铁站店)",
+                "address": "百子湾南三路百子湾东里403号楼2层201",
+                "location": {
+                  "longitude": 116.4907,
+                  "latitude": 39.8915
+                },
+                "price_range": "200-400元",
+                "rating": "4.3",
+                "distance": "距离故宫约8公里",
+                "type": "经济型酒店",
+                "estimated_cost": 300
+              },
+              "attractions": [
+                {
+                  "name": "故宫博物院",
+                  "address": "景山前街4号",
+                  "location": {
+                    "longitude": 116.3974,
+                    "latitude": 39.9165
+                  },
+                  "visit_duration": 240,
+                  "description": "故宫博物院是中国最大的古代文化艺术博物馆，位于北京中轴线的中心，是明清两代的皇家宫殿，世界文化遗产。",
+                  "category": "博物馆",
+                  "rating": 4.9,
+                  "photos": [],
+                  "poi_id": "",
+                  "image_url": null,
+                  "ticket_price": 60
+                },
+                {
+                  "name": "史家胡同博物馆",
+                  "address": "朝阳门街道东四南大街史家胡同24号",
+                  "location": {
+                    "longitude": 116.4205,
+                    "latitude": 39.9245
+                  },
+                  "visit_duration": 90,
+                  "description": "史家胡同博物馆位于北京东城区史家胡同内，展示老北京胡同文化和历史变迁，是了解北京传统民居文化的绝佳去处。",
+                  "category": "博物馆",
+                  "rating": 4.5,
+                  "photos": [],
+                  "poi_id": "",
+                  "image_url": null,
+                  "ticket_price": 0
+                },
+                {
+                  "name": "中国国家博物馆",
+                  "address": "东长安街16号天安门广场东侧",
+                  "location": {
+                    "longitude": 116.4035,
+                    "latitude": 39.9047
+                  },
+                  "visit_duration": 180,
+                  "description": "中国国家博物馆是集收藏、展览、研究、考古、公共教育、文化交流于一体的综合性国家博物馆，馆藏丰富，是了解中华文明的重要窗口。",
+                  "category": "博物馆",
+                  "rating": 4.8,
+                  "photos": [],
+                  "poi_id": "",
+                  "image_url": null,
+                  "ticket_price": 0
+                }
+              ],
+              "meals": [
+                {
+                  "type": "breakfast",
+                  "name": "方砖厂69号炸酱面(王府世纪店)",
+                  "address": "东安门大街55号王府世纪一层108室",
+                  "location": {
+                    "longitude": 116.4107,
+                    "latitude": 39.9165
+                  },
+                  "description": "北京地道炸酱面，早餐来一碗热腾腾的老北京炸酱面，开启美好的一天。",
+                  "cuisine": "北京菜",
+                  "rating": 4.5,
+                  "avg_cost": 40,
+                  "distance": "距离故宫约1公里",
+                  "poi_id": null,
+                  "source": "nearby",
+                  "estimated_cost": 30
+                },
+                {
+                  "type": "lunch",
+                  "name": "四季民福烤鸭店(故宫店)",
+                  "address": "南池子大街11号故宫东门旁",
+                  "location": {
+                    "longitude": 116.4012,
+                    "latitude": 39.916
+                  },
+                  "description": "北京知名烤鸭店，位于故宫东门旁，游览故宫后品尝正宗北京烤鸭，位置便利。",
+                  "cuisine": "北京菜",
+                  "rating": 4.7,
+                  "avg_cost": 150,
+                  "distance": "距离故宫约500米",
+                  "poi_id": null,
+                  "source": "nearby",
+                  "estimated_cost": 100
+                },
+                {
+                  "type": "dinner",
+                  "name": "全聚德(前门店)",
+                  "address": "前门大街30号",
+                  "location": {
+                    "longitude": 116.398,
+                    "latitude": 39.899
+                  },
+                  "description": "全聚德是北京烤鸭的百年老字号，前门店是其最著名的门店之一，品尝正宗挂炉烤鸭。",
+                  "cuisine": "北京菜",
+                  "rating": 4.6,
+                  "avg_cost": 180,
+                  "distance": "距离国家博物馆约1.5公里",
+                  "poi_id": null,
+                  "source": "popular",
+                  "estimated_cost": 120
+                }
+              ],
+              "route_segments": [
+                {
+                  "from_name": "酒店",
+                  "to_name": "故宫博物院",
+                  "distance": "8.0公里",
+                  "duration": "40分钟",
+                  "mode": "地铁",
+                  "detail": "从百子湾地铁站乘坐地铁7号线至磁器口站，换乘地铁5号线至天安门东站，步行约5分钟到达故宫"
+                },
+                {
+                  "from_name": "故宫博物院",
+                  "to_name": "史家胡同博物馆",
+                  "distance": "2.2公里",
+                  "duration": "30分钟",
+                  "mode": "公交",
+                  "detail": "从故宫神武门出，步行至神武门公交站，乘坐109路或101路至东四路口东站，步行约200米到达史家胡同博物馆"
+                },
+                {
+                  "from_name": "史家胡同博物馆",
+                  "to_name": "中国国家博物馆",
+                  "distance": "2.6公里",
+                  "duration": "25分钟",
+                  "mode": "地铁",
+                  "detail": "步行至东四地铁站，乘坐地铁5号线至东单站，换乘地铁1号线至天安门东站，步行约500米到达中国国家博物馆"
+                },
+                {
+                  "from_name": "中国国家博物馆",
+                  "to_name": "酒店",
+                  "distance": "8.5公里",
+                  "duration": "45分钟",
+                  "mode": "地铁",
+                  "detail": "从天安门东站乘坐地铁1号线至国贸站，换乘地铁7号线至百子湾站，步行约300米到达酒店"
+                }
+              ]
+            },
+            {
+              "date": "2026-09-03",
+              "day_index": 1,
+              "description": "第2天：前往八达岭长城，感受世界文化遗产的雄伟壮观。全天游览长城，体验登城远眺的壮丽景色。",
+              "transportation": "公共交通（地铁+公交）",
+              "accommodation": "经济型酒店",
+              "hotel": {
+                "name": "wohkoon者行孙酒店(北京国贸百子湾地铁站店)",
+                "address": "百子湾南三路百子湾东里403号楼2层201",
+                "location": {
+                  "longitude": 116.4907,
+                  "latitude": 39.8915
+                },
+                "price_range": "200-400元",
+                "rating": "4.3",
+                "distance": "距离八达岭长城约60公里",
+                "type": "经济型酒店",
+                "estimated_cost": 300
+              },
+              "attractions": [
+                {
+                  "name": "八达岭长城",
+                  "address": "G6京藏高速58号出口",
+                  "location": {
+                    "longitude": 115.9405,
+                    "latitude": 40.3605
+                  },
+                  "visit_duration": 360,
+                  "description": "八达岭长城是明长城中保存最好、最具代表性的一段，位于北京市延庆区，是万里长城的精华所在，世界文化遗产。",
+                  "category": "历史古迹",
+                  "rating": 4.8,
+                  "photos": [],
+                  "poi_id": "",
+                  "image_url": null,
+                  "ticket_price": 40
+                }
+              ],
+              "meals": [
+                {
+                  "type": "breakfast",
+                  "name": "方砖厂69号炸酱面(王府世纪店)",
+                  "address": "东安门大街55号王府世纪一层108室",
+                  "location": {
+                    "longitude": 116.4107,
+                    "latitude": 39.9165
+                  },
+                  "description": "出发前享用一碗地道的老北京炸酱面，为登长城补充能量。",
+                  "cuisine": "北京菜",
+                  "rating": 4.5,
+                  "avg_cost": 40,
+                  "distance": "距离酒店约8公里",
+                  "poi_id": null,
+                  "source": "nearby",
+                  "estimated_cost": 30
+                },
+                {
+                  "type": "lunch",
+                  "name": "紫光园·烤鸭·北京菜(前门大栅栏店)",
+                  "address": "大栅栏商业街31号",
+                  "location": {
+                    "longitude": 116.397,
+                    "latitude": 39.898
+                  },
+                  "description": "游览长城后返回市区，品尝紫光园的北京烤鸭和京味菜肴，感受老北京风味。",
+                  "cuisine": "北京菜",
+                  "rating": 4.5,
+                  "avg_cost": 100,
+                  "distance": "距离八达岭长城约60公里",
+                  "poi_id": null,
+                  "source": "nearby",
+                  "estimated_cost": 80
+                },
+                {
+                  "type": "dinner",
+                  "name": "花家怡园(四合院总店)",
+                  "address": "东直门内大街235号",
+                  "location": {
+                    "longitude": 116.42,
+                    "latitude": 39.94
+                  },
+                  "description": "花家怡园是北京著名的四合院餐厅，在传统四合院中品尝精致京菜，为旅程画上完美句号。",
+                  "cuisine": "北京菜",
+                  "rating": 4.6,
+                  "avg_cost": 150,
+                  "distance": "距离酒店约10公里",
+                  "poi_id": null,
+                  "source": "popular",
+                  "estimated_cost": 100
+                }
+              ],
+              "route_segments": [
+                {
+                  "from_name": "酒店",
+                  "to_name": "八达岭长城",
+                  "distance": "60公里",
+                  "duration": "2小时",
+                  "mode": "地铁+公交",
+                  "detail": "从百子湾站乘坐地铁7号线至磁器口站，换乘地铁5号线至北土城站，换乘919路公交至八达岭站，步行约1公里到达八达岭长城"
+                },
+                {
+                  "from_name": "八达岭长城",
+                  "to_name": "酒店",
+                  "distance": "60公里",
+                  "duration": "2小时",
+                  "mode": "公交+地铁",
+                  "detail": "从八达岭站乘坐919路公交至北土城站，换乘地铁5号线至磁器口站，换乘地铁7号线至百子湾站，步行约300米到达酒店"
+                }
+              ]
+            }
+          ],
+          "weather_info": [
+            {
+              "date": "2026-09-02",
+              "day_weather": "晴",
+              "night_weather": "晴",
+              "day_temp": 30,
+              "night_temp": 18,
+              "wind_direction": "南",
+              "wind_power": "1-3"
+            },
+            {
+              "date": "2026-09-03",
+              "day_weather": "待查询",
+              "night_weather": "待查询",
+              "day_temp": null,
+              "night_temp": null,
+              "wind_direction": "待查询",
+              "wind_power": "待查询"
+            }
+          ],
+          "overall_suggestions": "本次北京2日游以历史文化与博物馆为主题。第1天游览故宫博物院、史家胡同博物馆和中国国家博物馆，感受北京深厚的历史文化底蕴；第2天前往八达岭长城，体验世界文化遗产的雄伟壮观。行程节奏轻松，每天安排合理，预留充足休息时间。出行建议：1. 故宫和国家博物馆需提前预约门票；2. 八达岭长城距离市区较远，建议早起出发；3. 北京地铁网络发达，建议购买交通卡或使用手机扫码乘车；4. 品尝北京烤鸭和炸酱面等本地特色美食。天气方面：已获取的可信天气预报显示：9月2日白天晴，约30℃，夜间晴，约18℃，南风1-3级；9月2日白天气温较高，建议注意防晒补水；9月3日暂无可信天气预报，建议出发前3天重新查询天气。 预算方面：当前估算总预算约1360元。",
+          "budget": {
+            "total_attractions": 100,
+            "total_hotels": 600,
+            "total_meals": 460,
+            "total_transportation": 200,
+            "total": 1360
+          }
+        },
+        "interrupt": null,
+        "constraints": {
+          "max_budget": null,
+          "max_attractions_per_day": null,
+          "excluded_keywords": [],
+          "must_include_keywords": [],
+          "elderly_friendly": false,
+          "relaxed_pace": true,
+          "hard_notes": []
+        },
+        "violations": [],
+        "revision_count": 0,
+        "plan_version": 0,
+        "supervisor": {
+          "workers": [
+            "poi",
+            "weather",
+            "hotel",
+            "food",
+            "route"
+          ],
+          "routing_reason": "用户要求2天北京历史文化与博物馆主题行程，需景点检索、天气、住宿、餐饮及交通路线规划，且要求节奏放松，需完整链路支持。"
+        }
+      },
+      "elapsed_seconds": 54.55
+    },
+    {
+      "id": "E02",
+      "name": "预算约束与 Auto-Replan",
+      "type": "budget",
+      "user_id": "eval-20260830-163820-d626b9-e02",
+      "passed": true,
+      "metrics": {
+        "final_budget": 765,
+        "max_budget": 800,
+        "budget_pass": true,
+        "revision_count": 0,
+        "auto_replan_triggered": false,
+        "hard_violation_count": 0
+      },
+      "response": {
+        "success": true,
+        "status": "completed",
+        "message": "旅行计划已完成",
+        "thread_id": "trip-eeafb43809d6",
+        "data": {
+          "city": "北京",
+          "start_date": "2026-09-02",
+          "end_date": "2026-09-03",
+          "days": [
+            {
+              "date": "2026-09-02",
+              "day_index": 0,
+              "description": "第1天游览故宫博物院、史家胡同博物馆和中国国家博物馆，感受北京的历史文化与皇家气派。上午参观故宫，中午在附近品尝北京烤鸭，下午游览史家胡同博物馆和国家博物馆，晚上品尝老北京特色美食。",
+              "transportation": "公共交通（地铁+公交）",
+              "accommodation": "经济型酒店",
+              "hotel": {
+                "name": "wohkoon者行孙酒店(北京国贸百子湾地铁站店)",
+                "address": "百子湾南三路百子湾东里403号楼2层201",
+                "location": {
+                  "longitude": 116.49,
+                  "latitude": 39.89
+                },
+                "price_range": "150-250元",
+                "rating": "4.3",
+                "distance": "距离故宫约8公里",
+                "type": "经济型酒店",
+                "estimated_cost": 150
+              },
+              "attractions": [
+                {
+                  "name": "故宫博物院",
+                  "address": "景山前街4号",
+                  "location": {
+                    "longitude": 116.3974,
+                    "latitude": 39.9165
+                  },
+                  "visit_duration": 180,
+                  "description": "故宫博物院是中国最大的古代文化艺术博物馆，位于北京中轴线的中心，是明清两代的皇家宫殿，旧称紫禁城。拥有丰富的历史文物和宏伟的建筑群。",
+                  "category": "博物馆",
+                  "rating": 4.9,
+                  "photos": [],
+                  "poi_id": "",
+                  "image_url": null,
+                  "ticket_price": 60
+                },
+                {
+                  "name": "史家胡同博物馆",
+                  "address": "朝阳门街道东四南大街史家胡同24号",
+                  "location": {
+                    "longitude": 116.4205,
+                    "latitude": 39.9255
+                  },
+                  "visit_duration": 90,
+                  "description": "史家胡同博物馆位于北京东城区史家胡同内，展示老北京胡同文化和历史风貌，是了解北京传统生活方式的绝佳场所。",
+                  "category": "博物馆",
+                  "rating": 4.5,
+                  "photos": [],
+                  "poi_id": "",
+                  "image_url": null,
+                  "ticket_price": 0
+                },
+                {
+                  "name": "中国国家博物馆",
+                  "address": "东长安街16号天安门广场东侧",
+                  "location": {
+                    "longitude": 116.4035,
+                    "latitude": 39.9075
+                  },
+                  "visit_duration": 120,
+                  "description": "中国国家博物馆是中华文化的祠堂和祖庙，位于天安门广场东侧，收藏了大量珍贵文物，是了解中国历史文化的必访之地。",
+                  "category": "博物馆",
+                  "rating": 4.8,
+                  "photos": [],
+                  "poi_id": "",
+                  "image_url": null,
+                  "ticket_price": 0
+                }
+              ],
+              "meals": [
+                {
+                  "type": "breakfast",
+                  "name": "老北京炸酱面(南池子大街店)",
+                  "address": "南池子大街120号(天安门东地铁站B东北口步行420米)",
+                  "location": {
+                    "longitude": 116.398,
+                    "latitude": 39.915
+                  },
+                  "description": "位于故宫附近的老北京炸酱面馆，地道的老北京风味，早餐来一碗热腾腾的炸酱面开启美好一天。",
+                  "cuisine": "本地菜",
+                  "rating": 4.3,
+                  "avg_cost": 25,
+                  "distance": "距离故宫500米",
+                  "poi_id": null,
+                  "source": "nearby",
+                  "estimated_cost": 20
+                },
+                {
+                  "type": "lunch",
+                  "name": "四季民福烤鸭店(故宫店)",
+                  "address": "南池子大街11号故宫东门旁",
+                  "location": {
+                    "longitude": 116.399,
+                    "latitude": 39.917
+                  },
+                  "description": "位于故宫东门旁的知名烤鸭店，可以边品尝正宗北京烤鸭边欣赏故宫美景，是午餐的绝佳选择。",
+                  "cuisine": "北京菜",
+                  "rating": 4.6,
+                  "avg_cost": 80,
+                  "distance": "距离故宫200米",
+                  "poi_id": null,
+                  "source": "nearby",
+                  "estimated_cost": 50
+                },
+                {
+                  "type": "dinner",
+                  "name": "紫光园·烤鸭·北京菜(王府井店)",
+                  "address": "北京城区王府井大街99号世纪大厦F1层",
+                  "location": {
+                    "longitude": 116.411,
+                    "latitude": 39.909
+                  },
+                  "description": "王府井商圈的知名北京菜餐厅，提供正宗烤鸭和各类京味美食，晚餐后可在王府井逛街。",
+                  "cuisine": "北京菜",
+                  "rating": 4.5,
+                  "avg_cost": 70,
+                  "distance": "距离国家博物馆约1公里",
+                  "poi_id": null,
+                  "source": "popular",
+                  "estimated_cost": 50
+                }
+              ],
+              "route_segments": [
+                {
+                  "from_name": "酒店",
+                  "to_name": "故宫博物院",
+                  "distance": "8.0公里",
+                  "duration": "40分钟",
+                  "mode": "地铁",
+                  "detail": "从百子湾地铁站乘坐地铁7号线至磁器口站换乘5号线至天安门东站，B口出步行约5分钟到达故宫"
+                },
+                {
+                  "from_name": "故宫博物院",
+                  "to_name": "史家胡同博物馆",
+                  "distance": "2.2公里",
+                  "duration": "30分钟",
+                  "mode": "公交",
+                  "detail": "从故宫神武门出，乘坐109路或101路公交至东四路口东站，步行约400米到达史家胡同博物馆"
+                },
+                {
+                  "from_name": "史家胡同博物馆",
+                  "to_name": "中国国家博物馆",
+                  "distance": "2.5公里",
+                  "duration": "25分钟",
+                  "mode": "地铁",
+                  "detail": "从东四站乘坐地铁5号线至东单站，换乘1号线至天安门东站，C东南口出步行约300米到达国家博物馆"
+                },
+                {
+                  "from_name": "中国国家博物馆",
+                  "to_name": "酒店",
+                  "distance": "8.5公里",
+                  "duration": "45分钟",
+                  "mode": "地铁",
+                  "detail": "从天安门东站乘坐地铁1号线至国贸站，换乘7号线至百子湾站，步行约500米到达酒店"
+                }
+              ]
+            },
+            {
+              "date": "2026-09-03",
+              "day_index": 1,
+              "description": "第2天前往八达岭长城，体验世界文化遗产的雄伟壮观。全天游览长城，感受中华民族的伟大历史。",
+              "transportation": "公共交通（地铁+公交）",
+              "accommodation": "经济型酒店",
+              "hotel": {
+                "name": "wohkoon者行孙酒店(北京国贸百子湾地铁站店)",
+                "address": "百子湾南三路百子湾东里403号楼2层201",
+                "location": {
+                  "longitude": 116.49,
+                  "latitude": 39.89
+                },
+                "price_range": "150-250元",
+                "rating": "4.3",
+                "distance": "距离八达岭长城约60公里",
+                "type": "经济型酒店",
+                "estimated_cost": 150
+              },
+              "attractions": [
+                {
+                  "name": "八达岭长城",
+                  "address": "G6京藏高速58号出口",
+                  "location": {
+                    "longitude": 115.9955,
+                    "latitude": 40.3555
+                  },
+                  "visit_duration": 300,
+                  "description": "八达岭长城是明长城中保存最好、最具代表性的一段，位于北京市延庆区，是万里长城的精华所在，被誉为\"天下九塞\"之一。",
+                  "category": "历史遗迹",
+                  "rating": 4.8,
+                  "photos": [],
+                  "poi_id": "",
+                  "image_url": null,
+                  "ticket_price": 40
+                }
+              ],
+              "meals": [
+                {
+                  "type": "breakfast",
+                  "name": "老北京炸酱面(南池子大街店)",
+                  "address": "南池子大街120号(天安门东地铁站B东北口步行420米)",
+                  "location": {
+                    "longitude": 116.398,
+                    "latitude": 39.915
+                  },
+                  "description": "出发前在酒店附近享用地道的老北京炸酱面早餐，补充能量准备登长城。",
+                  "cuisine": "本地菜",
+                  "rating": 4.3,
+                  "avg_cost": 25,
+                  "distance": "距离酒店约8公里",
+                  "poi_id": null,
+                  "source": "nearby",
+                  "estimated_cost": 20
+                },
+                {
+                  "type": "lunch",
+                  "name": "老北京驴打滚",
+                  "address": "南池子大街与北湾子胡同交叉口西南20米",
+                  "location": {
+                    "longitude": 116.398,
+                    "latitude": 39.914
+                  },
+                  "description": "在长城游览途中品尝老北京传统小吃驴打滚，方便携带，补充体力。",
+                  "cuisine": "本地小吃",
+                  "rating": 4.2,
+                  "avg_cost": 20,
+                  "distance": "距离八达岭长城约60公里",
+                  "poi_id": null,
+                  "source": "nearby",
+                  "estimated_cost": 15
+                },
+                {
+                  "type": "dinner",
+                  "name": "全聚德(前门店)",
+                  "address": "前门大街30号",
+                  "location": {
+                    "longitude": 116.398,
+                    "latitude": 39.899
+                  },
+                  "description": "百年老字号全聚德烤鸭店，品尝最正宗的北京烤鸭，为旅程画上完美句号。",
+                  "cuisine": "北京菜",
+                  "rating": 4.6,
+                  "avg_cost": 80,
+                  "distance": "距离酒店约10公里",
+                  "poi_id": null,
+                  "source": "popular",
+                  "estimated_cost": 60
+                }
+              ],
+              "route_segments": [
+                {
+                  "from_name": "酒店",
+                  "to_name": "八达岭长城",
+                  "distance": "60公里",
+                  "duration": "2小时",
+                  "mode": "地铁+公交",
+                  "detail": "从百子湾站乘坐地铁7号线至磁器口站换乘5号线至北土城站，F西北口出，乘坐919路公交至八达岭站，步行约1.5公里到达长城入口"
+                },
+                {
+                  "from_name": "八达岭长城",
+                  "to_name": "酒店",
+                  "distance": "60公里",
+                  "duration": "2小时",
+                  "mode": "公交+地铁",
+                  "detail": "从八达岭站乘坐919路公交返回地铁北土城站，换乘地铁5号线至磁器口站换乘7号线至百子湾站，步行约500米到达酒店"
+                }
+              ]
+            }
+          ],
+          "weather_info": [
+            {
+              "date": "2026-09-02",
+              "day_weather": "晴",
+              "night_weather": "晴",
+              "day_temp": 30,
+              "night_temp": 18,
+              "wind_direction": "南",
+              "wind_power": "1-3"
+            },
+            {
+              "date": "2026-09-03",
+              "day_weather": "待查询",
+              "night_weather": "待查询",
+              "day_temp": null,
+              "night_temp": null,
+              "wind_direction": "待查询",
+              "wind_power": "待查询"
+            }
+          ],
+          "overall_suggestions": "前往八达岭长城路程较远，建议早起出发，携带充足的水和干粮。故宫和国家博物馆需要提前预约门票。所有景点和餐厅建议提前确认开放时间和预约要求。天气方面：已获取的可信天气预报显示：9月2日白天晴，约30℃，夜间晴，约18℃，南风1-3级；9月2日白天气温较高，建议注意防晒补水；9月3日暂无可信天气预报，建议出发前3天重新查询天气。 预算方面：当前估算总预算约765元，未超过预算上限800元。",
+          "budget": {
+            "total_attractions": 100,
+            "total_hotels": 300,
+            "total_meals": 215,
+            "total_transportation": 150,
+            "total": 765
+          }
+        },
+        "interrupt": null,
+        "constraints": {
+          "max_budget": 800,
+          "max_attractions_per_day": null,
+          "excluded_keywords": [],
+          "must_include_keywords": [],
+          "elderly_friendly": false,
+          "relaxed_pace": false,
+          "hard_notes": [
+            "请严格控制费用"
+          ]
+        },
+        "violations": [],
+        "revision_count": 0,
+        "plan_version": 0,
+        "supervisor": {
+          "workers": [
+            "poi",
+            "weather",
+            "hotel",
+            "food",
+            "route"
+          ],
+          "routing_reason": "2日北京历史文化游，需住宿经济型酒店、本地特色餐饮及公共交通路线，且预算紧张需严格控制费用，全链路Worker均需执行。"
+        }
+      },
+      "elapsed_seconds": 55.7
+    },
+    {
+      "id": "E03",
+      "name": "排除景点约束",
+      "type": "exclude",
+      "user_id": "eval-20260830-163820-d626b9-e03",
+      "passed": true,
+      "metrics": {
+        "excluded_keyword": "环球影城",
+        "excluded_absent": true,
+        "attractions": [
+          "故宫博物院",
+          "史家胡同博物馆",
+          "北京警察博物馆",
+          "八达岭长城"
+        ],
+        "hard_violation_count": 0
+      },
+      "response": {
+        "success": true,
+        "status": "completed",
+        "message": "旅行计划已完成",
+        "thread_id": "trip-36008a874158",
+        "data": {
+          "city": "北京",
+          "start_date": "2026-09-02",
+          "end_date": "2026-09-03",
+          "days": [
+            {
+              "date": "2026-09-02",
+              "day_index": 0,
+              "description": "第1天游览故宫博物院、史家胡同博物馆和北京警察博物馆，感受北京深厚的历史文化底蕴。上午参观故宫博物院，中午在东华门附近品尝北京烤鸭，下午游览史家胡同博物馆和北京警察博物馆，晚上品尝老北京炸酱面。",
+              "transportation": "公共交通（地铁+公交）",
+              "accommodation": "经济型酒店",
+              "hotel": {
+                "name": "wohkoon者行孙酒店(北京国贸百子湾地铁站店)",
+                "address": "百子湾南三路百子湾东里403号楼2层201",
+                "location": {
+                  "longitude": 116.4972,
+                  "latitude": 39.8951
+                },
+                "price_range": "200-350元",
+                "rating": "4.3",
+                "distance": "距离故宫约8公里",
+                "type": "经济型酒店",
+                "estimated_cost": 280
+              },
+              "attractions": [
+                {
+                  "name": "故宫博物院",
+                  "address": "景山前街4号",
+                  "location": {
+                    "longitude": 116.3974,
+                    "latitude": 39.9165
+                  },
+                  "visit_duration": 240,
+                  "description": "故宫博物院是中国最大的古代文化艺术博物馆，位于北京中轴线的中心，是明清两代的皇家宫殿，旧称紫禁城。拥有丰富的文物藏品和宏伟的古建筑群，是世界文化遗产。",
+                  "category": "博物馆",
+                  "rating": 4.9,
+                  "photos": [],
+                  "poi_id": "",
+                  "image_url": null,
+                  "ticket_price": 60
+                },
+                {
+                  "name": "史家胡同博物馆",
+                  "address": "朝阳门街道东四南大街史家胡同24号",
+                  "location": {
+                    "longitude": 116.4233,
+                    "latitude": 39.9254
+                  },
+                  "visit_duration": 90,
+                  "description": "史家胡同博物馆位于北京东城区史家胡同内，是一座展示老北京胡同文化和历史的小型博物馆，馆内陈列着胡同变迁、老北京生活场景等珍贵资料。",
+                  "category": "博物馆",
+                  "rating": 4.5,
+                  "photos": [],
+                  "poi_id": "",
+                  "image_url": null,
+                  "ticket_price": 0
+                },
+                {
+                  "name": "北京警察博物馆",
+                  "address": "东交民巷36号",
+                  "location": {
+                    "longitude": 116.4106,
+                    "latitude": 39.9066
+                  },
+                  "visit_duration": 90,
+                  "description": "北京警察博物馆位于东交民巷，展示了北京警察历史沿革、警用装备和重大案件侦破等丰富内容，是了解北京公安发展历程的重要场所。",
+                  "category": "博物馆",
+                  "rating": 4.4,
+                  "photos": [],
+                  "poi_id": "",
+                  "image_url": null,
+                  "ticket_price": 0
+                }
+              ],
+              "meals": [
+                {
+                  "type": "breakfast",
+                  "name": "老北京炸酱面·渝湘美食(东华门店)",
+                  "address": "东华门大街60号",
+                  "location": {
+                    "longitude": 116.4012,
+                    "latitude": 39.9178
+                  },
+                  "description": "位于东华门大街，距离故宫很近，早上可以品尝正宗的老北京炸酱面，开启一天的行程。",
+                  "cuisine": "北京菜",
+                  "rating": 4.3,
+                  "avg_cost": 35,
+                  "distance": "距离故宫约500米",
+                  "poi_id": null,
+                  "source": "nearby",
+                  "estimated_cost": 30
+                },
+                {
+                  "type": "lunch",
+                  "name": "四季民福烤鸭店(故宫店)",
+                  "address": "南池子大街11号故宫东门旁",
+                  "location": {
+                    "longitude": 116.3995,
+                    "latitude": 39.9158
+                  },
+                  "description": "位于故宫东门旁的知名烤鸭店，游览完故宫后步行即可到达，品尝正宗北京烤鸭。",
+                  "cuisine": "北京菜",
+                  "rating": 4.6,
+                  "avg_cost": 120,
+                  "distance": "距离故宫约300米",
+                  "poi_id": null,
+                  "source": "nearby",
+                  "estimated_cost": 80
+                },
+                {
+                  "type": "dinner",
+                  "name": "全聚德(前门店)",
+                  "address": "前门大街30号",
+                  "location": {
+                    "longitude": 116.3985,
+                    "latitude": 39.8994
+                  },
+                  "description": "全聚德是北京最著名的烤鸭老字号，前门店位于前门大街，是品尝正宗北京烤鸭的经典之选。",
+                  "cuisine": "北京菜",
+                  "rating": 4.5,
+                  "avg_cost": 150,
+                  "distance": "距离酒店约6公里",
+                  "poi_id": null,
+                  "source": "popular",
+                  "estimated_cost": 100
+                }
+              ],
+              "route_segments": [
+                {
+                  "from_name": "酒店",
+                  "to_name": "故宫博物院",
+                  "distance": "8.0公里",
+                  "duration": "40分钟",
+                  "mode": "地铁",
+                  "detail": "从百子湾地铁站乘坐地铁7号线至磁器口站换乘5号线至天安门东站，B口出步行约5分钟到达故宫"
+                },
+                {
+                  "from_name": "故宫博物院",
+                  "to_name": "史家胡同博物馆",
+                  "distance": "2.4公里",
+                  "duration": "30分钟",
+                  "mode": "公交",
+                  "detail": "从故宫神武门步行至景山前街，乘坐109路或101路公交至东四路口东站，步行约500米到达史家胡同博物馆"
+                },
+                {
+                  "from_name": "史家胡同博物馆",
+                  "to_name": "北京警察博物馆",
+                  "distance": "2.4公里",
+                  "duration": "25分钟",
+                  "mode": "地铁",
+                  "detail": "从史家胡同步行至东四地铁站，乘坐地铁5号线至东单站换乘1号线至王府井站，C3西南口出步行约500米到达北京警察博物馆"
+                },
+                {
+                  "from_name": "北京警察博物馆",
+                  "to_name": "酒店",
+                  "distance": "7.0公里",
+                  "duration": "35分钟",
+                  "mode": "地铁",
+                  "detail": "从北京警察博物馆步行至王府井地铁站，乘坐地铁1号线至国贸站换乘7号线至百子湾站，步行约500米到达酒店"
+                }
+              ]
+            },
+            {
+              "date": "2026-09-03",
+              "day_index": 1,
+              "description": "第2天前往八达岭长城，体验世界文化遗产的雄伟壮观。全天游览长城，感受中华民族的伟大工程，傍晚返回市区品尝北京特色美食。",
+              "transportation": "公共交通（地铁+公交）",
+              "accommodation": "经济型酒店",
+              "hotel": {
+                "name": "wohkoon者行孙酒店(北京国贸百子湾地铁站店)",
+                "address": "百子湾南三路百子湾东里403号楼2层201",
+                "location": {
+                  "longitude": 116.4972,
+                  "latitude": 39.8951
+                },
+                "price_range": "200-350元",
+                "rating": "4.3",
+                "distance": "距离八达岭长城约60公里",
+                "type": "经济型酒店",
+                "estimated_cost": 280
+              },
+              "attractions": [
+                {
+                  "name": "八达岭长城",
+                  "address": "G6京藏高速58号出口",
+                  "location": {
+                    "longitude": 115.9889,
+                    "latitude": 40.3544
+                  },
+                  "visit_duration": 300,
+                  "description": "八达岭长城是明长城中保存最好、最具代表性的一段，位于北京市延庆区军都山关沟古道北口，是万里长城的重要组成部分，也是世界文化遗产。",
+                  "category": "历史古迹",
+                  "rating": 4.8,
+                  "photos": [],
+                  "poi_id": "",
+                  "image_url": null,
+                  "ticket_price": 40
+                }
+              ],
+              "meals": [
+                {
+                  "type": "breakfast",
+                  "name": "老北京炸酱面(南长街店)",
+                  "address": "南长街甲30号",
+                  "location": {
+                    "longitude": 116.3925,
+                    "latitude": 39.9128
+                  },
+                  "description": "位于南长街的老北京炸酱面店，出发前享用一碗地道的炸酱面，为长城之旅补充能量。",
+                  "cuisine": "北京菜",
+                  "rating": 4.2,
+                  "avg_cost": 30,
+                  "distance": "距离酒店约8公里",
+                  "poi_id": null,
+                  "source": "nearby",
+                  "estimated_cost": 30
+                },
+                {
+                  "type": "lunch",
+                  "name": "紫光园清真北京小吃(故宫·东华门店)",
+                  "address": "东华门大街54号1幢",
+                  "location": {
+                    "longitude": 116.401,
+                    "latitude": 39.9175
+                  },
+                  "description": "长城游览途中可品尝紫光园的清真北京小吃，方便快捷，补充体力。",
+                  "cuisine": "北京小吃",
+                  "rating": 4.4,
+                  "avg_cost": 50,
+                  "distance": "距离八达岭长城约60公里",
+                  "poi_id": null,
+                  "source": "nearby",
+                  "estimated_cost": 40
+                },
+                {
+                  "type": "dinner",
+                  "name": "花家怡园(四合院总店)",
+                  "address": "东直门内大街235号",
+                  "location": {
+                    "longitude": 116.4285,
+                    "latitude": 39.9405
+                  },
+                  "description": "花家怡园是北京著名的四合院餐厅，以精致的北京菜闻名，晚餐在这里品尝地道的京味美食，为旅程画上完美句号。",
+                  "cuisine": "北京菜",
+                  "rating": 4.6,
+                  "avg_cost": 150,
+                  "distance": "距离酒店约8公里",
+                  "poi_id": null,
+                  "source": "popular",
+                  "estimated_cost": 100
+                }
+              ],
+              "route_segments": [
+                {
+                  "from_name": "酒店",
+                  "to_name": "八达岭长城",
+                  "distance": "60.0公里",
+                  "duration": "2小时",
+                  "mode": "地铁+公交",
+                  "detail": "从百子湾地铁站乘坐地铁7号线至磁器口站换乘5号线至北土城站，F西北口出步行至地铁北土城站公交站，乘坐919路公交至八达岭站下车，步行约1.4公里到达八达岭长城"
+                },
+                {
+                  "from_name": "八达岭长城",
+                  "to_name": "酒店",
+                  "distance": "60.0公里",
+                  "duration": "2小时",
+                  "mode": "公交+地铁",
+                  "detail": "从八达岭长城步行至八达岭公交站，乘坐919路公交至地铁北土城站，换乘地铁5号线至磁器口站换乘7号线至百子湾站，步行约500米到达酒店"
+                }
+              ]
+            }
+          ],
+          "weather_info": [
+            {
+              "date": "2026-09-02",
+              "day_weather": "晴",
+              "night_weather": "晴",
+              "day_temp": 30,
+              "night_temp": 18,
+              "wind_direction": "南",
+              "wind_power": "1-3"
+            },
+            {
+              "date": "2026-09-03",
+              "day_weather": "待查询",
+              "night_weather": "待查询",
+              "day_temp": null,
+              "night_temp": null,
+              "wind_direction": "待查询",
+              "wind_power": "待查询"
+            }
+          ],
+          "overall_suggestions": "本次北京2日游以历史文化景点为主。八达岭长城距离市区较远，建议尽早出发，预留充足时间。北京公共交通发达，建议使用地铁+公交组合出行。故宫博物院需提前预约门票，八达岭长城建议提前购票。品尝北京烤鸭、炸酱面等本地特色美食，感受京味文化。天气方面：已获取的可信天气预报显示：9月2日白天晴，约30℃，夜间晴，约18℃，南风1-3级；9月2日白天气温较高，建议注意防晒补水；9月3日暂无可信天气预报，建议出发前3天重新查询天气。 预算方面：当前估算总预算约1240元。",
+          "budget": {
+            "total_attractions": 100,
+            "total_hotels": 560,
+            "total_meals": 380,
+            "total_transportation": 200,
+            "total": 1240
+          }
+        },
+        "interrupt": null,
+        "constraints": {
+          "max_budget": null,
+          "max_attractions_per_day": null,
+          "excluded_keywords": [
+            "环球影城"
+          ],
+          "must_include_keywords": [],
+          "elderly_friendly": false,
+          "relaxed_pace": false,
+          "hard_notes": []
+        },
+        "violations": [],
+        "revision_count": 0,
+        "plan_version": 0,
+        "supervisor": {
+          "workers": [
+            "poi",
+            "weather",
+            "hotel",
+            "food",
+            "route"
+          ],
+          "routing_reason": "2天北京历史文化游，需景点检索（排除环球影城）、天气、经济型酒店住宿、本地特色餐饮及公共交通路线规划，完整链路均需执行。"
+        }
+      },
+      "elapsed_seconds": 58.14
+    },
+    {
+      "id": "E04",
+      "name": "轻松节奏与每日景点上限",
+      "type": "daily_limit",
+      "user_id": "eval-20260830-163820-d626b9-e04",
+      "passed": true,
+      "metrics": {
+        "daily_counts": [
+          {
+            "day_index": 0,
+            "count": 2
+          },
+          {
+            "day_index": 1,
+            "count": 1
+          }
+        ],
+        "max_attractions_per_day": 2,
+        "daily_limit_pass": true,
+        "hard_violation_count": 0
+      },
+      "response": {
+        "success": true,
+        "status": "completed",
+        "message": "旅行计划已完成",
+        "thread_id": "trip-b9243bbef041",
+        "data": {
+          "city": "北京",
+          "start_date": "2026-09-02",
+          "end_date": "2026-09-03",
+          "days": [
+            {
+              "date": "2026-09-02",
+              "day_index": 0,
+              "description": "第1天：游览故宫博物院和中国国家博物馆，感受北京深厚的历史文化底蕴。上午参观故宫，下午参观国家博物馆，节奏轻松，预留充足休息时间。",
+              "transportation": "公共交通（地铁+步行）",
+              "accommodation": "经济型酒店",
+              "hotel": {
+                "name": "wohkoon者行孙酒店(北京国贸百子湾地铁站店)",
+                "address": "百子湾南三路百子湾东里403号楼2层201",
+                "location": {
+                  "longitude": 116.4786,
+                  "latitude": 39.8952
+                },
+                "price_range": "200-350元",
+                "rating": "4.3",
+                "distance": "距离故宫约8公里",
+                "type": "经济型酒店",
+                "estimated_cost": 300
+              },
+              "attractions": [
+                {
+                  "name": "故宫博物院",
+                  "address": "景山前街4号",
+                  "location": {
+                    "longitude": 116.3974,
+                    "latitude": 39.9165
+                  },
+                  "visit_duration": 180,
+                  "description": "故宫博物院是中国最大的古代文化艺术博物馆，位于北京中轴线的中心，是明清两代的皇家宫殿，世界文化遗产，拥有丰富的文物藏品和宏伟的古建筑群。",
+                  "category": "博物馆",
+                  "rating": 4.9,
+                  "photos": [],
+                  "poi_id": "",
+                  "image_url": null,
+                  "ticket_price": 60
+                },
+                {
+                  "name": "中国国家博物馆",
+                  "address": "东长安街16号天安门广场东侧",
+                  "location": {
+                    "longitude": 116.4035,
+                    "latitude": 39.9042
+                  },
+                  "visit_duration": 150,
+                  "description": "中国国家博物馆是中华文化的祠堂和祖庙，位于天安门广场东侧，馆藏丰富，展示了中华民族五千年的文明发展史，是了解中国历史文化的绝佳场所。",
+                  "category": "博物馆",
+                  "rating": 4.8,
+                  "photos": [],
+                  "poi_id": "",
+                  "image_url": null,
+                  "ticket_price": 0
+                }
+              ],
+              "meals": [
+                {
+                  "type": "breakfast",
+                  "name": "老北京炸酱面·渝湘美食(东华门店)",
+                  "address": "东华门大街60号",
+                  "location": {
+                    "longitude": 116.4012,
+                    "latitude": 39.9178
+                  },
+                  "description": "位于故宫东华门附近，提供地道的老北京炸酱面，早餐来一碗热腾腾的炸酱面，开启美好的一天。",
+                  "cuisine": "北京菜",
+                  "rating": 4.2,
+                  "avg_cost": 30,
+                  "distance": "距离故宫约500米",
+                  "poi_id": null,
+                  "source": "nearby",
+                  "estimated_cost": 30
+                },
+                {
+                  "type": "lunch",
+                  "name": "四季民福烤鸭店(故宫店)",
+                  "address": "南池子大街11号故宫东门旁",
+                  "location": {
+                    "longitude": 116.3995,
+                    "latitude": 39.9158
+                  },
+                  "description": "位于故宫东门旁，是品尝正宗北京烤鸭的绝佳选择，环境优雅，烤鸭皮脆肉嫩，深受游客喜爱。",
+                  "cuisine": "北京菜",
+                  "rating": 4.7,
+                  "avg_cost": 150,
+                  "distance": "距离故宫约300米",
+                  "poi_id": null,
+                  "source": "nearby",
+                  "estimated_cost": 80
+                },
+                {
+                  "type": "dinner",
+                  "name": "全聚德(前门店)",
+                  "address": "前门大街30号",
+                  "location": {
+                    "longitude": 116.3983,
+                    "latitude": 39.8994
+                  },
+                  "description": "全聚德是北京烤鸭的百年老字号，前门店是其标志性门店，烤鸭技艺精湛，是体验正宗北京烤鸭文化的必选之地。",
+                  "cuisine": "北京菜",
+                  "rating": 4.6,
+                  "avg_cost": 180,
+                  "distance": "距离国家博物馆约1.5公里",
+                  "poi_id": null,
+                  "source": "popular",
+                  "estimated_cost": 100
+                }
+              ],
+              "route_segments": [
+                {
+                  "from_name": "酒店",
+                  "to_name": "故宫博物院",
+                  "distance": "8.5公里",
+                  "duration": "40分钟",
+                  "mode": "地铁",
+                  "detail": "从百子湾地铁站乘坐7号线至磁器口站，换乘5号线至东单站，再换乘1号线至天安门东站B口出，步行约5分钟到达故宫午门"
+                },
+                {
+                  "from_name": "故宫博物院",
+                  "to_name": "中国国家博物馆",
+                  "distance": "1.5公里",
+                  "duration": "20分钟",
+                  "mode": "步行",
+                  "detail": "从故宫午门出，沿东长安街向东步行约1.5公里，或从天安门东站乘坐地铁1号线1站至天安门东站，步行至国家博物馆北门"
+                },
+                {
+                  "from_name": "中国国家博物馆",
+                  "to_name": "酒店",
+                  "distance": "9公里",
+                  "duration": "45分钟",
+                  "mode": "地铁",
+                  "detail": "从天安门东站乘坐地铁1号线至国贸站，换乘7号线至百子湾站，步行约10分钟到达酒店"
+                }
+              ]
+            },
+            {
+              "date": "2026-09-03",
+              "day_index": 1,
+              "description": "第2天：游览八达岭长城，感受世界奇迹的雄伟壮观。考虑到老人同行，选择轻松游览方式，预留充足休息时间。",
+              "transportation": "公共交通（地铁+市郊铁路+景区接驳）",
+              "accommodation": "经济型酒店",
+              "hotel": {
+                "name": "wohkoon者行孙酒店(北京国贸百子湾地铁站店)",
+                "address": "百子湾南三路百子湾东里403号楼2层201",
+                "location": {
+                  "longitude": 116.4786,
+                  "latitude": 39.8952
+                },
+                "price_range": "200-350元",
+                "rating": "4.3",
+                "distance": "距离八达岭长城约60公里",
+                "type": "经济型酒店",
+                "estimated_cost": 300
+              },
+              "attractions": [
+                {
+                  "name": "八达岭长城",
+                  "address": "G6京藏高速58号出口",
+                  "location": {
+                    "longitude": 116.02,
+                    "latitude": 40.36
+                  },
+                  "visit_duration": 240,
+                  "description": "八达岭长城是明长城中保存最好、最具代表性的一段，位于北京市延庆区，是万里长城的精华所在，被誉为\"天下九塞\"之一，世界文化遗产。",
+                  "category": "古迹",
+                  "rating": 4.8,
+                  "photos": [],
+                  "poi_id": "",
+                  "image_url": null,
+                  "ticket_price": 40
+                }
+              ],
+              "meals": [
+                {
+                  "type": "breakfast",
+                  "name": "老北京炸酱面(南长街店)",
+                  "address": "南长街甲30号",
+                  "location": {
+                    "longitude": 116.3928,
+                    "latitude": 39.9145
+                  },
+                  "description": "位于南长街，提供地道的老北京炸酱面，早餐简单实惠，为一天的行程补充能量。",
+                  "cuisine": "北京菜",
+                  "rating": 4.3,
+                  "avg_cost": 30,
+                  "distance": "距离酒店约9公里",
+                  "poi_id": null,
+                  "source": "nearby",
+                  "estimated_cost": 30
+                },
+                {
+                  "type": "lunch",
+                  "name": "紫光园清真北京小吃(故宫·东华门店)",
+                  "address": "东华门大街54号1幢",
+                  "location": {
+                    "longitude": 116.401,
+                    "latitude": 39.9175
+                  },
+                  "description": "提供清真北京小吃，品种丰富，适合在游览长城后享用一顿地道的北京风味午餐。",
+                  "cuisine": "北京小吃",
+                  "rating": 4.4,
+                  "avg_cost": 60,
+                  "distance": "距离八达岭长城约60公里",
+                  "poi_id": null,
+                  "source": "nearby",
+                  "estimated_cost": 50
+                },
+                {
+                  "type": "dinner",
+                  "name": "花家怡园(四合院总店)",
+                  "address": "东直门内大街235号",
+                  "location": {
+                    "longitude": 116.4285,
+                    "latitude": 39.9415
+                  },
+                  "description": "花家怡园是北京著名的四合院餐厅，环境古色古香，提供精致的北京菜，是体验老北京四合院文化的绝佳选择。",
+                  "cuisine": "北京菜",
+                  "rating": 4.6,
+                  "avg_cost": 150,
+                  "distance": "距离酒店约8公里",
+                  "poi_id": null,
+                  "source": "popular",
+                  "estimated_cost": 100
+                }
+              ],
+              "route_segments": [
+                {
+                  "from_name": "酒店",
+                  "to_name": "八达岭长城",
+                  "distance": "60公里",
+                  "duration": "90分钟",
+                  "mode": "市郊铁路S2线",
+                  "detail": "从百子湾地铁站乘坐7号线至北京西站，换乘市郊铁路S2线至八达岭站，出站后乘坐景区接驳车到达长城入口"
+                },
+                {
+                  "from_name": "八达岭长城",
+                  "to_name": "酒店",
+                  "distance": "60公里",
+                  "duration": "90分钟",
+                  "mode": "市郊铁路S2线",
+                  "detail": "从八达岭站乘坐市郊铁路S2线返回北京西站，换乘地铁7号线至百子湾站，步行约10分钟到达酒店"
+                }
+              ]
+            }
+          ],
+          "weather_info": [
+            {
+              "date": "2026-09-02",
+              "day_weather": "晴",
+              "night_weather": "晴",
+              "day_temp": 30,
+              "night_temp": 18,
+              "wind_direction": "南",
+              "wind_power": "1-3"
+            },
+            {
+              "date": "2026-09-03",
+              "day_weather": "待查询",
+              "night_weather": "待查询",
+              "day_temp": null,
+              "night_temp": null,
+              "wind_direction": "待查询",
+              "wind_power": "待查询"
+            }
+          ],
+          "overall_suggestions": "本次北京2日游以轻松休闲为主，考虑到有老人同行，每天最多安排2个景点，避免赶行程。八达岭长城距离市区较远，建议提前规划好往返交通，可选择市郊铁路S2线。游览长城时建议乘坐缆车或索道上下，减少攀爬强度。全程以公共交通为主，地铁出行方便快捷。饮食方面推荐品尝北京烤鸭、炸酱面等本地特色美食。天气方面：已获取的可信天气预报显示：9月2日白天晴，约30℃，夜间晴，约18℃，南风1-3级；9月2日白天气温较高，建议注意防晒补水；9月3日暂无可信天气预报，建议出发前3天重新查询天气。 预算方面：当前估算总预算约1290元。",
+          "budget": {
+            "total_attractions": 100,
+            "total_hotels": 600,
+            "total_meals": 390,
+            "total_transportation": 200,
+            "total": 1290
+          }
+        },
+        "interrupt": null,
+        "constraints": {
+          "max_budget": null,
+          "max_attractions_per_day": 2,
+          "excluded_keywords": [],
+          "must_include_keywords": [],
+          "elderly_friendly": true,
+          "relaxed_pace": true,
+          "hard_notes": [
+            "不要赶行程"
+          ]
+        },
+        "violations": [],
+        "revision_count": 0,
+        "plan_version": 0,
+        "supervisor": {
+          "workers": [
+            "poi",
+            "weather",
+            "hotel",
+            "food",
+            "route"
+          ],
+          "routing_reason": "2日北京历史文化轻松游，老人同行需住宿与餐饮安排，完整旅行计划需景点、天气、住宿、餐饮及交通路线全链路支持。"
+        }
+      },
+      "elapsed_seconds": 83.57
+    },
+    {
+      "id": "E05",
+      "name": "局部修改保持",
+      "type": "edit",
+      "user_id": "eval-20260830-163820-d626b9-e05",
+      "passed": true,
+      "metrics": {
+        "day1_preserved": true,
+        "day2_changed": true,
+        "version_before": 0,
+        "version_after": 1,
+        "version_increment_pass": true,
+        "revision_count": 1,
+        "hard_violation_count": 0
+      },
+      "initial_response": {
+        "success": true,
+        "status": "completed",
+        "message": "旅行计划已完成",
+        "thread_id": "trip-b0ccf6c289cf",
+        "data": {
+          "city": "北京",
+          "start_date": "2026-09-02",
+          "end_date": "2026-09-03",
+          "days": [
+            {
+              "date": "2026-09-02",
+              "day_index": 0,
+              "description": "第1天：游览故宫博物院、史家胡同博物馆和中国国家博物馆，感受北京深厚的历史文化底蕴。上午参观故宫，中午在故宫周边品尝北京烤鸭，下午游览史家胡同博物馆和中国国家博物馆。",
+              "transportation": "公共交通（地铁+公交）",
+              "accommodation": "经济型酒店",
+              "hotel": {
+                "name": "wohkoon者行孙酒店(北京国贸百子湾地铁站店)",
+                "address": "百子湾南三路百子湾东里403号楼2层201",
+                "location": {
+                  "longitude": 116.4972,
+                  "latitude": 39.8954
+                },
+                "price_range": "200-400元",
+                "rating": "4.3",
+                "distance": "距离故宫约10公里",
+                "type": "经济型酒店",
+                "estimated_cost": 300
+              },
+              "attractions": [
+                {
+                  "name": "故宫博物院",
+                  "address": "景山前街4号",
+                  "location": {
+                    "longitude": 116.3974,
+                    "latitude": 39.9165
+                  },
+                  "visit_duration": 180,
+                  "description": "故宫博物院是中国最大的古代文化艺术博物馆，位于北京中轴线的中心，是明清两代的皇家宫殿，旧称紫禁城。拥有丰富的文物藏品和宏伟的古建筑群，是世界文化遗产。",
+                  "category": "博物馆",
+                  "rating": 5.0,
+                  "photos": [],
+                  "poi_id": "",
+                  "image_url": null,
+                  "ticket_price": 60
+                },
+                {
+                  "name": "史家胡同博物馆",
+                  "address": "朝阳门街道东四南大街史家胡同24号",
+                  "location": {
+                    "longitude": 116.42,
+                    "latitude": 39.925
+                  },
+                  "visit_duration": 90,
+                  "description": "史家胡同博物馆位于北京东城区史家胡同内，是一座展示老北京胡同文化和历史的小型博物馆，馆内陈列着胡同变迁、老北京生活场景等珍贵资料。",
+                  "category": "博物馆",
+                  "rating": 4.5,
+                  "photos": [],
+                  "poi_id": "",
+                  "image_url": null,
+                  "ticket_price": 0
+                },
+                {
+                  "name": "中国国家博物馆",
+                  "address": "东长安街16号天安门广场东侧",
+                  "location": {
+                    "longitude": 116.4035,
+                    "latitude": 39.9047
+                  },
+                  "visit_duration": 150,
+                  "description": "中国国家博物馆是集收藏、展览、研究、考古、公共教育、文化交流于一体的综合性国家博物馆，馆藏丰富，展示了中华文明五千年的发展历程。",
+                  "category": "博物馆",
+                  "rating": 4.8,
+                  "photos": [],
+                  "poi_id": "",
+                  "image_url": null,
+                  "ticket_price": 0
+                }
+              ],
+              "meals": [
+                {
+                  "type": "breakfast",
+                  "name": "老北京炸酱面·渝湘美食(东华门店)",
+                  "address": "东华门大街60号",
+                  "location": {
+                    "longitude": 116.4012,
+                    "latitude": 39.9168
+                  },
+                  "description": "位于故宫东华门附近，提供地道的老北京炸酱面，是开启一天故宫之旅的绝佳早餐选择。",
+                  "cuisine": "北京菜",
+                  "rating": 4.2,
+                  "avg_cost": 30,
+                  "distance": "距离故宫约500米",
+                  "poi_id": null,
+                  "source": "nearby",
+                  "estimated_cost": 30
+                },
+                {
+                  "type": "lunch",
+                  "name": "四季民福烤鸭店(故宫店)",
+                  "address": "南池子大街11号故宫东门旁",
+                  "location": {
+                    "longitude": 116.3995,
+                    "latitude": 39.916
+                  },
+                  "description": "位于故宫东门旁，是品尝正宗北京烤鸭的知名餐厅，环境优雅，烤鸭皮脆肉嫩，深受游客喜爱。",
+                  "cuisine": "北京菜",
+                  "rating": 4.7,
+                  "avg_cost": 120,
+                  "distance": "距离故宫约300米",
+                  "poi_id": null,
+                  "source": "nearby",
+                  "estimated_cost": 80
+                },
+                {
+                  "type": "dinner",
+                  "name": "全聚德(前门店)",
+                  "address": "前门大街30号",
+                  "location": {
+                    "longitude": 116.398,
+                    "latitude": 39.899
+                  },
+                  "description": "全聚德是北京烤鸭的百年老字号，前门店是其标志性门店，品尝正宗挂炉烤鸭，感受老北京饮食文化。",
+                  "cuisine": "北京菜",
+                  "rating": 4.6,
+                  "avg_cost": 150,
+                  "distance": "距离国家博物馆约2公里",
+                  "poi_id": null,
+                  "source": "popular",
+                  "estimated_cost": 100
+                }
+              ],
+              "route_segments": [
+                {
+                  "from_name": "酒店",
+                  "to_name": "故宫博物院",
+                  "distance": "10公里",
+                  "duration": "40分钟",
+                  "mode": "地铁",
+                  "detail": "从百子湾地铁站乘坐地铁7号线至磁器口站，换乘地铁5号线至东单站，再换乘地铁1号线至天安门东站B口出，步行约5分钟到达故宫午门入口"
+                },
+                {
+                  "from_name": "故宫博物院",
+                  "to_name": "史家胡同博物馆",
+                  "distance": "2.1公里",
+                  "duration": "30分钟",
+                  "mode": "公交",
+                  "detail": "从故宫神武门出，步行至神武门公交站，乘坐109路或101路公交车至东四路口东站下车，步行约300米到达史家胡同博物馆"
+                },
+                {
+                  "from_name": "史家胡同博物馆",
+                  "to_name": "中国国家博物馆",
+                  "distance": "2.7公里",
+                  "duration": "25分钟",
+                  "mode": "地铁",
+                  "detail": "步行至东四地铁站，乘坐地铁5号线至东单站，换乘地铁1号线至天安门东站C东南口出，步行约500米到达中国国家博物馆"
+                },
+                {
+                  "from_name": "中国国家博物馆",
+                  "to_name": "酒店",
+                  "distance": "10公里",
+                  "duration": "40分钟",
+                  "mode": "地铁",
+                  "detail": "从天安门东地铁站乘坐地铁1号线至国贸站，换乘地铁7号线至百子湾站，步行约500米到达酒店"
+                }
+              ]
+            },
+            {
+              "date": "2026-09-03",
+              "day_index": 1,
+              "description": "第2天：前往八达岭长城，体验世界文化遗产的雄伟壮观。全天游览长城，感受中华民族的伟大历史。",
+              "transportation": "公共交通（地铁+公交）",
+              "accommodation": "经济型酒店",
+              "hotel": {
+                "name": "wohkoon者行孙酒店(北京国贸百子湾地铁站店)",
+                "address": "百子湾南三路百子湾东里403号楼2层201",
+                "location": {
+                  "longitude": 116.4972,
+                  "latitude": 39.8954
+                },
+                "price_range": "200-400元",
+                "rating": "4.3",
+                "distance": "距离八达岭长城约60公里",
+                "type": "经济型酒店",
+                "estimated_cost": 300
+              },
+              "attractions": [
+                {
+                  "name": "八达岭长城",
+                  "address": "G6京藏高速58号出口",
+                  "location": {
+                    "longitude": 116.02,
+                    "latitude": 40.36
+                  },
+                  "visit_duration": 300,
+                  "description": "八达岭长城是明长城中保存最好、最具代表性的一段，位于北京市延庆区，是万里长城的精华所在，也是世界文化遗产。登城远眺，群山连绵，气势磅礴。",
+                  "category": "历史古迹",
+                  "rating": 4.8,
+                  "photos": [],
+                  "poi_id": "",
+                  "image_url": null,
+                  "ticket_price": 40
+                }
+              ],
+              "meals": [
+                {
+                  "type": "breakfast",
+                  "name": "老北京炸酱面(南长街店)",
+                  "address": "南长街甲30号",
+                  "location": {
+                    "longitude": 116.392,
+                    "latitude": 39.914
+                  },
+                  "description": "位于南长街的老北京炸酱面店，提供正宗的老北京风味早餐，为前往长城的旅程补充能量。",
+                  "cuisine": "北京菜",
+                  "rating": 4.3,
+                  "avg_cost": 30,
+                  "distance": "距离酒店约10公里",
+                  "poi_id": null,
+                  "source": "nearby",
+                  "estimated_cost": 30
+                },
+                {
+                  "type": "lunch",
+                  "name": "紫光园清真北京小吃(故宫·东华门店)",
+                  "address": "东华门大街54号1幢",
+                  "location": {
+                    "longitude": 116.401,
+                    "latitude": 39.9165
+                  },
+                  "description": "紫光园是北京知名的清真小吃连锁品牌，提供各类北京传统小吃，适合在长城游览途中享用。",
+                  "cuisine": "北京小吃",
+                  "rating": 4.4,
+                  "avg_cost": 50,
+                  "distance": "距离八达岭长城约60公里",
+                  "poi_id": null,
+                  "source": "nearby",
+                  "estimated_cost": 50
+                },
+                {
+                  "type": "dinner",
+                  "name": "花家怡园(四合院总店)",
+                  "address": "东直门内大街235号",
+                  "location": {
+                    "longitude": 116.428,
+                    "latitude": 39.941
+                  },
+                  "description": "花家怡园是北京著名的四合院餐厅，环境古色古香，提供精致的北京菜，是体验老北京饮食文化的绝佳选择。",
+                  "cuisine": "北京菜",
+                  "rating": 4.6,
+                  "avg_cost": 150,
+                  "distance": "距离酒店约8公里",
+                  "poi_id": null,
+                  "source": "popular",
+                  "estimated_cost": 100
+                }
+              ],
+              "route_segments": [
+                {
+                  "from_name": "酒店",
+                  "to_name": "八达岭长城",
+                  "distance": "60公里",
+                  "duration": "2小时",
+                  "mode": "地铁+公交",
+                  "detail": "从百子湾地铁站乘坐地铁7号线至磁器口站，换乘地铁5号线至惠新西街南口站，换乘地铁10号线至北土城站F西北口出，步行至地铁北土城站乘坐919路公交车至八达岭森林公园站下车，步行约2.4公里到达八达岭长城"
+                },
+                {
+                  "from_name": "八达岭长城",
+                  "to_name": "酒店",
+                  "distance": "60公里",
+                  "duration": "2小时",
+                  "mode": "公交+地铁",
+                  "detail": "从八达岭长城步行至八达岭森林公园站，乘坐919路公交车至地铁北土城站，换乘地铁10号线至惠新西街南口站，换乘地铁5号线至磁器口站，再换乘地铁7号线至百子湾站，步行约500米到达酒店"
+                }
+              ]
+            }
+          ],
+          "weather_info": [
+            {
+              "date": "2026-09-02",
+              "day_weather": "晴",
+              "night_weather": "晴",
+              "day_temp": 30,
+              "night_temp": 18,
+              "wind_direction": "南",
+              "wind_power": "1-3"
+            },
+            {
+              "date": "2026-09-03",
+              "day_weather": "待查询",
+              "night_weather": "待查询",
+              "day_temp": null,
+              "night_temp": null,
+              "wind_direction": "待查询",
+              "wind_power": "待查询"
+            }
+          ],
+          "overall_suggestions": "本次北京2天经典历史文化之旅将带您领略故宫的皇家气派、胡同的市井风情、国家博物馆的文明积淀以及八达岭长城的雄伟壮阔。故宫和国家博物馆需提前预约门票，八达岭长城建议尽早出发以避开人流高峰。全程使用公共交通出行，建议购买北京交通一卡通或使用手机扫码乘车。天气方面：已获取的可信天气预报显示：9月2日白天晴，约30℃，夜间晴，约18℃，南风1-3级；9月2日白天气温较高，建议注意防晒补水；9月3日暂无可信天气预报，建议出发前3天重新查询天气。 预算方面：当前估算总预算约1240元。",
+          "budget": {
+            "total_attractions": 100,
+            "total_hotels": 600,
+            "total_meals": 390,
+            "total_transportation": 150,
+            "total": 1240
+          }
+        },
+        "interrupt": null,
+        "constraints": {
+          "max_budget": null,
+          "max_attractions_per_day": null,
+          "excluded_keywords": [],
+          "must_include_keywords": [],
+          "elderly_friendly": false,
+          "relaxed_pace": false,
+          "hard_notes": [
+            "安排两天经典历史文化行程"
+          ]
+        },
+        "violations": [],
+        "revision_count": 0,
+        "plan_version": 0,
+        "supervisor": {
+          "workers": [
+            "poi",
+            "weather",
+            "hotel",
+            "food",
+            "route"
+          ],
+          "routing_reason": "两天北京历史文化行程，需景点检索、天气、住宿、餐饮及交通路线规划，完整执行研究链路。"
+        }
+      },
+      "edited_response": {
+        "success": true,
+        "status": "completed",
+        "message": "旅行计划已完成",
+        "thread_id": "trip-b0ccf6c289cf",
+        "data": {
+          "city": "北京",
+          "start_date": "2026-09-02",
+          "end_date": "2026-09-03",
+          "days": [
+            {
+              "date": "2026-09-02",
+              "day_index": 0,
+              "description": "第1天：游览故宫博物院、史家胡同博物馆和中国国家博物馆，感受北京深厚的历史文化底蕴。上午参观故宫，中午在故宫周边品尝北京烤鸭，下午游览史家胡同博物馆和中国国家博物馆。",
+              "transportation": "公共交通（地铁+公交）",
+              "accommodation": "经济型酒店",
+              "hotel": {
+                "name": "wohkoon者行孙酒店(北京国贸百子湾地铁站店)",
+                "address": "百子湾南三路百子湾东里403号楼2层201",
+                "location": {
+                  "longitude": 116.4972,
+                  "latitude": 39.8954
+                },
+                "price_range": "200-400元",
+                "rating": "4.3",
+                "distance": "距离故宫约10公里",
+                "type": "经济型酒店",
+                "estimated_cost": 300
+              },
+              "attractions": [
+                {
+                  "name": "故宫博物院",
+                  "address": "景山前街4号",
+                  "location": {
+                    "longitude": 116.3974,
+                    "latitude": 39.9165
+                  },
+                  "visit_duration": 180,
+                  "description": "故宫博物院是中国最大的古代文化艺术博物馆，位于北京中轴线的中心，是明清两代的皇家宫殿，旧称紫禁城。拥有丰富的文物藏品和宏伟的古建筑群，是世界文化遗产。",
+                  "category": "博物馆",
+                  "rating": 5.0,
+                  "photos": [],
+                  "poi_id": "",
+                  "image_url": null,
+                  "ticket_price": 60
+                },
+                {
+                  "name": "史家胡同博物馆",
+                  "address": "朝阳门街道东四南大街史家胡同24号",
+                  "location": {
+                    "longitude": 116.42,
+                    "latitude": 39.925
+                  },
+                  "visit_duration": 90,
+                  "description": "史家胡同博物馆位于北京东城区史家胡同内，是一座展示老北京胡同文化和历史的小型博物馆，馆内陈列着胡同变迁、老北京生活场景等珍贵资料。",
+                  "category": "博物馆",
+                  "rating": 4.5,
+                  "photos": [],
+                  "poi_id": "",
+                  "image_url": null,
+                  "ticket_price": 0
+                },
+                {
+                  "name": "中国国家博物馆",
+                  "address": "东长安街16号天安门广场东侧",
+                  "location": {
+                    "longitude": 116.4035,
+                    "latitude": 39.9047
+                  },
+                  "visit_duration": 150,
+                  "description": "中国国家博物馆是集收藏、展览、研究、考古、公共教育、文化交流于一体的综合性国家博物馆，馆藏丰富，展示了中华文明五千年的发展历程。",
+                  "category": "博物馆",
+                  "rating": 4.8,
+                  "photos": [],
+                  "poi_id": "",
+                  "image_url": null,
+                  "ticket_price": 0
+                }
+              ],
+              "meals": [
+                {
+                  "type": "breakfast",
+                  "name": "老北京炸酱面·渝湘美食(东华门店)",
+                  "address": "东华门大街60号",
+                  "location": {
+                    "longitude": 116.4012,
+                    "latitude": 39.9168
+                  },
+                  "description": "位于故宫东华门附近，提供地道的老北京炸酱面，是开启一天故宫之旅的绝佳早餐选择。",
+                  "cuisine": "北京菜",
+                  "rating": 4.2,
+                  "avg_cost": 30,
+                  "distance": "距离故宫约500米",
+                  "poi_id": null,
+                  "source": "nearby",
+                  "estimated_cost": 30
+                },
+                {
+                  "type": "lunch",
+                  "name": "四季民福烤鸭店(故宫店)",
+                  "address": "南池子大街11号故宫东门旁",
+                  "location": {
+                    "longitude": 116.3995,
+                    "latitude": 39.916
+                  },
+                  "description": "位于故宫东门旁，是品尝正宗北京烤鸭的知名餐厅，环境优雅，烤鸭皮脆肉嫩，深受游客喜爱。",
+                  "cuisine": "北京菜",
+                  "rating": 4.7,
+                  "avg_cost": 120,
+                  "distance": "距离故宫约300米",
+                  "poi_id": null,
+                  "source": "nearby",
+                  "estimated_cost": 80
+                },
+                {
+                  "type": "dinner",
+                  "name": "全聚德(前门店)",
+                  "address": "前门大街30号",
+                  "location": {
+                    "longitude": 116.398,
+                    "latitude": 39.899
+                  },
+                  "description": "全聚德是北京烤鸭的百年老字号，前门店是其标志性门店，品尝正宗挂炉烤鸭，感受老北京饮食文化。",
+                  "cuisine": "北京菜",
+                  "rating": 4.6,
+                  "avg_cost": 150,
+                  "distance": "距离国家博物馆约2公里",
+                  "poi_id": null,
+                  "source": "popular",
+                  "estimated_cost": 100
+                }
+              ],
+              "route_segments": [
+                {
+                  "from_name": "酒店",
+                  "to_name": "故宫博物院",
+                  "distance": "10公里",
+                  "duration": "40分钟",
+                  "mode": "地铁",
+                  "detail": "从百子湾地铁站乘坐地铁7号线至磁器口站，换乘地铁5号线至东单站，再换乘地铁1号线至天安门东站B口出，步行约5分钟到达故宫午门入口"
+                },
+                {
+                  "from_name": "故宫博物院",
+                  "to_name": "史家胡同博物馆",
+                  "distance": "2.1公里",
+                  "duration": "30分钟",
+                  "mode": "公交",
+                  "detail": "从故宫神武门出，步行至神武门公交站，乘坐109路或101路公交车至东四路口东站下车，步行约300米到达史家胡同博物馆"
+                },
+                {
+                  "from_name": "史家胡同博物馆",
+                  "to_name": "中国国家博物馆",
+                  "distance": "2.7公里",
+                  "duration": "25分钟",
+                  "mode": "地铁",
+                  "detail": "步行至东四地铁站，乘坐地铁5号线至东单站，换乘地铁1号线至天安门东站C东南口出，步行约500米到达中国国家博物馆"
+                },
+                {
+                  "from_name": "中国国家博物馆",
+                  "to_name": "酒店",
+                  "distance": "10公里",
+                  "duration": "40分钟",
+                  "mode": "地铁",
+                  "detail": "从天安门东地铁站乘坐地铁1号线至国贸站，换乘地铁7号线至百子湾站，步行约500米到达酒店"
+                }
+              ]
+            },
+            {
+              "date": "2026-09-03",
+              "day_index": 1,
+              "description": "第2天：前往颐和园，体验皇家园林的湖光山色与古典建筑之美。上午游览颐和园，漫步昆明湖畔，登万寿山，感受皇家园林的宁静与壮丽。下午可在园内或周边轻松漫步，享受悠闲时光。",
+              "transportation": "公共交通（地铁+公交）",
+              "accommodation": "经济型酒店",
+              "hotel": {
+                "name": "wohkoon者行孙酒店(北京国贸百子湾地铁站店)",
+                "address": "百子湾南三路百子湾东里403号楼2层201",
+                "location": {
+                  "longitude": 116.4972,
+                  "latitude": 39.8954
+                },
+                "price_range": "200-400元",
+                "rating": "4.3",
+                "distance": "距离颐和园约20公里",
+                "type": "经济型酒店",
+                "estimated_cost": 300
+              },
+              "attractions": [
+                {
+                  "name": "颐和园",
+                  "address": "北京市海淀区新建宫门路19号",
+                  "location": {
+                    "longitude": 116.275,
+                    "latitude": 39.999
+                  },
+                  "visit_duration": 300,
+                  "description": "颐和园是中国现存规模最大、保存最完整的皇家园林，位于北京西郊，以昆明湖、万寿山为基址，汲取江南园林设计手法而建成。园内湖光山色、亭台楼阁交相辉映，是世界文化遗产，也是轻松漫步、感受皇家园林魅力的绝佳去处。",
+                  "category": "皇家园林",
+                  "rating": 4.8,
+                  "photos": [],
+                  "poi_id": "",
+                  "image_url": null,
+                  "ticket_price": 30
+                }
+              ],
+              "meals": [
+                {
+                  "type": "breakfast",
+                  "name": "老北京炸酱面(南长街店)",
+                  "address": "南长街甲30号",
+                  "location": {
+                    "longitude": 116.392,
+                    "latitude": 39.914
+                  },
+                  "description": "位于南长街的老北京炸酱面店，提供正宗的老北京风味早餐，为前往颐和园的旅程补充能量。",
+                  "cuisine": "北京菜",
+                  "rating": 4.3,
+                  "avg_cost": 30,
+                  "distance": "距离酒店约10公里",
+                  "poi_id": null,
+                  "source": "nearby",
+                  "estimated_cost": 30
+                },
+                {
+                  "type": "lunch",
+                  "name": "颐和园听鹂馆",
+                  "address": "颐和园内万寿山南麓",
+                  "location": {
+                    "longitude": 116.273,
+                    "latitude": 39.998
+                  },
+                  "description": "位于颐和园内的听鹂馆，是园内著名的宫廷风味餐厅，环境优雅，可边用餐边欣赏昆明湖美景，品尝精致的宫廷菜肴。",
+                  "cuisine": "宫廷菜",
+                  "rating": 4.5,
+                  "avg_cost": 100,
+                  "distance": "位于颐和园内",
+                  "poi_id": null,
+                  "source": "nearby",
+                  "estimated_cost": 80
+                },
+                {
+                  "type": "dinner",
+                  "name": "花家怡园(四合院总店)",
+                  "address": "东直门内大街235号",
+                  "location": {
+                    "longitude": 116.428,
+                    "latitude": 39.941
+                  },
+                  "description": "花家怡园是北京著名的四合院餐厅，环境古色古香，提供精致的北京菜，是体验老北京饮食文化的绝佳选择。",
+                  "cuisine": "北京菜",
+                  "rating": 4.6,
+                  "avg_cost": 150,
+                  "distance": "距离酒店约8公里",
+                  "poi_id": null,
+                  "source": "popular",
+                  "estimated_cost": 100
+                }
+              ],
+              "route_segments": [
+                {
+                  "from_name": "酒店",
+                  "to_name": "颐和园",
+                  "distance": "20公里",
+                  "duration": "1小时",
+                  "mode": "地铁",
+                  "detail": "从百子湾地铁站乘坐地铁7号线至磁器口站，换乘地铁5号线至惠新西街南口站，换乘地铁10号线至巴沟站，换乘西郊线至颐和园西门站，步行约500米到达颐和园"
+                },
+                {
+                  "from_name": "颐和园",
+                  "to_name": "酒店",
+                  "distance": "20公里",
+                  "duration": "1小时",
+                  "mode": "地铁",
+                  "detail": "从颐和园西门站乘坐西郊线至巴沟站，换乘地铁10号线至惠新西街南口站，换乘地铁5号线至磁器口站，再换乘地铁7号线至百子湾站，步行约500米到达酒店"
+                }
+              ]
+            }
+          ],
+          "weather_info": [
+            {
+              "date": "2026-09-02",
+              "day_weather": "晴",
+              "night_weather": "晴",
+              "day_temp": 30,
+              "night_temp": 18,
+              "wind_direction": "南",
+              "wind_power": "1-3"
+            },
+            {
+              "date": "2026-09-03",
+              "day_weather": "待查询",
+              "night_weather": "待查询",
+              "day_temp": null,
+              "night_temp": null,
+              "wind_direction": "待查询",
+              "wind_power": "待查询"
+            }
+          ],
+          "overall_suggestions": "本次北京2天经典历史文化之旅将带您领略故宫的皇家气派、胡同的市井风情、国家博物馆的文明积淀以及八达岭长城的雄伟壮阔。故宫和国家博物馆需提前预约门票，八达岭长城建议尽早出发以避开人流高峰。全程使用公共交通出行，建议购买北京交通一卡通或使用手机扫码乘车。天气方面：已获取的可信天气预报显示：9月2日白天晴，约30℃，夜间晴，约18℃，南风1-3级；9月2日白天气温较高，建议注意防晒补水；9月3日暂无可信天气预报，建议出发前3天重新查询天气。 预算方面：当前估算总预算约1260元。",
+          "budget": {
+            "total_attractions": 90,
+            "total_hotels": 600,
+            "total_meals": 420,
+            "total_transportation": 150,
+            "total": 1260
+          }
+        },
+        "interrupt": null,
+        "constraints": {
+          "max_budget": null,
+          "max_attractions_per_day": null,
+          "excluded_keywords": [],
+          "must_include_keywords": [],
+          "elderly_friendly": false,
+          "relaxed_pace": false,
+          "hard_notes": [
+            "安排两天经典历史文化行程"
+          ]
+        },
+        "violations": [],
+        "revision_count": 1,
+        "plan_version": 1,
+        "supervisor": {
+          "workers": [
+            "poi",
+            "weather",
+            "hotel",
+            "food",
+            "route"
+          ],
+          "routing_reason": "两天北京历史文化行程，需景点检索、天气、住宿、餐饮及交通路线规划，完整执行研究链路。"
+        }
+      },
+      "elapsed_seconds": 75.91
+    },
+    {
+      "id": "E06",
+      "name": "长期 User Memory Recall",
+      "type": "memory",
+      "user_id": "eval-20260830-163820-d626b9-e06",
+      "passed": true,
+      "metrics": {
+        "memory_profile_present": true,
+        "recalled_transportation": "公共交通",
+        "recalled_accommodation": "经济型酒店",
+        "recalled_food": "本地特色",
+        "recalled_preferences": [
+          "博物馆",
+          "历史文化"
+        ],
+        "transport_pass": true,
+        "accommodation_pass": true,
+        "food_pass": true,
+        "preference_pass": true
+      },
+      "seed_response": {
+        "success": true,
+        "status": "completed",
+        "message": "旅行计划已完成",
+        "thread_id": "trip-ef50d9649a3a",
+        "data": {
+          "city": "北京",
+          "start_date": "2026-09-02",
+          "end_date": "2026-09-03",
+          "days": [
+            {
+              "date": "2026-09-02",
+              "day_index": 0,
+              "description": "第1天：游览天安门广场周边的博物馆群，包括北京警察博物馆、北京检察博物馆和中国国家博物馆，感受北京深厚的历史文化底蕴。",
+              "transportation": "公共交通（公交+步行）",
+              "accommodation": "经济型酒店",
+              "hotel": {
+                "name": "北京艺栈青年酒店(燕莎亮马桥地铁站店)",
+                "address": "新源南路甲3号佳亿广场F4层",
+                "location": {
+                  "longitude": 116.4551,
+                  "latitude": 39.9522
+                },
+                "price_range": "200-350元",
+                "rating": "4.3",
+                "distance": "距离天安门广场约8公里",
+                "type": "经济型酒店",
+                "estimated_cost": 300
+              },
+              "attractions": [
+                {
+                  "name": "北京警察博物馆",
+                  "address": "东交民巷36号",
+                  "location": {
+                    "longitude": 116.4074,
+                    "latitude": 39.8994
+                  },
+                  "visit_duration": 90,
+                  "description": "北京警察博物馆位于东交民巷，展示北京警察历史沿革、警用装备和重大案件侦破历程，是了解首都公安发展的重要场所。",
+                  "category": "博物馆",
+                  "rating": 4.2,
+                  "photos": [],
+                  "poi_id": "",
+                  "image_url": null,
+                  "ticket_price": 0
+                },
+                {
+                  "name": "北京检察博物馆",
+                  "address": "东交民巷39号",
+                  "location": {
+                    "longitude": 116.4074,
+                    "latitude": 39.8994
+                  },
+                  "visit_duration": 90,
+                  "description": "北京检察博物馆位于东交民巷，展示中国检察制度发展历程和北京检察工作历史，馆藏丰富，具有重要的历史文化价值。",
+                  "category": "博物馆",
+                  "rating": 4.0,
+                  "photos": [],
+                  "poi_id": "",
+                  "image_url": null,
+                  "ticket_price": 0
+                },
+                {
+                  "name": "中国国家博物馆",
+                  "address": "东长安街16号天安门广场东侧",
+                  "location": {
+                    "longitude": 116.3972,
+                    "latitude": 39.9055
+                  },
+                  "visit_duration": 180,
+                  "description": "中国国家博物馆是中华文化的祠堂和祖庙，馆藏文物140余万件，涵盖从远古到当代的各类珍贵文物，是了解中华文明的最佳去处。",
+                  "category": "博物馆",
+                  "rating": 4.8,
+                  "photos": [],
+                  "poi_id": "",
+                  "image_url": null,
+                  "ticket_price": 0
+                }
+              ],
+              "meals": [
+                {
+                  "type": "breakfast",
+                  "name": "老北京炸酱面·渝湘美食(东华门店)",
+                  "address": "东华门大街60号",
+                  "location": {
+                    "longitude": 116.4012,
+                    "latitude": 39.9085
+                  },
+                  "description": "位于东华门大街的本地特色早餐店，提供正宗老北京炸酱面，是开启一天博物馆之旅的绝佳选择。",
+                  "cuisine": "本地菜",
+                  "rating": 4.2,
+                  "avg_cost": 30,
+                  "distance": "距离国家博物馆约1公里",
+                  "poi_id": null,
+                  "source": "nearby",
+                  "estimated_cost": 30
+                },
+                {
+                  "type": "lunch",
+                  "name": "四季民福烤鸭店(故宫店)",
+                  "address": "南池子大街11号故宫东门旁",
+                  "location": {
+                    "longitude": 116.3995,
+                    "latitude": 39.9075
+                  },
+                  "description": "位于故宫东门旁的知名烤鸭店，环境优雅，烤鸭皮脆肉嫩，是游览博物馆后品尝北京烤鸭的绝佳选择。",
+                  "cuisine": "北京菜",
+                  "rating": 4.6,
+                  "avg_cost": 120,
+                  "distance": "距离国家博物馆约800米",
+                  "poi_id": null,
+                  "source": "nearby",
+                  "estimated_cost": 80
+                },
+                {
+                  "type": "dinner",
+                  "name": "全聚德(前门店)",
+                  "address": "前门大街30号",
+                  "location": {
+                    "longitude": 116.3982,
+                    "latitude": 39.8995
+                  },
+                  "description": "全聚德是北京烤鸭的百年老字号，前门店位于前门大街，是品尝正宗北京烤鸭的经典之选。",
+                  "cuisine": "北京菜",
+                  "rating": 4.5,
+                  "avg_cost": 150,
+                  "distance": "距离国家博物馆约1.5公里",
+                  "poi_id": null,
+                  "source": "popular",
+                  "estimated_cost": 100
+                }
+              ],
+              "route_segments": [
+                {
+                  "from_name": "北京艺栈青年酒店",
+                  "to_name": "北京警察博物馆",
+                  "distance": "8.5公里",
+                  "duration": "40分钟",
+                  "mode": "地铁+公交",
+                  "detail": "从酒店步行至亮马桥地铁站，乘坐地铁10号线至国贸站换乘1号线至王府井站，步行约15分钟到达东交民巷36号"
+                },
+                {
+                  "from_name": "北京警察博物馆",
+                  "to_name": "北京检察博物馆",
+                  "distance": "0.1公里",
+                  "duration": "2分钟",
+                  "mode": "步行",
+                  "detail": "两馆相邻，步行即可到达"
+                },
+                {
+                  "from_name": "北京检察博物馆",
+                  "to_name": "中国国家博物馆",
+                  "distance": "1.1公里",
+                  "duration": "15分钟",
+                  "mode": "步行",
+                  "detail": "沿东交民巷向西步行至前门东大街，再沿广场东侧路向北步行至天安门广场东侧"
+                },
+                {
+                  "from_name": "中国国家博物馆",
+                  "to_name": "北京艺栈青年酒店",
+                  "distance": "8.5公里",
+                  "duration": "40分钟",
+                  "mode": "地铁",
+                  "detail": "从天安门东站乘坐地铁1号线至国贸站换乘10号线至亮马桥站，步行约10分钟返回酒店"
+                }
+              ]
+            },
+            {
+              "date": "2026-09-03",
+              "day_index": 1,
+              "description": "第2天：游览西城区的中国地质博物馆和北京鲁迅博物馆，深入了解地质科学和文学巨匠鲁迅的生平事迹。",
+              "transportation": "公共交通（公交+步行）",
+              "accommodation": "经济型酒店",
+              "hotel": {
+                "name": "北京艺栈青年酒店(燕莎亮马桥地铁站店)",
+                "address": "新源南路甲3号佳亿广场F4层",
+                "location": {
+                  "longitude": 116.4551,
+                  "latitude": 39.9522
+                },
+                "price_range": "200-350元",
+                "rating": "4.3",
+                "distance": "距离地质博物馆约9公里",
+                "type": "经济型酒店",
+                "estimated_cost": 300
+              },
+              "attractions": [
+                {
+                  "name": "中国地质博物馆",
+                  "address": "西四羊肉胡同15号",
+                  "location": {
+                    "longitude": 116.3668,
+                    "latitude": 39.9244
+                  },
+                  "visit_duration": 150,
+                  "description": "中国地质博物馆是中国成立最早的地质类博物馆，馆藏各类地质标本20余万件，包括珍贵的矿物、岩石、古生物化石等，是了解地球科学的重要窗口。",
+                  "category": "博物馆",
+                  "rating": 4.5,
+                  "photos": [],
+                  "poi_id": "",
+                  "image_url": null,
+                  "ticket_price": 30
+                },
+                {
+                  "name": "北京鲁迅博物馆",
+                  "address": "阜城门内宫门口二条19号",
+                  "location": {
+                    "longitude": 116.3522,
+                    "latitude": 39.9244
+                  },
+                  "visit_duration": 120,
+                  "description": "北京鲁迅博物馆位于鲁迅故居所在地，展示鲁迅先生的生平事迹、文学创作和思想历程，馆内保存有鲁迅在北京生活时的故居原貌。",
+                  "category": "博物馆",
+                  "rating": 4.4,
+                  "photos": [],
+                  "poi_id": "",
+                  "image_url": null,
+                  "ticket_price": 0
+                }
+              ],
+              "meals": [
+                {
+                  "type": "breakfast",
+                  "name": "老北京炸酱面(南长街店)",
+                  "address": "南长街甲30号",
+                  "location": {
+                    "longitude": 116.3905,
+                    "latitude": 39.9102
+                  },
+                  "description": "位于南长街的本地特色早餐店，提供正宗老北京炸酱面，为一天的博物馆之旅补充能量。",
+                  "cuisine": "本地菜",
+                  "rating": 4.3,
+                  "avg_cost": 30,
+                  "distance": "距离地质博物馆约3公里",
+                  "poi_id": null,
+                  "source": "nearby",
+                  "estimated_cost": 30
+                },
+                {
+                  "type": "lunch",
+                  "name": "紫光园清真北京小吃(北河沿店)",
+                  "address": "北河沿大街甲145号",
+                  "location": {
+                    "longitude": 116.4052,
+                    "latitude": 39.9152
+                  },
+                  "description": "紫光园是北京知名的清真小吃连锁，提供各类地道北京小吃，是午餐的绝佳选择。",
+                  "cuisine": "清真北京小吃",
+                  "rating": 4.4,
+                  "avg_cost": 60,
+                  "distance": "距离地质博物馆约4公里",
+                  "poi_id": null,
+                  "source": "nearby",
+                  "estimated_cost": 50
+                },
+                {
+                  "type": "dinner",
+                  "name": "花家怡园(四合院总店)",
+                  "address": "东直门内大街235号",
+                  "location": {
+                    "longitude": 116.4252,
+                    "latitude": 39.9402
+                  },
+                  "description": "花家怡园是北京著名的四合院餐厅，在传统四合院中品尝地道北京菜，环境雅致，是体验北京饮食文化的绝佳选择。",
+                  "cuisine": "北京菜",
+                  "rating": 4.6,
+                  "avg_cost": 150,
+                  "distance": "距离鲁迅博物馆约7公里",
+                  "poi_id": null,
+                  "source": "popular",
+                  "estimated_cost": 100
+                }
+              ],
+              "route_segments": [
+                {
+                  "from_name": "北京艺栈青年酒店",
+                  "to_name": "中国地质博物馆",
+                  "distance": "9公里",
+                  "duration": "45分钟",
+                  "mode": "地铁",
+                  "detail": "从亮马桥站乘坐地铁10号线至呼家楼站换乘6号线至北海北站，步行约15分钟到达西四羊肉胡同15号"
+                },
+                {
+                  "from_name": "中国地质博物馆",
+                  "to_name": "北京鲁迅博物馆",
+                  "distance": "1.2公里",
+                  "duration": "20分钟",
+                  "mode": "公交",
+                  "detail": "从白塔寺东站乘坐102路/103路/101路公交至阜成门外站，步行约10分钟到达阜城门内宫门口二条19号"
+                },
+                {
+                  "from_name": "北京鲁迅博物馆",
+                  "to_name": "北京艺栈青年酒店",
+                  "distance": "9.5公里",
+                  "duration": "45分钟",
+                  "mode": "地铁",
+                  "detail": "从阜成门站乘坐地铁2号线至朝阳门站换乘6号线至呼家楼站换乘10号线至亮马桥站，步行约10分钟返回酒店"
+                }
+              ]
+            }
+          ],
+          "weather_info": [
+            {
+              "date": "2026-09-02",
+              "day_weather": "晴",
+              "night_weather": "晴",
+              "day_temp": 30,
+              "night_temp": 18,
+              "wind_direction": "南",
+              "wind_power": "1-3"
+            },
+            {
+              "date": "2026-09-03",
+              "day_weather": "待查询",
+              "night_weather": "待查询",
+              "day_temp": null,
+              "night_temp": null,
+              "wind_direction": "待查询",
+              "wind_power": "待查询"
+            }
+          ],
+          "overall_suggestions": "本次北京2日游以博物馆和历史文化为主题，第1天游览天安门广场周边的警察博物馆、检察博物馆和国家博物馆，第2天前往西城区参观地质博物馆和鲁迅博物馆。所有博物馆均需提前预约，建议通过官方渠道预约门票。北京公共交通发达，建议使用地铁和公交出行，可购买交通卡或使用手机扫码乘车。博物馆内请保持安静，遵守参观秩序。天气方面：已获取的可信天气预报显示：9月2日白天晴，约30℃，夜间晴，约18℃，南风1-3级；9月2日白天气温较高，建议注意防晒补水；9月3日暂无可信天气预报，建议出发前3天重新查询天气。 预算方面：当前估算总预算约1080元。",
+          "budget": {
+            "total_attractions": 30,
+            "total_hotels": 600,
+            "total_meals": 390,
+            "total_transportation": 60,
+            "total": 1080
+          }
+        },
+        "interrupt": null,
+        "constraints": {
+          "max_budget": null,
+          "max_attractions_per_day": null,
+          "excluded_keywords": [],
+          "must_include_keywords": [],
+          "elderly_friendly": false,
+          "relaxed_pace": false,
+          "hard_notes": []
+        },
+        "violations": [],
+        "revision_count": 0,
+        "plan_version": 0,
+        "supervisor": {
+          "workers": [
+            "poi",
+            "weather",
+            "hotel",
+            "food",
+            "route"
+          ],
+          "routing_reason": "2天北京历史文化+博物馆行程，需景点检索、天气、住宿、餐饮及交通路线规划，完整执行旅行研究链路。"
+        }
+      },
+      "memory_after_seed": {
+        "user_id": "eval-20260830-163820-d626b9-e06",
+        "profile": {
+          "travel_preferences": [
+            "博物馆",
+            "历史文化"
+          ],
+          "avoid_keywords": [],
+          "preferred_transportation": "公共交通",
+          "preferred_accommodation": "经济型酒店",
+          "preferred_food": "本地特色",
+          "relaxed_pace": false,
+          "elderly_friendly": false
+        }
+      },
+      "recall_response": {
+        "success": true,
+        "status": "completed",
+        "message": "旅行计划已完成",
+        "thread_id": "trip-ed398b2d6e6e",
+        "data": {
+          "city": "北京",
+          "start_date": "2026-09-04",
+          "end_date": "2026-09-05",
+          "days": [
+            {
+              "date": "2026-09-04",
+              "day_index": 0,
+              "description": "第1天：游览天安门广场周边的博物馆群，包括北京警察博物馆、北京检察博物馆和中国国家博物馆，感受北京的历史文化底蕴。",
+              "transportation": "公共交通（地铁+步行）",
+              "accommodation": "经济型酒店",
+              "hotel": {
+                "name": "北京艺栈青年酒店(燕莎亮马桥地铁站店)",
+                "address": "新源南路甲3号佳亿广场F4层",
+                "location": {
+                  "longitude": 116.460136,
+                  "latitude": 39.950165
+                },
+                "price_range": "200-400元",
+                "rating": "4.3",
+                "distance": "距离景点约9公里",
+                "type": "经济型酒店",
+                "estimated_cost": 300
+              },
+              "attractions": [
+                {
+                  "name": "北京警察博物馆",
+                  "address": "东交民巷36号",
+                  "location": {
+                    "longitude": 116.4103,
+                    "latitude": 39.9042
+                  },
+                  "visit_duration": 90,
+                  "description": "北京警察博物馆位于东交民巷，展示北京警察历史与公安发展历程，馆内收藏了大量珍贵的历史文物和资料。",
+                  "category": "博物馆",
+                  "rating": null,
+                  "photos": [],
+                  "poi_id": "",
+                  "image_url": null,
+                  "ticket_price": 0
+                },
+                {
+                  "name": "北京检察博物馆",
+                  "address": "东交民巷39号",
+                  "location": {
+                    "longitude": 116.4103,
+                    "latitude": 39.9042
+                  },
+                  "visit_duration": 90,
+                  "description": "北京检察博物馆位于东交民巷，展示中国检察制度的发展历史和检察文化的传承。",
+                  "category": "博物馆",
+                  "rating": null,
+                  "photos": [],
+                  "poi_id": "",
+                  "image_url": null,
+                  "ticket_price": 0
+                },
+                {
+                  "name": "中国国家博物馆",
+                  "address": "东长安街16号天安门广场东侧",
+                  "location": {
+                    "longitude": 116.4039,
+                    "latitude": 39.9047
+                  },
+                  "visit_duration": 180,
+                  "description": "中国国家博物馆是中华文明的收藏殿堂，馆藏文物丰富，涵盖从远古到近现代的历史文化精品，是了解中国历史的最佳去处。",
+                  "category": "博物馆",
+                  "rating": null,
+                  "photos": [],
+                  "poi_id": "",
+                  "image_url": null,
+                  "ticket_price": 0
+                }
+              ],
+              "meals": [
+                {
+                  "type": "breakfast",
+                  "name": "老北京炸酱面·渝湘美食(东华门店)",
+                  "address": "东华门大街60号",
+                  "location": {
+                    "longitude": 116.4039,
+                    "latitude": 39.9047
+                  },
+                  "description": "位于东华门大街，提供地道的老北京炸酱面，是体验北京本地早餐的好选择。",
+                  "cuisine": "本地菜",
+                  "rating": 4.2,
+                  "avg_cost": 30,
+                  "distance": "距离景点约1公里",
+                  "poi_id": null,
+                  "source": "nearby",
+                  "estimated_cost": 30
+                },
+                {
+                  "type": "lunch",
+                  "name": "四季民福烤鸭店(故宫店)",
+                  "address": "南池子大街11号故宫东门旁",
+                  "location": {
+                    "longitude": 116.4039,
+                    "latitude": 39.9047
+                  },
+                  "description": "位于故宫东门旁，是品尝正宗北京烤鸭的知名餐厅，环境优雅，烤鸭皮脆肉嫩。",
+                  "cuisine": "北京菜",
+                  "rating": 4.6,
+                  "avg_cost": 120,
+                  "distance": "距离国家博物馆约1公里",
+                  "poi_id": null,
+                  "source": "nearby",
+                  "estimated_cost": 80
+                },
+                {
+                  "type": "dinner",
+                  "name": "全聚德(前门店)",
+                  "address": "前门大街30号",
+                  "location": {
+                    "longitude": 116.3983,
+                    "latitude": 39.8994
+                  },
+                  "description": "全聚德是北京烤鸭的百年老字号，前门店是其标志性门店，品尝最正宗的挂炉烤鸭。",
+                  "cuisine": "北京菜",
+                  "rating": 4.5,
+                  "avg_cost": 150,
+                  "distance": "距离酒店约8公里",
+                  "poi_id": null,
+                  "source": "popular",
+                  "estimated_cost": 100
+                }
+              ],
+              "route_segments": [
+                {
+                  "from_name": "北京艺栈青年酒店",
+                  "to_name": "北京警察博物馆",
+                  "distance": "9.3公里",
+                  "duration": "50分钟",
+                  "mode": "地铁",
+                  "detail": "步行至亮马桥站乘坐地铁10号线内环至国贸站，换乘地铁1号线至王府井站C3西南口出，步行约15分钟到达"
+                },
+                {
+                  "from_name": "北京警察博物馆",
+                  "to_name": "北京检察博物馆",
+                  "distance": "0.5公里",
+                  "duration": "8分钟",
+                  "mode": "步行",
+                  "detail": "沿东交民巷向西步行约500米即可到达"
+                },
+                {
+                  "from_name": "北京检察博物馆",
+                  "to_name": "中国国家博物馆",
+                  "distance": "1.0公里",
+                  "duration": "15分钟",
+                  "mode": "步行",
+                  "detail": "沿东交民巷向西步行，经正义路向北，再向西步行约1公里到达天安门广场东侧"
+                },
+                {
+                  "from_name": "中国国家博物馆",
+                  "to_name": "北京艺栈青年酒店",
+                  "distance": "9.5公里",
+                  "duration": "50分钟",
+                  "mode": "地铁",
+                  "detail": "步行至王府井站乘坐地铁1号线至国贸站，换乘地铁10号线至亮马桥站A西北口出，步行回酒店"
+                }
+              ]
+            },
+            {
+              "date": "2026-09-05",
+              "day_index": 1,
+              "description": "第2天：前往西城区游览中国地质博物馆和北京鲁迅博物馆，感受地质科学与文学历史的魅力。",
+              "transportation": "公共交通（地铁+步行）",
+              "accommodation": "经济型酒店",
+              "hotel": {
+                "name": "北京艺栈青年酒店(燕莎亮马桥地铁站店)",
+                "address": "新源南路甲3号佳亿广场F4层",
+                "location": {
+                  "longitude": 116.460136,
+                  "latitude": 39.950165
+                },
+                "price_range": "200-400元",
+                "rating": "4.3",
+                "distance": "距离景点约10公里",
+                "type": "经济型酒店",
+                "estimated_cost": 300
+              },
+              "attractions": [
+                {
+                  "name": "中国地质博物馆",
+                  "address": "西四羊肉胡同15号",
+                  "location": {
+                    "longitude": 116.3692,
+                    "latitude": 39.9244
+                  },
+                  "visit_duration": 120,
+                  "description": "中国地质博物馆是中国最早的地质科学博物馆，馆藏丰富的地质标本和矿物晶体，展示地球演化的奥秘。",
+                  "category": "博物馆",
+                  "rating": null,
+                  "photos": [],
+                  "poi_id": "",
+                  "image_url": null,
+                  "ticket_price": 30
+                },
+                {
+                  "name": "北京鲁迅博物馆",
+                  "address": "阜城门内宫门口二条19号",
+                  "location": {
+                    "longitude": 116.3571,
+                    "latitude": 39.9254
+                  },
+                  "visit_duration": 120,
+                  "description": "北京鲁迅博物馆位于鲁迅故居所在地，展示鲁迅先生的生平事迹和文学成就，是了解中国现代文学的重要场所。",
+                  "category": "博物馆",
+                  "rating": null,
+                  "photos": [],
+                  "poi_id": "",
+                  "image_url": null,
+                  "ticket_price": 0
+                }
+              ],
+              "meals": [
+                {
+                  "type": "breakfast",
+                  "name": "老北京炸酱面(南长街店)",
+                  "address": "南长街甲30号",
+                  "location": {
+                    "longitude": 116.39,
+                    "latitude": 39.91
+                  },
+                  "description": "位于南长街的老北京炸酱面店，提供地道的北京传统早餐，炸酱面酱香浓郁。",
+                  "cuisine": "本地菜",
+                  "rating": 4.3,
+                  "avg_cost": 30,
+                  "distance": "距离酒店约8公里",
+                  "poi_id": null,
+                  "source": "nearby",
+                  "estimated_cost": 30
+                },
+                {
+                  "type": "lunch",
+                  "name": "金鼎轩(雍和宫地坛店)",
+                  "address": "和平里西街77号",
+                  "location": {
+                    "longitude": 116.41,
+                    "latitude": 39.95
+                  },
+                  "description": "金鼎轩是北京知名的粤式茶餐厅，提供丰富的点心和粤菜，环境舒适。",
+                  "cuisine": "粤菜",
+                  "rating": 4.4,
+                  "avg_cost": 80,
+                  "distance": "距离地质博物馆约5公里",
+                  "poi_id": null,
+                  "source": "nearby",
+                  "estimated_cost": 60
+                },
+                {
+                  "type": "dinner",
+                  "name": "花家怡园(四合院总店)",
+                  "address": "东直门内大街235号",
+                  "location": {
+                    "longitude": 116.43,
+                    "latitude": 39.94
+                  },
+                  "description": "花家怡园是北京著名的四合院餐厅，主打新派北京菜，环境古色古香，是体验北京美食文化的绝佳选择。",
+                  "cuisine": "北京菜",
+                  "rating": 4.5,
+                  "avg_cost": 150,
+                  "distance": "距离酒店约5公里",
+                  "poi_id": null,
+                  "source": "popular",
+                  "estimated_cost": 100
+                }
+              ],
+              "route_segments": [
+                {
+                  "from_name": "北京艺栈青年酒店",
+                  "to_name": "中国地质博物馆",
+                  "distance": "10.6公里",
+                  "duration": "55分钟",
+                  "mode": "地铁",
+                  "detail": "步行至亮马桥站乘坐地铁10号线内环至呼家楼站，换乘地铁6号线至平安里站，再换乘地铁4号线至西四站D西南口出，步行约10分钟到达"
+                },
+                {
+                  "from_name": "中国地质博物馆",
+                  "to_name": "北京鲁迅博物馆",
+                  "distance": "1.0公里",
+                  "duration": "15分钟",
+                  "mode": "步行",
+                  "detail": "沿羊肉胡同向西步行，经阜成门内大街步行约1公里到达鲁迅博物馆"
+                },
+                {
+                  "from_name": "北京鲁迅博物馆",
+                  "to_name": "北京艺栈青年酒店",
+                  "distance": "10.5公里",
+                  "duration": "55分钟",
+                  "mode": "地铁",
+                  "detail": "步行至阜成门站乘坐地铁2号线至东直门站，换乘地铁13号线至亮马桥站，步行回酒店"
+                }
+              ]
+            }
+          ],
+          "weather_info": [
+            {
+              "date": "2026-09-04",
+              "day_weather": "待查询",
+              "night_weather": "待查询",
+              "day_temp": null,
+              "night_temp": null,
+              "wind_direction": "待查询",
+              "wind_power": "待查询"
+            },
+            {
+              "date": "2026-09-05",
+              "day_weather": "待查询",
+              "night_weather": "待查询",
+              "day_temp": null,
+              "night_temp": null,
+              "wind_direction": "待查询",
+              "wind_power": "待查询"
+            }
+          ],
+          "overall_suggestions": "北京博物馆类景点大多需要提前预约，建议提前在官方渠道预约门票。出行以公共交通为主，建议下载北京地铁APP或使用乘车码。博物馆内禁止大声喧哗，请文明参观。部分博物馆周一闭馆，请确认开放时间。天气方面：9月4日、9月5日暂无可信天气预报，建议出发前3天重新查询天气。 预算方面：当前估算总预算约1130元。",
+          "budget": {
+            "total_attractions": 30,
+            "total_hotels": 600,
+            "total_meals": 400,
+            "total_transportation": 100,
+            "total": 1130
+          }
+        },
+        "interrupt": null,
+        "constraints": {
+          "max_budget": null,
+          "max_attractions_per_day": null,
+          "excluded_keywords": [],
+          "must_include_keywords": [],
+          "elderly_friendly": false,
+          "relaxed_pace": false,
+          "hard_notes": []
+        },
+        "violations": [],
+        "revision_count": 0,
+        "plan_version": 0,
+        "supervisor": {
+          "workers": [
+            "poi",
+            "weather",
+            "hotel",
+            "food",
+            "route"
+          ],
+          "routing_reason": "2天北京行程，偏好博物馆与历史文化，需住宿经济型酒店并安排三餐与公共交通路线，完整链路均需执行。"
+        }
+      },
+      "thread_state": {
+        "values": {
+          "request": {
+            "city": "北京",
+            "start_date": "2026-09-04",
+            "end_date": "2026-09-05",
+            "travel_days": 2,
+            "transportation": "公共交通",
+            "accommodation": "经济型酒店",
+            "preferences": [
+              "博物馆",
+              "历史文化"
+            ],
+            "food_preference": "本地特色",
+            "free_text_input": ""
+          },
+          "attractions_info": "[{'type': 'text', 'text': '{\"suggestion\":{\"keywords\":\"\",\"ciytes\":{\"suggestion\":[]}},\"pois\":[{\"id\":\"B000A83U0P\",\"name\":\"中国国家博物馆\",\"address\":\"东长安街16号天安门广场东侧\",\"typecode\":\"140100\",\"photo\":\"https://aos-comment.amap.com/B000A83U0P/headerImg/c18b1708f9b307ca92bf78809f7a0220_2048_2048_80.jpg\"},{\"id\":\"B000A8UIN8\",\"name\":\"故宫博物院\",\"address\":\"景山前街4号\",\"typecode\":\"110201|140100\",\"photo\":\"http://store.is.autonavi.com/showpic/2f968490d105bb2741e17f90b85c6b79\"},{\"id\":\"B0HUFDX2SZ\",\"name\":\"中央礼品文物管理中心\",\"address\":\"西兴隆街1号\",\"typecode\":\"140100\",\"photo\":\"https://aos-comment.amap.com/B0HUFDX2SZ/comment/20260316-b5582c984891c4a88f54bd59-8cKsyj7BsM06ngumxuJdK8.jpg\"},{\"id\":\"B000A7CRPA\",\"name\":\"国家自然博物馆\",\"address\":\"天桥南大街126号\",\"typecode\":\"140100\",\"photo\":\"http://store.is.autonavi.com/showpic/75fe64b469bd6b88564a9644a9a471ca\"},{\"id\":\"B000A3E189\",\"name\":\"北京警察博物馆\",\"address\":\"东交民巷36号\",\"typecode\":\"140100\",\"photo\":\"http://store.is.autonavi.com/showpic/5d743251217083210b996dc20c818bd5\"},{\"id\":\"B000A7BC2S\",\"name\":\"中国美术馆\",\"address\":\"五四大街1号\",\"typecode\":\"140100\",\"photo\":\"http://store.is.autonavi.com/showpic/7bd6fc174fed670cf2ea3a6ffcfa303a\"},{\"id\":\"B000AA0HTV\",\"name\":\"中国海关博物馆\",\"address\":\"建国门内大街2号\",\"typecode\":\"140100\",\"photo\":\"https://store.is.autonavi.com/showpic/52a316699a97c97c0000003139382383?type=pic\"},{\"id\":\"B000A84MRF\",\"name\":\"中国铁道博物馆正阳门馆\",\"address\":\"前门大街甲2号(前门地铁站E2北口旁)\",\"typecode\":\"140100\",\"photo\":\"http://store.is.autonavi.com/showpic/b5db866cf1e2fef06088957b9085a417\"},{\"id\":\"B0L0LUA3GD\",\"name\":\"巧克巧蔻·巧克力博物馆(北京馆)\",\"address\":\"廊坊头条2号院5号楼1层01号\",\"typecode\":\"140100\",\"photo\":\"https://aos-comment.amap.com/comment/content_service__1769922873038_06657985_1769922878238_88490056.jpg\"},{\"id\":\"B000A16BBC\",\"name\":\"北京古代建筑博物馆\",\"address\":\"东经路21号\",\"typecode\":\"140100\",\"photo\":\"http://store.is.autonavi.com/showpic/584ac3caafa9d9a3b44649f96af5faff\"},{\"id\":\"B000A8UMB4\",\"name\":\"中国钱币博物馆\",\"address\":\"西交民巷17号\",\"typecode\":\"140100\",\"photo\":\"https://aos-comment.amap.com/B000A8UMB4/comment/content_media_external_file_100006572_1768058312246_20893829.jpg\"},{\"id\":\"B000A85E86\",\"name\":\"中国妇女儿童博物馆\",\"address\":\"北极阁路9号\",\"typecode\":\"140100\",\"photo\":\"http://store.is.autonavi.com/showpic/4b3e5a52540959986e7c29f8cc00b59c\"},{\"id\":\"B000A88E4C\",\"name\":\"中国地质博物馆\",\"address\":\"西四羊肉胡同15号\",\"typecode\":\"140100\",\"photo\":\"http://store.is.autonavi.com/showpic/2c936a301df230738dc17b8f8a81528d\"},{\"id\":\"B0L2OHUUDS\",\"name\":\"国礼博物馆\",\"address\":\"西兴隆街与戴家胡同交叉口西北60米\",\"typecode\":\"140100\",\"photo\":\"https://store.is.autonavi.com/showpic/305df3e163d35e110000000743030024?type=pic\"},{\"id\":\"B0FFF3T3SC\",\"name\":\"史家胡同博物馆\",\"address\":\"朝阳门街道东四南大街史家胡同24号\",\"typecode\":\"140100\",\"photo\":\"http://store.is.autonavi.com/showpic/88ab2e7eaa870004db94843af353c23c\"},{\"id\":\"B0L65UOVLD\",\"name\":\"中国警察博物馆\",\"address\":\"东长安街14号公安部办公大楼D座\",\"typecode\":\"140100\",\"photo\":\"https://aos-comment.amap.com/B0L65UOVLD/comment/content_media_external_file_8831_1771649046108_09586921.jpg\"},{\"id\":\"B0K2O57QJB\",\"name\":\"北京检察博物馆\",\"address\":\"东交民巷39号\",\"typecode\":\"140100\",\"photo\":\"https://store.is.autonavi.com/showpic/c60a0a85c359981c937b226e30f1dd4d\"},{\"id\":\"B0FFJONA76\",\"name\":\"东四胡同博物馆\",\"address\":\"北京市东四街道北京市东四街道东四四条77号\",\"typecode\":\"140100\",\"photo\":\"http://store.is.autonavi.com/showpic/3fe772c5e341cf851a1696d2a7af14b7\"},{\"id\":\"B000A3BE77\",\"name\":\"北京鲁迅博物馆\",\"address\":\"阜城门内宫门口二条19号(阜成门地铁站B东北口步行260米)\",\"typecode\":\"110210\",\"photo\":\"https://store.is.autonavi.com/showpic/dc6a77943c5893fa0000002953582697?type=pic\"},{\"id\":\"B0FFFLJLZF\",\"name\":\"93号院博物馆\",\"address\":\"铁树斜街93号院\",\"typecode\":\"140100\",\"photo\":\"http://store.is.autonavi.com/showpic/15a446aa9aff245a86c8506e5f587703\"}]}', 'id': 'lc_866d65fa-7fad-45be-aa05-8385f83d88ab'}]",
+          "weather_info": "WEATHER_STATUS=OUT_OF_FORECAST_RANGE\n城市：北京\n旅行日期：2026-09-04 ~ 2026-09-05\n当前日期：2026-08-30\n可信预报窗口：2026-08-30 ~ 2026-09-02\n距离出发还有 5 天。\n旅行日期超出当前天气接口的可信预报范围，因此没有查询或提供具体逐日天气。\n禁止生成或推断具体的晴雨、温度、风力等天气数据。\n只能给出非具体天气性质的准备建议，并建议出发前 3 天重新查询。",
+          "hotels_info": "[{'type': 'text', 'text': '{\"suggestion\":{\"keywords\":\"\",\"ciytes\":{\"suggestion\":[]}},\"pois\":[{\"id\":\"B0LKJX43IL\",\"name\":\"驿小栈青年酒店(北京朝阳高铁站青年路地铁站店)\",\"address\":\"青年路西里3号院1号楼2层\",\"typecode\":\"100000\",\"photo\":\"https://store.is.autonavi.com/showpic/d3e12a1d0dea22e10000003278286245?type=pic\"},{\"id\":\"B0L04SXNTP\",\"name\":\"北京艺栈青年酒店(燕莎亮马桥地铁站店)\",\"address\":\"新源南路甲3号佳亿广场F4层\",\"typecode\":\"100100\",\"photo\":\"https://store.is.autonavi.com/showpic/ab282aa27762e7bc9284a2314f8883ff\"},{\"id\":\"B000A85TSU\",\"name\":\"北京美家快捷酒店(燕山石化店)\",\"address\":\"向阳路37号\",\"typecode\":\"100100\",\"photo\":\"https://store.is.autonavi.com/showpic/6ba78e1224bff39769fe684d41b10849\"},{\"id\":\"B0FFGH21I9\",\"name\":\"北京东方银河宾馆\",\"address\":\"南大街10号\",\"typecode\":\"100100\",\"photo\":\"http://store.is.autonavi.com/showpic/90c4bd4dfd7bbbc349e79e4792ec9e8b\"},{\"id\":\"B0M6TC56WN\",\"name\":\"wohkoon者行孙酒店(北京国贸百子湾地铁站店)\",\"address\":\"百子湾南三路百子湾东里403号楼2层201\",\"typecode\":\"100100\",\"photo\":\"https://store.is.autonavi.com/showpic/ee2a39f96cac88a551c55ae1a6f8a167\"},{\"id\":\"B0LAZBPVEI\",\"name\":\"才佰商务青年酒店(北京天坛医院白盆窑地铁站店)\",\"address\":\"樊羊路69号院2号楼116号(白盆窑地铁站A口步行150米)\",\"typecode\":\"100000\",\"photo\":\"https://aos-comment.amap.com/comment/20260320-c95f104a6a1df5146c9fab97-4sEJrIO9Tco7SJcIkQJew4.jpg\"},{\"id\":\"B0HRT655BL\",\"name\":\"北京金龙越鑫宾馆\",\"address\":\"太平中街\",\"typecode\":\"100100|100200\",\"photo\":\"http://store.is.autonavi.com/showpic/3ccf4cf5f1e9010c31bedc77b82a4ecb\"},{\"id\":\"B0L0SSJLPG\",\"name\":\"wohkoon者行孙精选酒店(北京朝阳路十里堡店)\",\"address\":\"朝阳路十里堡3号\",\"typecode\":\"100100\",\"photo\":\"https://store.is.autonavi.com/showpic/084b139d197a88724c1b766c0a8ca0c0\"},{\"id\":\"B000A8XE7H\",\"name\":\"北京群英阁宾馆\",\"address\":\"马驹桥商业街61号\",\"typecode\":\"100100\",\"photo\":\"http://store.is.autonavi.com/showpic/169cc91f0790afb0276c0f5862a43719\"},{\"id\":\"B000A9ZXNP\",\"name\":\"贞德麟宾馆(安贞医院安华桥地铁店)\",\"address\":\"安贞西里四区甲一号西楼\",\"typecode\":\"100200\",\"photo\":\"https://store.is.autonavi.com/showpic/54cb20e44df94d8bc1cef01358fba2cc\"},{\"id\":\"B0HKCZ7R0Q\",\"name\":\"静宇阁(大兴机场店)\",\"address\":\"礼贤镇东郏河村西三条13号\",\"typecode\":\"100000\",\"photo\":\"https://store.is.autonavi.com/showpic/4edc0be86577e17bc86cfb7661c86fc6\"},{\"id\":\"B0FFFWSIZM\",\"name\":\"海友客栈(北京亦庄天华西路店)\",\"address\":\"天华园一里四区10号楼3108号\",\"typecode\":\"100105\",\"photo\":\"http://store.is.autonavi.com/showpic/286fc9d4f72d0aa8def04fd06f53f345\"},{\"id\":\"B0G1BH7P39\",\"name\":\"星程酒店(北京万丰路店)\",\"address\":\"万丰路526号南侧3-5号\",\"typecode\":\"100100\",\"photo\":\"http://aos-cdn-image.amap.com/sns/ugccomment/0db78f3c-b9aa-4354-84f8-b41066133956.jpg\"},{\"id\":\"B0FFHF4IAC\",\"name\":\"忆爱精品酒店(北京良乡北关店)\",\"address\":\"北关西路20号伟业商厦4层\",\"typecode\":\"100100\",\"photo\":\"http://store.is.autonavi.com/showpic/c547cb4411a2d83bbdbfc3d79abe383e\"},{\"id\":\"B0FFFAI0EO\",\"name\":\"学府园宾馆\",\"address\":\"成府路45号\",\"typecode\":\"100104\",\"photo\":\"https://store.is.autonavi.com/showpic/35b3814ac42cce0023871bbcef0cbb7b\"},{\"id\":\"B000A84A8Q\",\"name\":\"升港国际商务酒店\",\"address\":\"首都机场西平街12号\",\"typecode\":\"100104\",\"photo\":\"https://aos-comment.amap.com/B000A84A8Q/comment/content_media_external_file_5161_1768214202540_21801488.jpg\"},{\"id\":\"B0FFKPW3O8\",\"name\":\"星宿酒店(北京双桥地铁站店)\",\"address\":\"康惠园2号院2号楼底商\",\"typecode\":\"100100\",\"photo\":\"http://store.is.autonavi.com/showpic/48f6daf9fdac113b7a5a2a3281b4bb08\"},{\"id\":\"B0HA5DMWJ4\",\"name\":\"花筑·北京金凯特民宿酒店\",\"address\":\"宋庄镇丁各庄村临18号\",\"typecode\":\"100100\",\"photo\":\"http://store.is.autonavi.com/showpic/1685637c742441d88548b61d9acc8826\"},{\"id\":\"B0HG5SBFW9\",\"name\":\"北京永顺酒店(物资学院路店)\",\"address\":\"永顺镇物资学院路南口C1\",\"typecode\":\"100100\",\"photo\":\"https://store.is.autonavi.com/showpic/d3aa5c58660072429ee87bb7d20024d0\"},{\"id\":\"B000A8VYN5\",\"name\":\"北京大友宾馆(车道沟店)\",\"address\":\"车道沟南路B座商业楼\",\"typecode\":\"100100\",\"photo\":\"http://store.is.autonavi.com/showpic/0febf1790480684968721e5073468bc0\"}]}', 'id': 'lc_29b4a1ac-3914-4498-9e2d-d5895425d2da'}]",
+          "food_info": "[maps_around_search]: [{'type': 'text', 'text': '{\"pois\":[{\"id\":\"B0IDKPGE9B\",\"name\":\"东华门烤鸭\",\"address\":\"北池子大街与东华门大街交叉口北60米\",\"typecode\":\"050100\",\"photo\":\"https://aos-comment.amap.com/B0IDKPGE9B/comment/037D1F70_2961_4410_8E36_26D0DCFBCD56_L0_001_1280_1588_1731391333038_24538404.jpg\"},{\"id\":\"B0FFH22N6U\",\"name\":\"老北京炸酱面·渝湘美食(东华门店)\",\"address\":\"东华门大街60号\",\"typecode\":\"050111\",\"photo\":\"https://store.is.autonavi.com/showpic/809f483ee764247ac2110527ba76219e\"},{\"id\":\"B0FFG9V1R9\",\"name\":\"四季民福烤鸭店(故宫店)\",\"address\":\"南池子大街11号故宫东门旁(距趣拿步行780m)\",\"typecode\":\"050111\",\"photo\":\"http://store.is.autonavi.com/showpic/4b7d9bedcbdb8eff378f08fef54cfed2\"},{\"id\":\"B0HUBMD6LZ\",\"name\":\"全福德烤鸭店(故宫东门店)\",\"address\":\"北京城区东华门大街63号\",\"typecode\":\"050000\",\"photo\":\"https://store.is.autonavi.com/showpic/4a54b2e502d531b10000002928870889?type=pic\"},{\"id\":\"B0LK4SW9Z1\",\"name\":\"北京烤鸭(南池子大街店)\",\"address\":\"南池子大街与普渡寺西巷交叉口南60米\",\"typecode\":\"050000\",\"photo\":\"http://store.is.autonavi.com/showpic/436046508f8a4bf09540a08f78881b3b\"},{\"id\":\"B0FFGLATHT\",\"name\":\"老北京炸酱面店\",\"address\":\"南池子大街33号\",\"typecode\":\"050111\",\"photo\":\"https://aos-comment.amap.com/comment/content_service__1770782064075_40151334_1770782080533_49556889.jpg\"},{\"id\":\"B0FFH6C9HC\",\"name\":\"北京烤鸭(南池子大街店)\",\"address\":\"东华门大街81号\",\"typecode\":\"050111\",\"photo\":\"http://store.is.autonavi.com/showpic/d82465896b6f026c4969ea08791c29c3\"},{\"id\":\"B0FFK5EQ0I\",\"name\":\"河沿肉饼(东华门店)\",\"address\":\"北京城区东华门大街60号\",\"typecode\":\"050100\",\"photo\":\"https://aos-comment.amap.com/B0FFK5EQ0I/comment/3DEF8056_974A_49E6_BECF_9FB0D94DE0C4_L0_001_2048_153_1769491331953_25965969.jpg\"},{\"id\":\"B0KDUN2EB0\",\"name\":\"老北京驴打滚\",\"address\":\"东华门大街与南池子大街交叉口东100米\",\"typecode\":\"050100\",\"photo\":\"https://aos-comment.amap.com/B0KDUN2EB0/comment/FAEF6AE3_1173_474C_9200_3E935036E4BE_L0_001_1500_200_1767489774066_48356254.jpg\"},{\"id\":\"B0L3USGUMC\",\"name\":\"河沿烤鸭店\",\"address\":\"普渡寺西巷与普渡寺后巷交叉口北80米\",\"typecode\":\"050100\",\"photo\":\"http://store.is.autonavi.com/showpic/6e4c22a0bdfdd703d44570fb14e4253c\"},{\"id\":\"B0LBXLJUCQ\",\"name\":\"紫光园清真北京小吃(故宫·东华门店)\",\"address\":\"东华门大街54号1幢\",\"typecode\":\"050121\",\"photo\":\"https://aos-comment.amap.com/B0LBXLJUCQ/comment/content_media_external_images_media_100012523_1748600709795_60959307.jpg\"},{\"id\":\"B0LK4SWVDC\",\"name\":\"京福巷·烤鸭·北京菜(故宫·王府井店)\",\"address\":\"东华门大街小区北1门旁\",\"typecode\":\"050100\",\"photo\":\"https://aos-comment.amap.com/B0LK4SWVDC/comment/0B1FE1D3_5DB5_48BE_9710_2DEAC9E51E92_L0_001_1500_200_1770719118660_17207535.jpg\"},{\"id\":\"B0KRBCU9G0\",\"name\":\"北景源·北京涮肉(故宫角楼店)\",\"address\":\"景山前街24号(近北海公园南门)\",\"typecode\":\"050117\",\"photo\":\"https://aos-comment.amap.com/B0KRBCU9G0/comment/D749FD04_7253_47F4_A31A_3D4D18F5B82A_L0_001_1336_200_1746342448125_55412649.jpg\"},{\"id\":\"B0G0AKOSSJ\",\"name\":\"老北京炸酱面(景山前街店)\",\"address\":\"景山前街北海\",\"typecode\":\"050100\",\"photo\":\"https://aos-comment.amap.com/B0G0AKOSSJ/comment/4502E5D2_9E09_4424_A43A_1C441302EC8B_L0_001_2000_150_1771475587667_31693695.jpg\"},{\"id\":\"B000AA0IME\",\"name\":\"老北京炸酱面(南长街店)\",\"address\":\"南长街甲30号\",\"typecode\":\"050118\",\"photo\":\"https://aos-comment.amap.com/B000AA0IME/comment/content_media_external_images_media_100003049_1768840988260_31766068.jpg\"},{\"id\":\"B0LBG567ZG\",\"name\":\"紫光园清真北京小吃(北河沿店)\",\"address\":\"北河沿大街甲145号北河沿大街甲145号院\",\"typecode\":\"050121\",\"photo\":\"https://aos-comment.amap.com/comment/content_service__1771933343770_31940095_1771933380298_72568057.jpg\"},{\"id\":\"B0FFMGTCAY\",\"name\":\"思味道老北京百年卤煮(北河沿大街甲145号院店)\",\"address\":\"北河沿大街甲145号北河沿大街甲145号院\",\"typecode\":\"050100\",\"photo\":\"https://store.is.autonavi.com/showpic/8fc78f25a841bb72776783a7cb1b2a61\"},{\"id\":\"B0FFGBTHIL\",\"name\":\"铜锅涮肉馆烤鸭\",\"address\":\"北河沿大街141号\",\"typecode\":\"070000\",\"photo\":\"http://store.is.autonavi.com/showpic/bcfc13cc4ef4d53b6d471b71a08edb27\"},{\"id\":\"B0FFGBO55H\",\"name\":\"鹏宏天外天烤鸭店(北河沿店)\",\"address\":\"北河沿大街141号\",\"typecode\":\"050118\",\"photo\":\"https://store.is.autonavi.com/showpic/735c94a707e309130000003003020659?type=pic\"},{\"id\":\"B0KGGC6JYY\",\"name\":\"晨昕卤煮·京味小馆\",\"address\":\"东华门大街25号\",\"typecode\":\"050100\",\"photo\":\"https://aos-comment.amap.com/B0KGGC6JYY/comment/202506_23-14233_1750659999497_41789806.jpg\"}]}', 'id': 'lc_e6a6c2f8-204c-40ee-a6c2-2cc2d38c54b2'}]\n[maps_text_search]: [{'type': 'text', 'text': '{\"suggestion\":{\"keywords\":\"\",\"ciytes\":{\"suggestion\":[]}},\"pois\":[{\"id\":\"B0FFHELWET\",\"name\":\"四季民福烤鸭店(王府井东安门店)\",\"address\":\"东安门大街53号万程华府酒店1楼\",\"typecode\":\"050118\",\"photo\":\"http://store.is.autonavi.com/showpic/746fdbb61c0bf8096b09b5091835de42\"},{\"id\":\"B0KA9ZNT40\",\"name\":\"紫光园·烤鸭·北京菜(前门大栅栏店)\",\"address\":\"大栅栏商业街31号\",\"typecode\":\"050000\",\"photo\":\"http://store.is.autonavi.com/query_pic?id=stc56029d4-8f36-4428-b61d-aded6ac2fe6d&user=search&operate=original\"},{\"id\":\"B000A87JDG\",\"name\":\"全聚德(北京和平门店)\",\"address\":\"北京城区前门西大街14号楼(和平门地铁站C2东南口步行80米)\",\"typecode\":\"050116|050111\",\"photo\":\"http://store.is.autonavi.com/showpic/70fdb310de6e96d189b13f8de5f31f2c\"},{\"id\":\"B000A9KC22\",\"name\":\"花家怡园(四合院总店)\",\"address\":\"东直门内大街235号\",\"typecode\":\"050100\",\"photo\":\"https://store.is.autonavi.com/showpic/80913cdd5e0b54500000002240416867?type=pic\"},{\"id\":\"B000A7KVRU\",\"name\":\"金鼎轩(雍和宫地坛店)\",\"address\":\"和平里西街77号(雍和宫地铁站A西北口步行260米)\",\"typecode\":\"050101\",\"photo\":\"http://store.is.autonavi.com/showpic/6baf878c941bc67759d42b71c38eac3c\"},{\"id\":\"B000A9XMKL\",\"name\":\"北京凯瑞御仙都皇家菜博物馆\",\"address\":\"西四环北路117号金四季购物中心F1层\",\"typecode\":\"050101\",\"photo\":\"http://store.is.autonavi.com/showpic/37109f16584602f945d66c92ec963cf0\"},{\"id\":\"B0FFK7GTSV\",\"name\":\"四季民福烤鸭店(前门大栅栏店)\",\"address\":\"前门大栅栏街18号(1796商场二层同仁堂东侧)\",\"typecode\":\"050118\",\"photo\":\"http://store.is.autonavi.com/query_pic?id=st59c23194-2049-497b-ab1e-b8f9371fcc9b&user=search&operate=original\"},{\"id\":\"B0IKKSU342\",\"name\":\"紫光园·烤鸭·北京菜(王府井店)\",\"address\":\"北京城区王府井大街99号世纪大厦F1层\",\"typecode\":\"050100\",\"photo\":\"http://store.is.autonavi.com/query_pic?id=stc56029d4-8f36-4428-b61d-aded6ac2fe6d&user=search&operate=original\"},{\"id\":\"B000A81B55\",\"name\":\"全聚德(前门店)\",\"address\":\"前门大街30号\",\"typecode\":\"050111\",\"photo\":\"https://store.is.autonavi.com/showpic/898aa6c79e8ffd450000002890480675?type=pic\"},{\"id\":\"B0FFF5OOM3\",\"name\":\"花家怡园(清华西路店)\",\"address\":\"清华西路28号(圆明园地铁站A出口西侧院内)\",\"typecode\":\"050111\",\"photo\":\"http://store.is.autonavi.com/showpic/16aed393c75b460bf7f801c8f276ce65\"},{\"id\":\"B000AAASEM\",\"name\":\"北京宴(丰台总店)\",\"address\":\"北京城区靛厂路3号楼\",\"typecode\":\"050101\",\"photo\":\"http://store.is.autonavi.com/showpic/e336846cf3b3e6ea80fcdf695bd68377\"},{\"id\":\"B0FFK2MS0Z\",\"name\":\"四季民福烤鸭店(前门店)\",\"address\":\"大栅栏街1号(大栅栏街和珠宝市街交汇处)\",\"typecode\":\"050118\",\"photo\":\"http://store.is.autonavi.com/query_pic?id=st59c23194-2049-497b-ab1e-b8f9371fcc9b&user=search&operate=original\"},{\"id\":\"B000A7OJXW\",\"name\":\"北平楼烤鸭·京菜(牡丹园店)\",\"address\":\"北京城区牡丹园西里16号楼1-2层\",\"typecode\":\"050111\",\"photo\":\"http://store.is.autonavi.com/showpic/2d3db28ea803f2a5a6625e534e6a170f\"},{\"id\":\"B0H04DCOJK\",\"name\":\"紫光园·烤鸭·北京菜(崇文门店)\",\"address\":\"北京城区东打磨厂7号宝鼎中心B座一层\",\"typecode\":\"050121\",\"photo\":\"http://store.is.autonavi.com/query_pic?id=stc56029d4-8f36-4428-b61d-aded6ac2fe6d&user=search&operate=original\"},{\"id\":\"B000A81K31\",\"name\":\"全聚德(清华园店)\",\"address\":\"中关村东路1号院清华科技园·启迪科技大厦A座1层\",\"typecode\":\"050111\",\"photo\":\"http://store.is.autonavi.com/showpic/16d254bb74c06575190b0e48374dce31\"},{\"id\":\"B0FFIPC3YE\",\"name\":\"鸿宾楼(朝阳门店)\",\"address\":\"北京城区朝阳门外大街20号1栋联合大厦2层\",\"typecode\":\"050100\",\"photo\":\"http://store.is.autonavi.com/showpic/1e3ffadad062d60b2103ceefec976135\"},{\"id\":\"B0KKL5RBFZ\",\"name\":\"八次方烤鸭店\",\"address\":\"王府井大街74号王府井教堂东侧附属配楼一层北侧03门\",\"typecode\":\"050000\",\"photo\":\"https://store.is.autonavi.com/showpic/2c3c82f47d171ed30000004854878271?type=pic\"},{\"id\":\"B0LUXUO1CE\",\"name\":\"大鸭梨烤鸭(王府井臻选店)\",\"address\":\"区王府井大街王府商厦四楼\",\"typecode\":\"070000\",\"photo\":\"https://store.is.autonavi.com/showpic/8f84d5022e23b1b40000003659576441?type=pic\"},{\"id\":\"B0FFFQ2KBT\",\"name\":\"四季民福烤鸭店(和平里店)\",\"address\":\"和平里街21号北京商报1-2层(天丰利商场旁)\",\"typecode\":\"050118\",\"photo\":\"http://store.is.autonavi.com/showpic/3fee8190997acb7d9c74869bcb2367b3\"},{\"id\":\"B0FFFT3EO3\",\"name\":\"紫光园(西直门店)\",\"address\":\"西直门内大街冠英园西区6号楼1门(南草厂街交叉口向南100米路东)\",\"typecode\":\"050121\",\"photo\":\"http://store.is.autonavi.com/showpic/4e65939d3edf6774fd513868b3370c81\"}]}', 'id': 'lc_6b9a09f4-9907-4ffa-9d39-61f9076e104b'}]",
+          "cluster_info": "=== 每日景点分组建议（基于地理位置聚类） ===\n\n⚠️ 景点数量超过每天3个的上限，已按距离聚类中心最近的原则筛选，保留每天最多3个景点\n\n第1天建议景点:\n  1. 北京警察博物馆 (116.4103, 39.9042)\n  2. 北京检察博物馆 (116.4103, 39.9042)\n  3. 中国国家博物馆 (116.4039, 39.9047)\n  组内最大距离: 0.5km\n\n第2天建议景点:\n  1. 中国地质博物馆 (116.3692, 39.9244)\n  2. 北京鲁迅博物馆 (116.3571, 39.9254)\n  组内最大距离: 1.0km\n\n=== 选中景点间距离矩阵 (km) ===\n\n           中国国家博物  北京警察博物  中国地质博物  北京检察博物  北京鲁迅博物\n中国国家博物馆        --    0.5    3.7    0.5    4.6\n北京警察博物馆      0.5      --    4.2    0.0    5.1\n中国地质博物馆      3.7    4.2      --    4.2    1.0\n北京检察博物馆      0.5    0.0    4.2      --    5.1\n北京鲁迅博物馆      4.6    5.1    1.0    5.1      --",
+          "route_info": "[maps_direction_transit_integrated]: [{'type': 'text', 'text': '{\"origin\":\"116.46,39.95\",\"destination\":\"116.4103,39.9042\",\"distance\":\"9330\",\"transits\":[{\"duration\":\"3028\",\"walking_distance\":\"1655\",\"segments\":[{\"walking\":{\"origin\":\"116.460136,39.950165\",\"destination\":\"116.462151,39.949383\",\"distance\":\"425\",\"duration\":\"460\",\"steps\":[{\"instruction\":\"步行15米0x02\",\"road\":\"\",\"distance\":\"15\",\"action\":\"0x02\",\"assistant_action\":\"\"},{\"instruction\":\"步行53米0x01\",\"road\":\"\",\"distance\":\"53\",\"action\":\"0x01\",\"assistant_action\":\"\"},{\"instruction\":\"步行58米0x02\",\"road\":\"\",\"distance\":\"58\",\"action\":\"0x02\",\"assistant_action\":\"\"},{\"instruction\":\"步行33米0x03\",\"road\":\"\",\"distance\":\"33\",\"action\":\"0x03\",\"assistant_action\":\"\"},{\"instruction\":\"步行22米0x01\",\"road\":\"\",\"distance\":\"22\",\"action\":\"0x01\",\"assistant_action\":\"\"},{\"instruction\":\"沿新源南路步行17米0x01\",\"road\":\"新源南路\",\"distance\":\"17\",\"action\":\"0x01\",\"assistant_action\":\"\"},{\"instruction\":\"步行33米0x00到达目的地\",\"road\":\"\",\"distance\":\"33\",\"action\":\"0x00\",\"assistant_action\":\"到达目的地\"},{\"instruction\":\"步行1米0x08\",\"road\":\"\",\"distance\":\"1\",\"action\":\"0x08\",\"assistant_action\":\"\"},{\"instruction\":\"步行194米0x00到达亮马桥\",\"road\":\"\",\"distance\":\"194\",\"action\":\"0x00\",\"assistant_action\":\"到达亮马桥\"}]},\"bus\":{\"buslines\":[{\"name\":\"地铁10号线内环(巴沟--巴沟)\",\"distance\":\"4490\",\"duration\":\"690\",\"departure_stop\":{\"name\":\"亮马桥\"},\"arrival_stop\":{\"name\":\"国贸\"},\"via_stops\":[{\"name\":\"农业展览馆\"},{\"name\":\"团结湖\"},{\"name\":\"呼家楼\"},{\"name\":\"金台夕照\"}]}]},\"entrance\":{\"name\":\"A西北口\"},\"exit\":{\"name\":\"\"},\"railway\":{\"name\":\"\",\"trip\":\"\"}},{\"walking\":{\"origin\":\"116.461838,39.909103\",\"destination\":\"116.459702,39.908424\",\"distance\":\"245\",\"duration\":\"283\",\"steps\":[{\"instruction\":\"步行228米0x00到达国贸\",\"road\":\"\",\"distance\":\"228\",\"action\":\"0x00\",\"assistant_action\":\"到达国贸\"}]},\"bus\":{\"buslines\":[{\"name\":\"地铁1号线八通线(环球度假区--苹果园)\",\"distance\":\"4110\",\"duration\":\"660\",\"departure_stop\":{\"name\":\"国贸\"},\"arrival_stop\":{\"name\":\"王府井\"},\"via_stops\":[{\"name\":\"永安里\"},{\"name\":\"建国门\"},{\"name\":\"东单\"}]}]},\"entrance\":{\"name\":\"\"},\"exit\":{\"name\":\"C3西南口\"},\"railway\":{\"name\":\"\",\"trip\":\"\"}},{\"walking\":{\"origin\":\"116.411568,39.908070\",\"destination\":\"116.410233,39.904194\",\"distance\":\"985\",\"duration\":\"935\",\"steps\":[{\"instruction\":\"步行100米0x08\",\"road\":\"\",\"distance\":\"100\",\"action\":\"0x08\",\"assistant_action\":\"\"},{\"instruction\":\"步行1米0x00到达目的地\",\"road\":\"\",\"distance\":\"1\",\"action\":\"0x00\",\"assistant_action\":\"到达目的地\"},{\"instruction\":\"步行40米0x02\",\"road\":\"\",\"distance\":\"40\",\"action\":\"0x02\",\"assistant_action\":\"\"},{\"instruction\":\"沿台基厂大街步行576米0x02\",\"road\":\"台基厂大街\",\"distance\":\"576\",\"action\":\"0x02\",\"assistant_action\":\"\"},{\"instruction\":\"沿东交民巷步行90米0x02\",\"road\":\"东交民巷\",\"distance\":\"90\",\"action\":\"0x02\",\"assistant_action\":\"\"},{\"instruction\":\"步行179米0x00到达目的地\",\"road\":\"\",\"distance\":\"179\",\"action\":\"0x00\",\"assistant_action\":\"到达目的地\"}]},\"bus\":{\"buslines\":[]},\"entrance\":{\"name\":\"\"},\"exit\":{\"name\":\"\"},\"railway\":{\"name\":\"\",\"trip\":\"\"}}]},{\"duration\":\"3414\",\"walking_distance\":\"1470\",\"segments\":[{\"walking\":{\"origin\":\"116.460136,39.950165\",\"destination\":\"116.459473,39.948986\",\"distance\":\"199\",\"duration\":\"228\",\"steps\":[{\"instruction\":\"步行15米0x02\",\"road\":\"\",\"distance\":\"15\",\"action\":\"0x02\",\"assistant_action\":\"\"},{\"instruction\":\"步行117米0x02\",\"road\":\"\",\"distance\":\"117\",\"action\":\"0x02\",\"assistant_action\":\"\"},{\"instruction\":\"沿新源南路步行67米0x00到达燕莎桥西\",\"road\":\"新源南路\",\"distance\":\"67\",\"action\":\"0x00\",\"assistant_action\":\"到达燕莎桥西\"}]},\"bus\":{\"buslines\":[{\"name\":\"413路(北京朝阳站--东直门枢纽站)\",\"distance\":\"2849\",\"duration\":\"1209\",\"departure_stop\":{\"name\":\"燕莎桥西\"},\"arrival_stop\":{\"name\":\"东直门枢纽站\"},\"via_stops\":[{\"name\":\"新源南路西口\"},{\"name\":\"塔园村\"},{\"name\":\"幸福三村\"},{\"name\":\"春秀路\"}]}]},\"entrance\":{\"name\":\"\"},\"exit\":{\"name\":\"\"},\"railway\":{\"name\":\"\",\"trip\":\"\"}},{\"walking\":{\"origin\":\"116.436295,39.942394\",\"destination\":\"116.433556,39.941090\",\"distance\":\"378\",\"duration\":\"395\",\"steps\":[{\"instruction\":\"步行58米0x02\",\"road\":\"\",\"distance\":\"58\",\"action\":\"0x02\",\"assistant_action\":\"\"},{\"instruction\":\"步行28米0x01\",\"road\":\"\",\"distance\":\"28\",\"action\":\"0x01\",\"assistant_action\":\"\"},{\"instruction\":\"步行43米0x02\",\"road\":\"\",\"distance\":\"43\",\"action\":\"0x02\",\"assistant_action\":\"\"},{\"instruction\":\"步行52米0x01\",\"road\":\"\",\"distance\":\"52\",\"action\":\"0x01\",\"assistant_action\":\"\"},{\"instruction\":\"步行13米0x02\",\"road\":\"\",\"distance\":\"13\",\"action\":\"0x02\",\"assistant_action\":\"\"},{\"instruction\":\"步行22米0x00到达目的地\",\"road\":\"\",\"distance\":\"22\",\"action\":\"0x00\",\"assistant_action\":\"到达目的地\"},{\"instruction\":\"步行162米0x00到达东直门\",\"road\":\"\",\"distance\":\"162\",\"action\":\"0x00\",\"assistant_action\":\"到达东直门\"}]},\"bus\":{\"buslines\":[{\"name\":\"地铁2号线内环(积水潭--积水潭)\",\"distance\":\"5632\",\"duration\":\"750\",\"departure_stop\":{\"name\":\"东直门\"},\"arrival_stop\":{\"name\":\"崇文门\"},\"via_stops\":[{\"name\":\"东四十条\"},{\"name\":\"朝阳门\"},{\"name\":\"建国门\"},{\"name\":\"北京站\"}]}]},\"entrance\":{\"name\":\"B1东北口\"},\"exit\":{\"name\":\"A1西北口\"},\"railway\":{\"name\":\"\",\"trip\":\"\"}},{\"walking\":{\"origin\":\"116.416908,39.901081\",\"destination\":\"116.410233,39.904194\",\"distance\":\"893\",\"duration\":\"832\",\"steps\":[{\"instruction\":\"步行105米0x02\",\"road\":\"\",\"distance\":\"105\",\"action\":\"0x02\",\"assistant_action\":\"\"},{\"instruction\":\"步行1米0x00到达目的地\",\"road\":\"\",\"distance\":\"1\",\"action\":\"0x00\",\"assistant_action\":\"到达目的地\"},{\"instruction\":\"沿崇文门西大街辅路步行355米0x02\",\"road\":\"崇文门西大街辅路\",\"distance\":\"355\",\"action\":\"0x02\",\"assistant_action\":\"\"},{\"instruction\":\"沿台基厂大街步行164米0x01\",\"road\":\"台基厂大街\",\"distance\":\"164\",\"action\":\"0x01\",\"assistant_action\":\"\"},{\"instruction\":\"沿东交民巷步行90米0x02\",\"road\":\"东交民巷\",\"distance\":\"90\",\"action\":\"0x02\",\"assistant_action\":\"\"},{\"instruction\":\"步行179米0x00到达目的地\",\"road\":\"\",\"distance\":\"179\",\"action\":\"0x00\",\"assistant_action\":\"到达目的地\"}]},\"bus\":{\"buslines\":[]},\"entrance\":{\"name\":\"\"},\"exit\":{\"name\":\"\"},\"railway\":{\"name\":\"\",\"trip\":\"\"}}]},{\"duration\":\"3833\",\"walking_distance\":\"1306\",\"segments\":[{\"walking\":{\"origin\":\"116.460136,39.950165\",\"destination\":\"116.462151,39.949383\",\"distance\":\"425\",\"duration\":\"460\",\"steps\":[{\"instruction\":\"步行15米0x02\",\"road\":\"\",\"distance\":\"15\",\"action\":\"0x02\",\"assistant_action\":\"\"},{\"instruction\":\"步行53米0x01\",\"road\":\"\",\"distance\":\"53\",\"action\":\"0x01\",\"assistant_action\":\"\"},{\"instruction\":\"步行58米0x02\",\"road\":\"\",\"distance\":\"58\",\"action\":\"0x02\",\"assistant_action\":\"\"},{\"instruction\":\"步行33米0x03\",\"road\":\"\",\"distance\":\"33\",\"action\":\"0x03\",\"assistant_action\":\"\"},{\"instruction\":\"步行22米0x01\",\"road\":\"\",\"distance\":\"22\",\"action\":\"0x01\",\"assistant_action\":\"\"},{\"instruction\":\"沿新源南路步行17米0x01\",\"road\":\"新源南路\",\"distance\":\"17\",\"action\":\"0x01\",\"assistant_action\":\"\"},{\"instruction\":\"步行33米0x00到达目的地\",\"road\":\"\",\"distance\":\"33\",\"action\":\"0x00\",\"assistant_action\":\"到达目的地\"},{\"instruction\":\"步行1米0x08\",\"road\":\"\",\"distance\":\"1\",\"action\":\"0x08\",\"assistant_action\":\"\"},{\"instruction\":\"步行194米0x00到达亮马桥\",\"road\":\"\",\"distance\":\"194\",\"action\":\"0x00\",\"assistant_action\":\"到达亮马桥\"}]},\"bus\":{\"buslines\":[{\"name\":\"地铁10号线内环(巴沟--巴沟)\",\"distance\":\"4490\",\"duration\":\"690\",\"departure_stop\":{\"name\":\"亮马桥\"},\"arrival_stop\":{\"name\":\"国贸\"},\"via_stops\":[{\"name\":\"农业展览馆\"},{\"name\":\"团结湖\"},{\"name\":\"呼家楼\"},{\"name\":\"金台夕照\"}]}]},\"entrance\":{\"name\":\"A西北口\"},\"exit\":{\"name\":\"E1西北口\"},\"railway\":{\"name\":\"\",\"trip\":\"\"}},{\"walking\":{\"origin\":\"116.461838,39.909103\",\"destination\":\"116.459824,39.908695\",\"distance\":\"310\",\"duration\":\"329\",\"steps\":[{\"instruction\":\"步行156米0x00\",\"road\":\"\",\"distance\":\"156\",\"action\":\"0x00\",\"assistant_action\":\"\"},{\"instruction\":\"步行1米0x00到达目的地\",\"road\":\"\",\"distance\":\"1\",\"action\":\"0x00\",\"assistant_action\":\"到达目的地\"},{\"instruction\":\"步行9米0x02\",\"road\":\"\",\"distance\":\"9\",\"action\":\"0x02\",\"assistant_action\":\"\"},{\"instruction\":\"步行58米0x02\",\"road\":\"\",\"distance\":\"58\",\"action\":\"0x02\",\"assistant_action\":\"\"},{\"instruction\":\"沿建国门外大街辅路步行87米0x00到达大北窑西\",\"road\":\"建国门外大街辅路\",\"distance\":\"87\",\"action\":\"0x00\",\"assistant_action\":\"到达大北窑西\"}]},\"bus\":{\"buslines\":[{\"name\":\"9路(金台路口西--靛厂新村)\",\"distance\":\"5155\",\"duration\":\"1848\",\"departure_stop\":{\"name\":\"大北窑西\"},\"arrival_stop\":{\"name\":\"台基厂路口西\"},\"via_stops\":[{\"name\":\"永安里路口西\"},{\"name\":\"日坛路\"},{\"name\":\"北京站东\"},{\"name\":\"北京站西\"},{\"name\":\"崇文门西\"}]}]},\"entrance\":{\"name\":\"\"},\"exit\":{\"name\":\"\"},\"railway\":{\"name\":\"\",\"trip\":\"\"}},{\"walking\":{\"origin\":\"116.410133,39.901077\",\"destination\":\"116.410233,39.904194\",\"distance\":\"571\",\"duration\":\"506\",\"steps\":[{\"instruction\":\"沿前门东大街辅路步行138米0x01\",\"road\":\"前门东大街辅路\",\"distance\":\"138\",\"action\":\"0x01\",\"assistant_action\":\"\"},{\"instruction\":\"沿台基厂大街步行164米0x01\",\"road\":\"台基厂大街\",\"distance\":\"164\",\"action\":\"0x01\",\"assistant_action\":\"\"},{\"instruction\":\"沿东交民巷步行90米0x02\",\"road\":\"东交民巷\",\"distance\":\"90\",\"action\":\"0x02\",\"assistant_action\":\"\"},{\"instruction\":\"步行179米0x00到达目的地\",\"road\":\"\",\"distance\":\"179\",\"action\":\"0x00\",\"assistant_action\":\"到达目的地\"}]},\"bus\":{\"buslines\":[]},\"entrance\":{\"name\":\"\"},\"exit\":{\"name\":\"\"},\"railway\":{\"name\":\"\",\"trip\":\"\"}}]},{\"duration\":\"3671\",\"walking_distance\":\"1054\",\"segments\":[{\"walking\":{\"origin\":\"116.460136,39.950165\",\"destination\":\"116.459473,39.948986\",\"distance\":\"199\",\"duration\":\"228\",\"steps\":[{\"instruction\":\"步行15米0x02\",\"road\":\"\",\"distance\":\"15\",\"action\":\"0x02\",\"assistant_action\":\"\"},{\"instruction\":\"步行117米0x02\",\"road\":\"\",\"distance\":\"117\",\"action\":\"0x02\",\"assistant_action\":\"\"},{\"instruction\":\"沿新源南路步行67米0x00到达燕莎桥西\",\"road\":\"新源南路\",\"distance\":\"67\",\"action\":\"0x00\",\"assistant_action\":\"到达燕莎桥西\"}]},\"bus\":{\"buslines\":[{\"name\":\"413路(北京朝阳站--东直门枢纽站)\",\"distance\":\"2849\",\"duration\":\"1209\",\"departure_stop\":{\"name\":\"燕莎桥西\"},\"arrival_stop\":{\"name\":\"东直门枢纽站\"},\"via_stops\":[{\"name\":\"新源南路西口\"},{\"name\":\"塔园村\"},{\"name\":\"幸福三村\"},{\"name\":\"春秀路\"}]}]},\"entrance\":{\"name\":\"\"},\"exit\":{\"name\":\"\"},\"railway\":{\"name\":\"\",\"trip\":\"\"}},{\"walking\":{\"origin\":\"116.436295,39.942394\",\"destination\":\"116.433556,39.941090\",\"distance\":\"378\",\"duration\":\"395\",\"steps\":[{\"instruction\":\"步行58米0x02\",\"road\":\"\",\"distance\":\"58\",\"action\":\"0x02\",\"assistant_action\":\"\"},{\"instruction\":\"步行28米0x01\",\"road\":\"\",\"distance\":\"28\",\"action\":\"0x01\",\"assistant_action\":\"\"},{\"instruction\":\"步行43米0x02\",\"road\":\"\",\"distance\":\"43\",\"action\":\"0x02\",\"assistant_action\":\"\"},{\"instruction\":\"步行52米0x01\",\"road\":\"\",\"distance\":\"52\",\"action\":\"0x01\",\"assistant_action\":\"\"},{\"instruction\":\"步行13米0x02\",\"road\":\"\",\"distance\":\"13\",\"action\":\"0x02\",\"assistant_action\":\"\"},{\"instruction\":\"步行22米0x00到达目的地\",\"road\":\"\",\"distance\":\"22\",\"action\":\"0x00\",\"assistant_action\":\"到达目的地\"},{\"instruction\":\"步行162米0x00到达东直门\",\"road\":\"\",\"distance\":\"162\",\"action\":\"0x00\",\"assistant_action\":\"到达东直门\"}]},\"bus\":{\"buslines\":[{\"name\":\"地铁2号线内环(积水潭--积水潭)\",\"distance\":\"5632\",\"duration\":\"750\",\"departure_stop\":{\"name\":\"东直门\"},\"arrival_stop\":{\"name\":\"崇文门\"},\"via_stops\":[{\"name\":\"东四十条\"},{\"name\":\"朝阳门\"},{\"name\":\"建国门\"},{\"name\":\"北京站\"}]}]},\"entrance\":{\"name\":\"B1东北口\"},\"exit\":{\"name\":\"A2西北口\"},\"railway\":{\"name\":\"\",\"trip\":\"\"}},{\"walking\":{\"origin\":\"116.416908,39.901081\",\"destination\":\"116.416794,39.901138\",\"distance\":\"148\",\"duration\":\"185\",\"steps\":[{\"instruction\":\"步行104米0x01\",\"road\":\"\",\"distance\":\"104\",\"action\":\"0x01\",\"assistant_action\":\"\"},{\"instruction\":\"步行1米0x00到达目的地\",\"road\":\"\",\"distance\":\"1\",\"action\":\"0x00\",\"assistant_action\":\"到达目的地\"},{\"instruction\":\"沿崇文门西大街步行44米0x00到达崇文门西\",\"road\":\"崇文门西大街\",\"distance\":\"44\",\"action\":\"0x00\",\"assistant_action\":\"到达崇文门西\"}]},\"bus\":{\"buslines\":[{\"name\":\"103路(北京站西--动物园枢纽站)\",\"distance\":\"670\",\"duration\":\"617\",\"departure_stop\":{\"name\":\"崇文门西\"},\"arrival_stop\":{\"name\":\"台基厂\"},\"via_stops\":[{\"name\":\"台基厂路口东\"}]}]},\"entrance\":{\"name\":\"\"},\"exit\":{\"name\":\"\"},\"railway\":{\"name\":\"\",\"trip\":\"\"}},{\"walking\":{\"origin\":\"116.411720,39.903137\",\"destination\":\"116.410233,39.904194\",\"distance\":\"329\",\"duration\":\"287\",\"steps\":[{\"instruction\":\"沿台基厂大街步行60米0x02\",\"road\":\"台基厂大街\",\"distance\":\"60\",\"action\":\"0x02\",\"assistant_action\":\"\"},{\"instruction\":\"沿东交民巷步行90米0x02\",\"road\":\"东交民巷\",\"distance\":\"90\",\"action\":\"0x02\",\"assistant_action\":\"\"},{\"instruction\":\"步行179米0x00到达目的地\",\"road\":\"\",\"distance\":\"179\",\"action\":\"0x00\",\"assistant_action\":\"到达目的地\"}]},\"bus\":{\"buslines\":[]},\"entrance\":{\"name\":\"\"},\"exit\":{\"name\":\"\"},\"railway\":{\"name\":\"\",\"trip\":\"\"}}]},{\"duration\":\"4807\",\"walking_distance\":\"889\",\"segments\":[{\"walking\":{\"origin\":\"116.460136,39.950165\",\"destination\":\"116.461456,39.948372\",\"distance\":\"317\",\"duration\":\"336\",\"steps\":[{\"instruction\":\"步行15米0x02\",\"road\":\"\",\"distance\":\"15\",\"action\":\"0x02\",\"assistant_action\":\"\"},{\"instruction\":\"步行53米0x01\",\"road\":\"\",\"distance\":\"53\",\"action\":\"0x01\",\"assistant_action\":\"\"},{\"instruction\":\"步行58米0x02\",\"road\":\"\",\"distance\":\"58\",\"action\":\"0x02\",\"assistant_action\":\"\"},{\"instruction\":\"步行33米0x03\",\"road\":\"\",\"distance\":\"33\",\"action\":\"0x03\",\"assistant_action\":\"\"},{\"instruction\":\"步行22米0x01\",\"road\":\"\",\"distance\":\"22\",\"action\":\"0x01\",\"assistant_action\":\"\"},{\"instruction\":\"沿新源南路步行36米0x02\",\"road\":\"新源南路\",\"distance\":\"36\",\"action\":\"0x02\",\"assistant_action\":\"\"},{\"instruction\":\"沿东三环北路辅路步行100米0x00到达燕莎桥南\",\"road\":\"东三环北路辅路\",\"distance\":\"100\",\"action\":\"0x00\",\"assistant_action\":\"到达燕莎桥南\"}]},\"bus\":{\"buslines\":[{\"name\":\"405路(孙河公交场站--四惠枢纽站)\",\"distance\":\"3976\",\"duration\":\"1943\",\"departure_stop\":{\"name\":\"燕莎桥南\"},\"arrival_stop\":{\"name\":\"光华桥南\"},\"via_stops\":[{\"name\":\"亮马桥\"},{\"name\":\"农业展览馆\"},{\"name\":\"白家庄北\"},{\"name\":\"白家庄\"},{\"name\":\"呼家楼南\"}]},{\"name\":\"687路(燕莎桥南--马家堡公交场站)\",\"distance\":\"3983\",\"duration\":\"1943\",\"departure_stop\":{\"name\":\"燕莎桥南\"},\"arrival_stop\":{\"name\":\"光华桥南\"},\"via_stops\":[{\"name\":\"亮马桥\"},{\"name\":\"农业展览馆\"},{\"name\":\"白家庄\"},{\"name\":\"呼家楼南\"}]}]},\"entrance\":{\"name\":\"\"},\"exit\":{\"name\":\"\"},\"railway\":{\"name\":\"\",\"trip\":\"\"}},{\"walking\":{\"origin\":\"116.461449,39.912647\",\"destination\":\"116.461449,39.912647\",\"distance\":\"1\",\"duration\":\"0\",\"steps\":[{\"instruction\":\"沿东三环中路辅路步行1米0x00到达光华桥南\",\"road\":\"东三环中路辅路\",\"distance\":\"1\",\"action\":\"0x00\",\"assistant_action\":\"到达光华桥南\"}]},\"bus\":{\"buslines\":[{\"name\":\"9路(金台路口西--靛厂新村)\",\"distance\":\"5697\",\"duration\":\"2022\",\"departure_stop\":{\"name\":\"光华桥南\"},\"arrival_stop\":{\"name\":\"台基厂路口西\"},\"via_stops\":[{\"name\":\"大北窑西\"},{\"name\":\"永安里路口西\"},{\"name\":\"日坛路\"},{\"name\":\"北京站东\"},{\"name\":\"北京站西\"},{\"name\":\"崇文门西\"}]}]},\"entrance\":{\"name\":\"\"},\"exit\":{\"name\":\"\"},\"railway\":{\"name\":\"\",\"trip\":\"\"}},{\"walking\":{\"origin\":\"116.410133,39.901077\",\"destination\":\"116.410233,39.904194\",\"distance\":\"571\",\"duration\":\"506\",\"steps\":[{\"instruction\":\"沿前门东大街辅路步行138米0x01\",\"road\":\"前门东大街辅路\",\"distance\":\"138\",\"action\":\"0x01\",\"assistant_action\":\"\"},{\"instruction\":\"沿台基厂大街步行164米0x01\",\"road\":\"台基厂大街\",\"distance\":\"164\",\"action\":\"0x01\",\"assistant_action\":\"\"},{\"instruction\":\"沿东交民巷步行90米0x02\",\"road\":\"东交民巷\",\"distance\":\"90\",\"action\":\"0x02\",\"assistant_action\":\"\"},{\"instruction\":\"步行179米0x00到达目的地\",\"road\":\"\",\"distance\":\"179\",\"action\":\"0x00\",\"assistant_action\":\"到达目的地\"}]},\"bus\":{\"buslines\":[]},\"entrance\":{\"name\":\"\"},\"exit\":{\"name\":\"\"},\"railway\":{\"name\":\"\",\"trip\":\"\"}}]}]}', 'id': 'lc_3e5844fc-4c8c-478f-b250-9e60ad7fd8ac'}]\n[maps_direction_transit_integrated]: [{'type': 'text', 'text': '{\"origin\":\"116.46,39.95\",\"destination\":\"116.3692,39.9244\",\"distance\":\"10588\",\"transits\":[{\"duration\":\"3236\",\"walking_distance\":\"1396\",\"segments\":[{\"walking\":{\"origin\":\"116.460136,39.950165\",\"destination\":\"116.462151,39.949383\",\"distance\":\"425\",\"duration\":\"460\",\"steps\":[{\"instruction\":\"步行15米0x02\",\"road\":\"\",\"distance\":\"15\",\"action\":\"0x02\",\"assistant_action\":\"\"},{\"instruction\":\"步行53米0x01\",\"road\":\"\",\"distance\":\"53\",\"action\":\"0x01\",\"assistant_action\":\"\"},{\"instruction\":\"步行58米0x02\",\"road\":\"\",\"distance\":\"58\",\"action\":\"0x02\",\"assistant_action\":\"\"},{\"instruction\":\"步行33米0x03\",\"road\":\"\",\"distance\":\"33\",\"action\":\"0x03\",\"assistant_action\":\"\"},{\"instruction\":\"步行22米0x01\",\"road\":\"\",\"distance\":\"22\",\"action\":\"0x01\",\"assistant_action\":\"\"},{\"instruction\":\"沿新源南路步行17米0x01\",\"road\":\"新源南路\",\"distance\":\"17\",\"action\":\"0x01\",\"assistant_action\":\"\"},{\"instruction\":\"步行33米0x00到达目的地\",\"road\":\"\",\"distance\":\"33\",\"action\":\"0x00\",\"assistant_action\":\"到达目的地\"},{\"instruction\":\"步行1米0x08\",\"road\":\"\",\"distance\":\"1\",\"action\":\"0x08\",\"assistant_action\":\"\"},{\"instruction\":\"步行194米0x00到达亮马桥\",\"road\":\"\",\"distance\":\"194\",\"action\":\"0x00\",\"assistant_action\":\"到达亮马桥\"}]},\"bus\":{\"buslines\":[{\"name\":\"地铁10号线内环(巴沟--巴沟)\",\"distance\":\"2900\",\"duration\":\"450\",\"departure_stop\":{\"name\":\"亮马桥\"},\"arrival_stop\":{\"name\":\"呼家楼\"},\"via_stops\":[{\"name\":\"农业展览馆\"},{\"name\":\"团结湖\"}]}]},\"entrance\":{\"name\":\"A西北口\"},\"exit\":{\"name\":\"\"},\"railway\":{\"name\":\"\",\"trip\":\"\"}},{\"walking\":{\"origin\":\"116.461594,39.923317\",\"destination\":\"116.461594,39.923317\",\"distance\":\"58\",\"duration\":\"151\",\"steps\":[{\"instruction\":\"步行1米0x00到达呼家楼\",\"road\":\"\",\"distance\":\"1\",\"action\":\"0x00\",\"assistant_action\":\"到达呼家楼\"}]},\"bus\":{\"buslines\":[{\"name\":\"地铁6号线(潞阳--金安桥)\",\"distance\":\"8600\",\"duration\":\"990\",\"departure_stop\":{\"name\":\"呼家楼\"},\"arrival_stop\":{\"name\":\"平安里\"},\"via_stops\":[{\"name\":\"东大桥\"},{\"name\":\"朝阳门\"},{\"name\":\"东四\"},{\"name\":\"南锣鼓巷\"},{\"name\":\"北海北\"}]}]},\"entrance\":{\"name\":\"\"},\"exit\":{\"name\":\"\"},\"railway\":{\"name\":\"\",\"trip\":\"\"}},{\"walking\":{\"origin\":\"116.370552,39.932587\",\"destination\":\"116.372879,39.933949\",\"distance\":\"245\",\"duration\":\"269\",\"steps\":[{\"instruction\":\"步行341米0x00到达平安里\",\"road\":\"\",\"distance\":\"341\",\"action\":\"0x00\",\"assistant_action\":\"到达平安里\"}]},\"bus\":{\"buslines\":[{\"name\":\"地铁4号线大兴线(安河桥北--天宫院)\",\"distance\":\"1090\",\"duration\":\"210\",\"departure_stop\":{\"name\":\"平安里\"},\"arrival_stop\":{\"name\":\"西四\"},\"via_stops\":[]}]},\"entrance\":{\"name\":\"\"},\"exit\":{\"name\":\"D西南口\"},\"railway\":{\"name\":\"\",\"trip\":\"\"}},{\"walking\":{\"origin\":\"116.373337,39.924206\",\"destination\":\"116.369057,39.924397\",\"distance\":\"668\",\"duration\":\"706\",\"steps\":[{\"instruction\":\"步行177米0x08\",\"road\":\"\",\"distance\":\"177\",\"action\":\"0x08\",\"assistant_action\":\"\"},{\"instruction\":\"步行1米0x00到达目的地\",\"road\":\"\",\"distance\":\"1\",\"action\":\"0x00\",\"assistant_action\":\"到达目的地\"},{\"instruction\":\"步行14米0x02\",\"road\":\"\",\"distance\":\"14\",\"action\":\"0x02\",\"assistant_action\":\"\"},{\"instruction\":\"沿羊肉胡同步行306米0x02\",\"road\":\"羊肉胡同\",\"distance\":\"306\",\"action\":\"0x02\",\"assistant_action\":\"\"},{\"instruction\":\"沿羊肉胡同步行171米0x00到达目的地\",\"road\":\"羊肉胡同\",\"distance\":\"171\",\"action\":\"0x00\",\"assistant_action\":\"到达目的地\"}]},\"bus\":{\"buslines\":[]},\"entrance\":{\"name\":\"\"},\"exit\":{\"name\":\"\"},\"railway\":{\"name\":\"\",\"trip\":\"\"}}]},{\"duration\":\"3412\",\"walking_distance\":\"1936\",\"segments\":[{\"walking\":{\"origin\":\"116.460136,39.950165\",\"destination\":\"116.462151,39.949383\",\"distance\":\"425\",\"duration\":\"460\",\"steps\":[{\"instruction\":\"步行15米0x02\",\"road\":\"\",\"distance\":\"15\",\"action\":\"0x02\",\"assistant_action\":\"\"},{\"instruction\":\"步行53米0x01\",\"road\":\"\",\"distance\":\"53\",\"action\":\"0x01\",\"assistant_action\":\"\"},{\"instruction\":\"步行58米0x02\",\"road\":\"\",\"distance\":\"58\",\"action\":\"0x02\",\"assistant_action\":\"\"},{\"instruction\":\"步行33米0x03\",\"road\":\"\",\"distance\":\"33\",\"action\":\"0x03\",\"assistant_action\":\"\"},{\"instruction\":\"步行22米0x01\",\"road\":\"\",\"distance\":\"22\",\"action\":\"0x01\",\"assistant_action\":\"\"},{\"instruction\":\"沿新源南路步行17米0x01\",\"road\":\"新源南路\",\"distance\":\"17\",\"action\":\"0x01\",\"assistant_action\":\"\"},{\"instruction\":\"步行33米0x00到达目的地\",\"road\":\"\",\"distance\":\"33\",\"action\":\"0x00\",\"assistant_action\":\"到达目的地\"},{\"instruction\":\"步行1米0x08\",\"road\":\"\",\"distance\":\"1\",\"action\":\"0x08\",\"assistant_action\":\"\"},{\"instruction\":\"步行194米0x00到达亮马桥\",\"road\":\"\",\"distance\":\"194\",\"action\":\"0x00\",\"assistant_action\":\"到达亮马桥\"}]},\"bus\":{\"buslines\":[{\"name\":\"地铁10号线内环(巴沟--巴沟)\",\"distance\":\"2900\",\"duration\":\"450\",\"departure_stop\":{\"name\":\"亮马桥\"},\"arrival_stop\":{\"name\":\"呼家楼\"},\"via_stops\":[{\"name\":\"农业展览馆\"},{\"name\":\"团结湖\"}]}]},\"entrance\":{\"name\":\"A西北口\"},\"exit\":{\"name\":\"\"},\"railway\":{\"name\":\"\",\"trip\":\"\"}},{\"walking\":{\"origin\":\"116.461594,39.923317\",\"destination\":\"116.461594,39.923317\",\"distance\":\"58\",\"duration\":\"151\",\"steps\":[{\"instruction\":\"步行1米0x00到达呼家楼\",\"road\":\"\",\"distance\":\"1\",\"action\":\"0x00\",\"assistant_action\":\"到达呼家楼\"}]},\"bus\":{\"buslines\":[{\"name\":\"地铁6号线(潞阳--金安桥)\",\"distance\":\"8600\",\"duration\":\"990\",\"departure_stop\":{\"name\":\"呼家楼\"},\"arrival_stop\":{\"name\":\"平安里\"},\"via_stops\":[{\"name\":\"东大桥\"},{\"name\":\"朝阳门\"},{\"name\":\"东四\"},{\"name\":\"南锣鼓巷\"},{\"name\":\"北海北\"}]}]},\"entrance\":{\"name\":\"\"},\"exit\":{\"name\":\"H西南口\"},\"railway\":{\"name\":\"\",\"trip\":\"\"}},{\"walking\":{\"origin\":\"116.370552,39.932587\",\"destination\":\"116.369049,39.924400\",\"distance\":\"1453\",\"duration\":\"1361\",\"steps\":[{\"instruction\":\"步行102米0x01\",\"road\":\"\",\"distance\":\"102\",\"action\":\"0x01\",\"assistant_action\":\"\"},{\"instruction\":\"步行1米0x00到达目的地\",\"road\":\"\",\"distance\":\"1\",\"action\":\"0x00\",\"assistant_action\":\"到达目的地\"},{\"instruction\":\"步行17米0x01\",\"road\":\"\",\"distance\":\"17\",\"action\":\"0x01\",\"assistant_action\":\"\"},{\"instruction\":\"沿平安里西大街步行183米0x01\",\"road\":\"平安里西大街\",\"distance\":\"183\",\"action\":\"0x01\",\"assistant_action\":\"\"},{\"instruction\":\"沿赵登禹路步行753米0x01\",\"road\":\"赵登禹路\",\"distance\":\"753\",\"action\":\"0x01\",\"assistant_action\":\"\"},{\"instruction\":\"沿西四北头条步行261米0x02\",\"road\":\"西四北头条\",\"distance\":\"261\",\"action\":\"0x02\",\"assistant_action\":\"\"},{\"instruction\":\"沿姚家胡同步行137米0x00到达目的地\",\"road\":\"姚家胡同\",\"distance\":\"137\",\"action\":\"0x00\",\"assistant_action\":\"到达目的地\"}]},\"bus\":{\"buslines\":[]},\"entrance\":{\"name\":\"\"},\"exit\":{\"name\":\"\"},\"railway\":{\"name\":\"\",\"trip\":\"\"}}]},{\"duration\":\"4377\",\"walking_distance\":\"452\",\"segments\":[{\"walking\":{\"origin\":\"116.460136,39.950165\",\"destination\":\"116.459473,39.948986\",\"distance\":\"199\",\"duration\":\"228\",\"steps\":[{\"instruction\":\"步行15米0x02\",\"road\":\"\",\"distance\":\"15\",\"action\":\"0x02\",\"assistant_action\":\"\"},{\"instruction\":\"步行117米0x02\",\"road\":\"\",\"distance\":\"117\",\"action\":\"0x02\",\"assistant_action\":\"\"},{\"instruction\":\"沿新源南路步行67米0x00到达燕莎桥西\",\"road\":\"新源南路\",\"distance\":\"67\",\"action\":\"0x00\",\"assistant_action\":\"到达燕莎桥西\"}]},\"bus\":{\"buslines\":[{\"name\":\"413路(北京朝阳站--东直门枢纽站)\",\"distance\":\"1210\",\"duration\":\"727\",\"departure_stop\":{\"name\":\"燕莎桥西\"},\"arrival_stop\":{\"name\":\"塔园村\"},\"via_stops\":[{\"name\":\"新源南路西口\"}]}]},\"entrance\":{\"name\":\"\"},\"exit\":{\"name\":\"\"},\"railway\":{\"name\":\"\",\"trip\":\"\"}},{\"walking\":{\"origin\":\"116.450241,39.943977\",\"destination\":\"116.450241,39.943977\",\"distance\":\"1\",\"duration\":\"0\",\"steps\":[{\"instruction\":\"沿新东路辅路步行1米0x00到达塔园村\",\"road\":\"新东路辅路\",\"distance\":\"1\",\"action\":\"0x00\",\"assistant_action\":\"到达塔园村\"}]},\"bus\":{\"buslines\":[{\"name\":\"3路(左家庄--金家村桥东)\",\"distance\":\"8894\",\"duration\":\"3195\",\"departure_stop\":{\"name\":\"塔园村\"},\"arrival_stop\":{\"name\":\"西四路口西\"},\"via_stops\":[{\"name\":\"幸福三村\"},{\"name\":\"工人体育场\"},{\"name\":\"工人体育馆\"},{\"name\":\"东四十条桥东\"},{\"name\":\"东四十条桥西\"},{\"name\":\"东四十条\"},{\"name\":\"张自忠路\"},{\"name\":\"宽街路口东\"},{\"name\":\"南锣鼓巷\"},{\"name\":\"地安门东\"},{\"name\":\"北海北门\"},{\"name\":\"东官房\"},{\"name\":\"厂桥路口东\"},{\"name\":\"北京四中\"},{\"name\":\"北京三十九中学\"}]}]},\"entrance\":{\"name\":\"\"},\"exit\":{\"name\":\"\"},\"railway\":{\"name\":\"\",\"trip\":\"\"}},{\"walking\":{\"origin\":\"116.371452,39.923985\",\"destination\":\"116.369057,39.924397\",\"distance\":\"252\",\"duration\":\"227\",\"steps\":[{\"instruction\":\"沿阜成门内大街步行202米0x02\",\"road\":\"阜成门内大街\",\"distance\":\"202\",\"action\":\"0x02\",\"assistant_action\":\"\"},{\"instruction\":\"沿姚家胡同步行50米0x00到达目的地\",\"road\":\"姚家胡同\",\"distance\":\"50\",\"action\":\"0x00\",\"assistant_action\":\"到达目的地\"}]},\"bus\":{\"buslines\":[]},\"entrance\":{\"name\":\"\"},\"exit\":{\"name\":\"\"},\"railway\":{\"name\":\"\",\"trip\":\"\"}}]},{\"duration\":\"4276\",\"walking_distance\":\"1189\",\"segments\":[{\"walking\":{\"origin\":\"116.460136,39.950165\",\"destination\":\"116.462151,39.949383\",\"distance\":\"425\",\"duration\":\"460\",\"steps\":[{\"instruction\":\"步行15米0x02\",\"road\":\"\",\"distance\":\"15\",\"action\":\"0x02\",\"assistant_action\":\"\"},{\"instruction\":\"步行53米0x01\",\"road\":\"\",\"distance\":\"53\",\"action\":\"0x01\",\"assistant_action\":\"\"},{\"instruction\":\"步行58米0x02\",\"road\":\"\",\"distance\":\"58\",\"action\":\"0x02\",\"assistant_action\":\"\"},{\"instruction\":\"步行33米0x03\",\"road\":\"\",\"distance\":\"33\",\"action\":\"0x03\",\"assistant_action\":\"\"},{\"instruction\":\"步行22米0x01\",\"road\":\"\",\"distance\":\"22\",\"action\":\"0x01\",\"assistant_action\":\"\"},{\"instruction\":\"沿新源南路步行17米0x01\",\"road\":\"新源南路\",\"distance\":\"17\",\"action\":\"0x01\",\"assistant_action\":\"\"},{\"instruction\":\"步行33米0x00到达目的地\",\"road\":\"\",\"distance\":\"33\",\"action\":\"0x00\",\"assistant_action\":\"到达目的地\"},{\"instruction\":\"步行1米0x08\",\"road\":\"\",\"distance\":\"1\",\"action\":\"0x08\",\"assistant_action\":\"\"},{\"instruction\":\"步行194米0x00到达亮马桥\",\"road\":\"\",\"distance\":\"194\",\"action\":\"0x00\",\"assistant_action\":\"到达亮马桥\"}]},\"bus\":{\"buslines\":[{\"name\":\"地铁10号线外环(车道沟--车道沟)\",\"distance\":\"14570\",\"duration\":\"1830\",\"departure_stop\":{\"name\":\"亮马桥\"},\"arrival_stop\":{\"name\":\"海淀黄庄\"},\"via_stops\":[{\"name\":\"三元桥\"},{\"name\":\"太阳宫\"},{\"name\":\"芍药居\"},{\"name\":\"惠新西街南口\"},{\"name\":\"安贞门\"},{\"name\":\"北土城\"},{\"name\":\"健德门\"},{\"name\":\"牡丹园\"},{\"name\":\"西土城\"},{\"name\":\"知春路\"},{\"name\":\"知春里\"}]}]},\"entrance\":{\"name\":\"A西北口\"},\"exit\":{\"name\":\"\"},\"railway\":{\"name\":\"\",\"trip\":\"\"}},{\"walking\":{\"origin\":\"116.317558,39.975994\",\"destination\":\"116.317558,39.975994\",\"distance\":\"96\",\"duration\":\"110\",\"steps\":[{\"instruction\":\"步行1米0x00到达海淀黄庄\",\"road\":\"\",\"distance\":\"1\",\"action\":\"0x00\",\"assistant_action\":\"到达海淀黄庄\"}]},\"bus\":{\"buslines\":[{\"name\":\"地铁4号线大兴线(安河桥北--天宫院)\",\"distance\":\"9920\",\"duration\":\"1170\",\"departure_stop\":{\"name\":\"海淀黄庄\"},\"arrival_stop\":{\"name\":\"西四\"},\"via_stops\":[{\"name\":\"人民大学\"},{\"name\":\"魏公村\"},{\"name\":\"国家图书馆\"},{\"name\":\"动物园\"},{\"name\":\"西直门\"},{\"name\":\"新街口\"},{\"name\":\"平安里\"}]}]},\"entrance\":{\"name\":\"\"},\"exit\":{\"name\":\"D西南口\"},\"railway\":{\"name\":\"\",\"trip\":\"\"}},{\"walking\":{\"origin\":\"116.373337,39.924206\",\"destination\":\"116.369057,39.924397\",\"distance\":\"668\",\"duration\":\"706\",\"steps\":[{\"instruction\":\"步行177米0x08\",\"road\":\"\",\"distance\":\"177\",\"action\":\"0x08\",\"assistant_action\":\"\"},{\"instruction\":\"步行1米0x00到达目的地\",\"road\":\"\",\"distance\":\"1\",\"action\":\"0x00\",\"assistant_action\":\"到达目的地\"},{\"instruction\":\"步行14米0x02\",\"road\":\"\",\"distance\":\"14\",\"action\":\"0x02\",\"assistant_action\":\"\"},{\"instruction\":\"沿羊肉胡同步行306米0x02\",\"road\":\"羊肉胡同\",\"distance\":\"306\",\"action\":\"0x02\",\"assistant_action\":\"\"},{\"instruction\":\"沿羊肉胡同步行171米0x00到达目的地\",\"road\":\"羊肉胡同\",\"distance\":\"171\",\"action\":\"0x00\",\"assistant_action\":\"到达目的地\"}]},\"bus\":{\"buslines\":[]},\"entrance\":{\"name\":\"\"},\"exit\":{\"name\":\"\"},\"railway\":{\"name\":\"\",\"trip\":\"\"}}]},{\"duration\":\"4602\",\"walking_distance\":\"1363\",\"segments\":[{\"walking\":{\"origin\":\"116.459999,39.950165\",\"destination\":\"116.449074,39.948349\",\"distance\":\"1111\",\"duration\":\"998\",\"steps\":[{\"instruction\":\"步行227米0x02\",\"road\":\"\",\"distance\":\"227\",\"action\":\"0x02\",\"assistant_action\":\"\"},{\"instruction\":\"沿新源南路步行761米0x02\",\"road\":\"新源南路\",\"distance\":\"761\",\"action\":\"0x02\",\"assistant_action\":\"\"},{\"instruction\":\"沿新东路辅路步行123米0x00到达新源里\",\"road\":\"新东路辅路\",\"distance\":\"123\",\"action\":\"0x00\",\"assistant_action\":\"到达新源里\"}]},\"bus\":{\"buslines\":[{\"name\":\"3路(左家庄--金家村桥东)\",\"distance\":\"9424\",\"duration\":\"3377\",\"departure_stop\":{\"name\":\"新源里\"},\"arrival_stop\":{\"name\":\"西四路口西\"},\"via_stops\":[{\"name\":\"塔园村\"},{\"name\":\"幸福三村\"},{\"name\":\"工人体育场\"},{\"name\":\"工人体育馆\"},{\"name\":\"东四十条桥东\"},{\"name\":\"东四十条桥西\"},{\"name\":\"东四十条\"},{\"name\":\"张自忠路\"},{\"name\":\"宽街路口东\"},{\"name\":\"南锣鼓巷\"},{\"name\":\"地安门东\"},{\"name\":\"北海北门\"},{\"name\":\"东官房\"},{\"name\":\"厂桥路口东\"},{\"name\":\"北京四中\"},{\"name\":\"北京三十九中学\"}]}]},\"entrance\":{\"name\":\"\"},\"exit\":{\"name\":\"\"},\"railway\":{\"name\":\"\",\"trip\":\"\"}},{\"walking\":{\"origin\":\"116.371452,39.923985\",\"destination\":\"116.369057,39.924397\",\"distance\":\"252\",\"duration\":\"227\",\"steps\":[{\"instruction\":\"沿阜成门内大街步行202米0x02\",\"road\":\"阜成门内大街\",\"distance\":\"202\",\"action\":\"0x02\",\"assistant_action\":\"\"},{\"instruction\":\"沿姚家胡同步行50米0x00到达目的地\",\"road\":\"姚家胡同\",\"distance\":\"50\",\"action\":\"0x00\",\"assistant_action\":\"到达目的地\"}]},\"bus\":{\"buslines\":[]},\"entrance\":{\"name\":\"\"},\"exit\":{\"name\":\"\"},\"railway\":{\"name\":\"\",\"trip\":\"\"}}]}]}', 'id': 'lc_d6fd51e9-6a0b-4382-b707-cb75f896d1f8'}]\n[maps_direction_walking]: [{'type': 'text', 'text': '{\"route\":{\"origin\":\"116.4103,39.9042\",\"destination\":\"116.4039,39.9047\",\"paths\":[{\"distance\":1010,\"duration\":808,\"steps\":[{\"instruction\":\"向南步行179米右转\",\"road\":\"\",\"distance\":179,\"orientation\":\"南\",\"duration\":143},{\"instruction\":\"沿东交民巷向西步行333米右转\",\"road\":\"东交民巷\",\"distance\":333,\"orientation\":\"西\",\"duration\":266},{\"instruction\":\"沿正义路向北步行114米左转\",\"road\":\"正义路\",\"distance\":114,\"orientation\":\"北\",\"duration\":91},{\"instruction\":\"向西步行274米右转\",\"road\":\"\",\"distance\":274,\"orientation\":\"西\",\"duration\":219},{\"instruction\":\"向北步行72米右转\",\"road\":\"\",\"distance\":72,\"orientation\":\"北\",\"duration\":58},{\"instruction\":\"向东步行38米到达目的地\",\"road\":\"\",\"distance\":38,\"orientation\":\"东\",\"duration\":30}]}]}}', 'id': 'lc_931587e4-fd56-43a0-9348-ba15a43a1516'}]",
+          "trip_plan": {
+            "city": "北京",
+            "start_date": "2026-09-04",
+            "end_date": "2026-09-05",
+            "days": [
+              {
+                "date": "2026-09-04",
+                "day_index": 0,
+                "description": "第1天：游览天安门广场周边的博物馆群，包括北京警察博物馆、北京检察博物馆和中国国家博物馆，感受北京的历史文化底蕴。",
+                "transportation": "公共交通（地铁+步行）",
+                "accommodation": "经济型酒店",
+                "hotel": {
+                  "name": "北京艺栈青年酒店(燕莎亮马桥地铁站店)",
+                  "address": "新源南路甲3号佳亿广场F4层",
+                  "location": {
+                    "longitude": 116.460136,
+                    "latitude": 39.950165
+                  },
+                  "price_range": "200-400元",
+                  "rating": "4.3",
+                  "distance": "距离景点约9公里",
+                  "type": "经济型酒店",
+                  "estimated_cost": 300
+                },
+                "attractions": [
+                  {
+                    "name": "北京警察博物馆",
+                    "address": "东交民巷36号",
+                    "location": {
+                      "longitude": 116.4103,
+                      "latitude": 39.9042
+                    },
+                    "visit_duration": 90,
+                    "description": "北京警察博物馆位于东交民巷，展示北京警察历史与公安发展历程，馆内收藏了大量珍贵的历史文物和资料。",
+                    "category": "博物馆",
+                    "rating": null,
+                    "photos": [],
+                    "poi_id": "",
+                    "image_url": null,
+                    "ticket_price": 0
+                  },
+                  {
+                    "name": "北京检察博物馆",
+                    "address": "东交民巷39号",
+                    "location": {
+                      "longitude": 116.4103,
+                      "latitude": 39.9042
+                    },
+                    "visit_duration": 90,
+                    "description": "北京检察博物馆位于东交民巷，展示中国检察制度的发展历史和检察文化的传承。",
+                    "category": "博物馆",
+                    "rating": null,
+                    "photos": [],
+                    "poi_id": "",
+                    "image_url": null,
+                    "ticket_price": 0
+                  },
+                  {
+                    "name": "中国国家博物馆",
+                    "address": "东长安街16号天安门广场东侧",
+                    "location": {
+                      "longitude": 116.4039,
+                      "latitude": 39.9047
+                    },
+                    "visit_duration": 180,
+                    "description": "中国国家博物馆是中华文明的收藏殿堂，馆藏文物丰富，涵盖从远古到近现代的历史文化精品，是了解中国历史的最佳去处。",
+                    "category": "博物馆",
+                    "rating": null,
+                    "photos": [],
+                    "poi_id": "",
+                    "image_url": null,
+                    "ticket_price": 0
+                  }
+                ],
+                "meals": [
+                  {
+                    "type": "breakfast",
+                    "name": "老北京炸酱面·渝湘美食(东华门店)",
+                    "address": "东华门大街60号",
+                    "location": {
+                      "longitude": 116.4039,
+                      "latitude": 39.9047
+                    },
+                    "description": "位于东华门大街，提供地道的老北京炸酱面，是体验北京本地早餐的好选择。",
+                    "cuisine": "本地菜",
+                    "rating": 4.2,
+                    "avg_cost": 30,
+                    "distance": "距离景点约1公里",
+                    "poi_id": null,
+                    "source": "nearby",
+                    "estimated_cost": 30
+                  },
+                  {
+                    "type": "lunch",
+                    "name": "四季民福烤鸭店(故宫店)",
+                    "address": "南池子大街11号故宫东门旁",
+                    "location": {
+                      "longitude": 116.4039,
+                      "latitude": 39.9047
+                    },
+                    "description": "位于故宫东门旁，是品尝正宗北京烤鸭的知名餐厅，环境优雅，烤鸭皮脆肉嫩。",
+                    "cuisine": "北京菜",
+                    "rating": 4.6,
+                    "avg_cost": 120,
+                    "distance": "距离国家博物馆约1公里",
+                    "poi_id": null,
+                    "source": "nearby",
+                    "estimated_cost": 80
+                  },
+                  {
+                    "type": "dinner",
+                    "name": "全聚德(前门店)",
+                    "address": "前门大街30号",
+                    "location": {
+                      "longitude": 116.3983,
+                      "latitude": 39.8994
+                    },
+                    "description": "全聚德是北京烤鸭的百年老字号，前门店是其标志性门店，品尝最正宗的挂炉烤鸭。",
+                    "cuisine": "北京菜",
+                    "rating": 4.5,
+                    "avg_cost": 150,
+                    "distance": "距离酒店约8公里",
+                    "poi_id": null,
+                    "source": "popular",
+                    "estimated_cost": 100
+                  }
+                ],
+                "route_segments": [
+                  {
+                    "from_name": "北京艺栈青年酒店",
+                    "to_name": "北京警察博物馆",
+                    "distance": "9.3公里",
+                    "duration": "50分钟",
+                    "mode": "地铁",
+                    "detail": "步行至亮马桥站乘坐地铁10号线内环至国贸站，换乘地铁1号线至王府井站C3西南口出，步行约15分钟到达"
+                  },
+                  {
+                    "from_name": "北京警察博物馆",
+                    "to_name": "北京检察博物馆",
+                    "distance": "0.5公里",
+                    "duration": "8分钟",
+                    "mode": "步行",
+                    "detail": "沿东交民巷向西步行约500米即可到达"
+                  },
+                  {
+                    "from_name": "北京检察博物馆",
+                    "to_name": "中国国家博物馆",
+                    "distance": "1.0公里",
+                    "duration": "15分钟",
+                    "mode": "步行",
+                    "detail": "沿东交民巷向西步行，经正义路向北，再向西步行约1公里到达天安门广场东侧"
+                  },
+                  {
+                    "from_name": "中国国家博物馆",
+                    "to_name": "北京艺栈青年酒店",
+                    "distance": "9.5公里",
+                    "duration": "50分钟",
+                    "mode": "地铁",
+                    "detail": "步行至王府井站乘坐地铁1号线至国贸站，换乘地铁10号线至亮马桥站A西北口出，步行回酒店"
+                  }
+                ]
+              },
+              {
+                "date": "2026-09-05",
+                "day_index": 1,
+                "description": "第2天：前往西城区游览中国地质博物馆和北京鲁迅博物馆，感受地质科学与文学历史的魅力。",
+                "transportation": "公共交通（地铁+步行）",
+                "accommodation": "经济型酒店",
+                "hotel": {
+                  "name": "北京艺栈青年酒店(燕莎亮马桥地铁站店)",
+                  "address": "新源南路甲3号佳亿广场F4层",
+                  "location": {
+                    "longitude": 116.460136,
+                    "latitude": 39.950165
+                  },
+                  "price_range": "200-400元",
+                  "rating": "4.3",
+                  "distance": "距离景点约10公里",
+                  "type": "经济型酒店",
+                  "estimated_cost": 300
+                },
+                "attractions": [
+                  {
+                    "name": "中国地质博物馆",
+                    "address": "西四羊肉胡同15号",
+                    "location": {
+                      "longitude": 116.3692,
+                      "latitude": 39.9244
+                    },
+                    "visit_duration": 120,
+                    "description": "中国地质博物馆是中国最早的地质科学博物馆，馆藏丰富的地质标本和矿物晶体，展示地球演化的奥秘。",
+                    "category": "博物馆",
+                    "rating": null,
+                    "photos": [],
+                    "poi_id": "",
+                    "image_url": null,
+                    "ticket_price": 30
+                  },
+                  {
+                    "name": "北京鲁迅博物馆",
+                    "address": "阜城门内宫门口二条19号",
+                    "location": {
+                      "longitude": 116.3571,
+                      "latitude": 39.9254
+                    },
+                    "visit_duration": 120,
+                    "description": "北京鲁迅博物馆位于鲁迅故居所在地，展示鲁迅先生的生平事迹和文学成就，是了解中国现代文学的重要场所。",
+                    "category": "博物馆",
+                    "rating": null,
+                    "photos": [],
+                    "poi_id": "",
+                    "image_url": null,
+                    "ticket_price": 0
+                  }
+                ],
+                "meals": [
+                  {
+                    "type": "breakfast",
+                    "name": "老北京炸酱面(南长街店)",
+                    "address": "南长街甲30号",
+                    "location": {
+                      "longitude": 116.39,
+                      "latitude": 39.91
+                    },
+                    "description": "位于南长街的老北京炸酱面店，提供地道的北京传统早餐，炸酱面酱香浓郁。",
+                    "cuisine": "本地菜",
+                    "rating": 4.3,
+                    "avg_cost": 30,
+                    "distance": "距离酒店约8公里",
+                    "poi_id": null,
+                    "source": "nearby",
+                    "estimated_cost": 30
+                  },
+                  {
+                    "type": "lunch",
+                    "name": "金鼎轩(雍和宫地坛店)",
+                    "address": "和平里西街77号",
+                    "location": {
+                      "longitude": 116.41,
+                      "latitude": 39.95
+                    },
+                    "description": "金鼎轩是北京知名的粤式茶餐厅，提供丰富的点心和粤菜，环境舒适。",
+                    "cuisine": "粤菜",
+                    "rating": 4.4,
+                    "avg_cost": 80,
+                    "distance": "距离地质博物馆约5公里",
+                    "poi_id": null,
+                    "source": "nearby",
+                    "estimated_cost": 60
+                  },
+                  {
+                    "type": "dinner",
+                    "name": "花家怡园(四合院总店)",
+                    "address": "东直门内大街235号",
+                    "location": {
+                      "longitude": 116.43,
+                      "latitude": 39.94
+                    },
+                    "description": "花家怡园是北京著名的四合院餐厅，主打新派北京菜，环境古色古香，是体验北京美食文化的绝佳选择。",
+                    "cuisine": "北京菜",
+                    "rating": 4.5,
+                    "avg_cost": 150,
+                    "distance": "距离酒店约5公里",
+                    "poi_id": null,
+                    "source": "popular",
+                    "estimated_cost": 100
+                  }
+                ],
+                "route_segments": [
+                  {
+                    "from_name": "北京艺栈青年酒店",
+                    "to_name": "中国地质博物馆",
+                    "distance": "10.6公里",
+                    "duration": "55分钟",
+                    "mode": "地铁",
+                    "detail": "步行至亮马桥站乘坐地铁10号线内环至呼家楼站，换乘地铁6号线至平安里站，再换乘地铁4号线至西四站D西南口出，步行约10分钟到达"
+                  },
+                  {
+                    "from_name": "中国地质博物馆",
+                    "to_name": "北京鲁迅博物馆",
+                    "distance": "1.0公里",
+                    "duration": "15分钟",
+                    "mode": "步行",
+                    "detail": "沿羊肉胡同向西步行，经阜成门内大街步行约1公里到达鲁迅博物馆"
+                  },
+                  {
+                    "from_name": "北京鲁迅博物馆",
+                    "to_name": "北京艺栈青年酒店",
+                    "distance": "10.5公里",
+                    "duration": "55分钟",
+                    "mode": "地铁",
+                    "detail": "步行至阜成门站乘坐地铁2号线至东直门站，换乘地铁13号线至亮马桥站，步行回酒店"
+                  }
+                ]
+              }
+            ],
+            "weather_info": [
+              {
+                "date": "2026-09-04",
+                "day_weather": "待查询",
+                "night_weather": "待查询",
+                "day_temp": null,
+                "night_temp": null,
+                "wind_direction": "待查询",
+                "wind_power": "待查询"
+              },
+              {
+                "date": "2026-09-05",
+                "day_weather": "待查询",
+                "night_weather": "待查询",
+                "day_temp": null,
+                "night_temp": null,
+                "wind_direction": "待查询",
+                "wind_power": "待查询"
+              }
+            ],
+            "overall_suggestions": "北京博物馆类景点大多需要提前预约，建议提前在官方渠道预约门票。出行以公共交通为主，建议下载北京地铁APP或使用乘车码。博物馆内禁止大声喧哗，请文明参观。部分博物馆周一闭馆，请确认开放时间。天气方面：9月4日、9月5日暂无可信天气预报，建议出发前3天重新查询天气。 预算方面：当前估算总预算约1130元。",
+            "budget": {
+              "total_attractions": 30,
+              "total_hotels": 600,
+              "total_meals": 400,
+              "total_transportation": 100,
+              "total": 1130
+            }
+          },
+          "errors": [],
+          "mode": "new",
+          "user_id": "eval-20260830-163820-d626b9-e06",
+          "human_review_enabled": false,
+          "supervisor_decision": {
+            "workers": [
+              "poi",
+              "weather",
+              "hotel",
+              "food",
+              "route"
+            ],
+            "routing_reason": "2天北京行程，偏好博物馆与历史文化，需住宿经济型酒店并安排三餐与公共交通路线，完整链路均需执行。"
+          },
+          "constraints": {
+            "max_budget": null,
+            "max_attractions_per_day": null,
+            "excluded_keywords": [],
+            "must_include_keywords": [],
+            "elderly_friendly": false,
+            "relaxed_pace": false,
+            "hard_notes": []
+          },
+          "explicit_constraints": null,
+          "violations": [],
+          "revision_count": 0,
+          "plan_version": 0,
+          "memory_profile": {
+            "travel_preferences": [
+              "博物馆",
+              "历史文化"
+            ],
+            "avoid_keywords": [],
+            "preferred_transportation": "公共交通",
+            "preferred_accommodation": "经济型酒店",
+            "preferred_food": "本地特色",
+            "relaxed_pace": false,
+            "elderly_friendly": false
+          },
+          "edit_feedback": "",
+          "edit_intent": {},
+          "human_decision": "",
+          "messages": []
+        },
+        "next": [],
+        "config": {
+          "configurable": {
+            "thread_id": "trip-ed398b2d6e6e",
+            "checkpoint_ns": "",
+            "checkpoint_id": "1f1a44f3-1c53-6868-800b-9da2b3e4aea5"
+          }
+        }
+      },
+      "elapsed_seconds": 118.79
+    }
+  ]
+}

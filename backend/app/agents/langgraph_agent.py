@@ -1,0 +1,2126 @@
+"""基于 LangGraph 的旅行规划 Agent 系统
+
+重构说明:
+- 使用 langchain-mcp-adapters 官方适配器替代 hello_agents.MCPTool
+- 所有节点函数改为异步，工具调用使用 ainvoke
+- 图执行使用 ainvoke
+"""
+
+import json
+import re
+import math
+import operator
+import asyncio
+import random
+from typing import Dict, Any, List, Optional, Annotated
+from typing_extensions import TypedDict
+
+from langchain_core.messages import BaseMessage, HumanMessage, SystemMessage
+from langchain_core.tools import BaseTool
+from langgraph.graph import StateGraph, START, END
+
+from ..services.llm_service import get_llm
+from ..services.langchain_amap_tools import get_langchain_amap_service, get_mcp_tools
+from ..models.schemas import TripRequest, TripPlan, DayPlan, Attraction, Meal, WeatherInfo, Location, Hotel
+from ..config import get_settings
+
+from datetime import datetime, timedelta
+
+
+async def _invoke_mcp_tool(
+    tool: BaseTool,
+    arguments: Dict[str, Any]
+) -> Any:
+    """
+    Agent 层只负责确定调用哪个 MCP 工具。
+
+    timeout / retry / timing
+    统一由 LangChainAmapService 负责。
+    """
+    service = get_langchain_amap_service()
+
+    return await service.invoke_tool(
+        tool.name,
+        arguments
+    )
+
+
+
+async def _invoke_llm_with_retry(llm_with_tools, messages: list, max_retries: int = 5) -> Any:
+    last_error = None
+    for attempt in range(max_retries):
+        try:
+            result = await llm_with_tools.ainvoke(messages)
+            return result
+        except Exception as e:
+            last_error = e
+            error_name = type(e).__name__
+            if attempt < max_retries - 1:
+                base_wait = min(2 ** attempt, 30)
+                jitter = random.uniform(0, 3)
+                wait_time = base_wait + jitter
+                print(f"⚠️ LLM调用失败 (尝试 {attempt + 1}/{max_retries}): {error_name}: {str(e)[:100]}")
+                print(f"   等待 {wait_time:.1f} 秒后重试...")
+                await asyncio.sleep(wait_time)
+            else:
+                print(f"❌ LLM调用最终失败 (已重试 {max_retries} 次): {error_name}: {str(e)[:100]}")
+    raise last_error
+
+# ============ Agent提示词 (复用并适配 LangGraph) ============
+
+ATTRACTION_AGENT_PROMPT = """你是景点搜索专家。你的任务是根据城市和用户偏好搜索合适的景点。
+
+**重要提示:**
+你必须使用 maps_text_search 工具来搜索景点！不要自己编造景点信息！
+
+**工具调用说明:**
+使用 maps_text_search 工具时，你需要提供以下参数：
+- keywords: 景点关键词（例如："历史文化"、"公园"、"博物馆"）
+- city: 城市名称（例如："北京"、"上海"）
+
+**示例:**
+用户需求: "城市: 北京, 偏好: 历史文化"
+你的动作: 调用 maps_text_search(keywords="历史文化", city="北京")
+
+**注意:**
+1. 必须使用提供的工具获取真实数据，不要直接编造回答。
+2. 根据用户的偏好准确提取关键词进行搜索。
+"""
+
+WEATHER_AGENT_PROMPT = """你是天气查询专家。你的任务是查询指定城市的天气信息。
+
+**重要提示:**
+你必须使用 maps_weather 工具来查询天气！不要自己编造天气信息！
+
+**工具调用说明:**
+使用 maps_weather 工具时，你需要提供以下参数：
+- city: 城市名称（例如："北京"、"上海"）
+
+**示例:**
+用户需求: "请查询城市: 广州 的天气"
+你的动作: 调用 maps_weather(city="广州")
+
+**注意:**
+1. 必须使用提供的工具获取真实数据，不要直接编造回答。
+"""
+
+HOTEL_AGENT_PROMPT = """你是酒店推荐专家。你的任务是根据城市和景点位置推荐合适的酒店。
+
+**重要提示:**
+你必须使用 maps_text_search 工具搜索酒店！不要自己编造酒店信息！
+
+**工具调用说明:**
+使用 maps_text_search 工具搜索酒店时，你需要提供以下参数：
+- keywords: 包含住宿类型和"酒店"或"宾馆"的关键词（例如："经济型酒店"、"五星级酒店"）
+- city: 城市名称（例如："北京"、"上海"）
+
+**示例:**
+用户需求: "城市: 上海, 住宿偏好: 经济型"
+你的动作: 调用 maps_text_search(keywords="经济型酒店", city="上海")
+
+**注意:**
+1. 必须使用提供的工具获取真实数据，不要直接编造回答。
+2. 结合用户的住宿偏好构建准确的搜索关键词。
+"""
+
+FOOD_AGENT_PROMPT = """你是美食推荐专家。你的任务是根据城市和用户美食偏好搜索真实餐厅信息。
+
+**重要提示:**
+你必须使用工具来搜索真实餐厅！不要自己编造餐厅信息！
+
+**工具调用说明:**
+1. maps_around_search - 周边搜索（搜索景点附近的餐厅）
+   参数: keywords(关键词), location(中心点经纬度，格式"经度,纬度"), radius(搜索半径，单位米)
+
+2. maps_text_search - 关键词搜索（搜索城市热门餐厅）
+   参数: keywords(关键词), city(城市名称)
+
+**搜索策略:**
+- 景点周边餐厅: 使用 maps_around_search，以景点坐标为中心，搜索半径2000米内的餐厅
+- 城市热门餐厅: 使用 maps_text_search，搜索城市特色菜系的热门餐厅
+
+**示例:**
+用户需求: "城市: 成都, 美食偏好: 本地特色, 景点坐标: 104.065735,30.659462"
+你的动作:
+1. 调用 maps_around_search(keywords="川菜", location="104.065735,30.659462", radius="2000") 搜索景点周边餐厅
+2. 调用 maps_text_search(keywords="成都火锅", city="成都") 搜索城市热门餐厅
+
+**注意:**
+1. 必须使用工具获取真实数据，不要直接编造回答。
+2. 根据用户偏好和城市特色构建准确的搜索关键词。
+3. 每次搜索调用1-2个工具即可，不要过度调用。
+"""
+
+ROUTE_AGENT_PROMPT = """你是交通路线规划专家。你的任务是根据城市、用户的交通偏好，以及景点和酒店的位置，规划出合理的交通路线或建议。
+
+**重要提示:**
+你必须使用路线规划工具来获取真实路线数据！不要自己编造路线和时间！
+
+**路线规划工具（选择一个）:**
+- maps_direction_walking (步行路线规划，100km以内)
+- maps_direction_driving (驾车路线规划)
+- maps_direction_transit_integrated (公交路线规划，含火车/公交/地铁)
+
+**参数说明:**
+- origin: 起点经纬度，格式为 "经度,纬度"（必填）
+- destination: 终点经纬度，格式为 "经度,纬度"（必填）
+- city: 起点城市（仅公交规划必填）
+- cityd: 终点城市（仅公交规划可选）
+
+**示例:**
+调用 maps_direction_walking(origin="116.397428,39.916527", destination="116.397128,39.916527")
+
+**注意:**
+1. 如果输入中已包含经纬度坐标，直接使用坐标调用路线规划工具，不需要调用 maps_geo
+2. 如果没有坐标，先用 maps_geo 工具将地址转为坐标，再调用路线规划工具
+3. 必须调用工具获取真实数据，不要直接编造回答
+"""
+
+PLANNER_AGENT_PROMPT = """你是行程规划专家。你的任务是根据景点信息、天气信息和路线信息，生成详细的旅行计划。
+
+请严格按照以下JSON格式返回旅行计划:
+```json
+{
+  "city": "城市名称",
+  "start_date": "YYYY-MM-DD",
+  "end_date": "YYYY-MM-DD",
+  "days": [
+    {
+      "date": "YYYY-MM-DD",
+      "day_index": 0,
+      "description": "第1天行程概述",
+      "transportation": "交通方式",
+      "accommodation": "住宿类型",
+      "hotel": {
+        "name": "酒店名称",
+        "address": "酒店地址",
+        "location": {"longitude": 116.397128, "latitude": 39.916527},
+        "price_range": "300-500元",
+        "rating": "4.5",
+        "distance": "距离景点2公里",
+        "type": "经济型酒店",
+        "estimated_cost": 400
+      },
+      "attractions": [
+        {
+          "name": "景点名称",
+          "address": "详细地址",
+          "location": {"longitude": 116.397128, "latitude": 39.916527},
+          "visit_duration": 120,
+          "description": "景点详细描述",
+          "category": "景点类别",
+          "ticket_price": 60
+        }
+      ],
+      "meals": [
+        {
+          "type": "breakfast",
+          "name": "餐厅名称（必须来自搜索结果中的真实餐厅）",
+          "address": "餐厅地址",
+          "location": {"longitude": 116.397128, "latitude": 39.916527},
+          "description": "推荐理由",
+          "cuisine": "菜系（如：川菜/粤菜/本地菜）",
+          "rating": 4.5,
+          "avg_cost": 80,
+          "distance": "距离景点500米",
+          "source": "nearby",
+          "estimated_cost": 30
+        },
+        {
+          "type": "lunch",
+          "name": "餐厅名称（必须来自搜索结果中的真实餐厅）",
+          "address": "餐厅地址",
+          "location": {"longitude": 116.397128, "latitude": 39.916527},
+          "description": "推荐理由",
+          "cuisine": "菜系",
+          "rating": 4.5,
+          "avg_cost": 80,
+          "distance": "距离景点200米",
+          "source": "nearby",
+          "estimated_cost": 50
+        },
+        {
+          "type": "dinner",
+          "name": "餐厅名称（必须来自搜索结果中的真实餐厅）",
+          "address": "餐厅地址",
+          "location": {"longitude": 116.397128, "latitude": 39.916527},
+          "description": "推荐理由",
+          "cuisine": "菜系",
+          "rating": 4.5,
+          "avg_cost": 120,
+          "distance": "距离酒店1公里",
+          "source": "popular",
+          "estimated_cost": 80
+        }
+      ],
+      "route_segments": [
+        {
+          "from_name": "酒店",
+          "to_name": "故宫博物院",
+          "distance": "3.5公里",
+          "duration": "25分钟",
+          "mode": "地铁",
+          "detail": "乘坐地铁1号线天安门东站B口出，步行约5分钟到达"
+        },
+        {
+          "from_name": "故宫博物院",
+          "to_name": "天坛公园",
+          "distance": "5.2公里",
+          "duration": "30分钟",
+          "mode": "公交",
+          "detail": "乘坐公交2路从天安门东→天坛西门"
+        },
+        {
+          "from_name": "天坛公园",
+          "to_name": "酒店",
+          "distance": "4.0公里",
+          "duration": "20分钟",
+          "mode": "地铁",
+          "detail": "乘坐地铁5号线天坛东门站→酒店附近"
+        }
+      ]
+    }
+  ],
+  "weather_info": [
+    {
+      "date": "YYYY-MM-DD",
+      "day_weather": "待查询",
+      "night_weather": "待查询",
+      "day_temp": null,
+      "night_temp": null,
+      "wind_direction": "待查询",
+      "wind_power": "待查询"
+    }
+  ],
+  "overall_suggestions": "总体建议",
+  "budget": {
+    "total_attractions": 180,
+    "total_hotels": 1200,
+    "total_meals": 480,
+    "total_transportation": 200,
+    "total": 2060
+  }
+}
+```
+
+**重要提示:**
+1. weather_info 数组必须包含旅行中的每一天；
+
+2. 必须严格遵守输入中的 WEATHER_STATUS：
+   - FORECAST_AVAILABLE：
+     只能使用【高德可信天气数据】中与 date 精确匹配的数据；
+   - PARTIAL_FORECAST：
+     可信日期使用真实数据，missing_dates 必须使用“待查询”和 null；
+   - OUT_OF_FORECAST_RANGE：
+     所有旅行日期的具体天气均未知；
+   - HISTORICAL_UNAVAILABLE：
+     不得根据当前天气推断历史天气；
+   - TOOL_ERROR：
+     不得自行补全天气；
+   - NO_MATCHING_FORECAST：
+     不得使用其他日期的天气代替；
+   - INVALID_DATE：
+     不得生成具体天气信息；
+
+3. 无可信天气数据时，每日天气必须使用：
+   - day_weather = "待查询"
+   - night_weather = "待查询"
+   - day_temp = null
+   - night_temp = null
+   - wind_direction = "待查询"
+   - wind_power = "待查询"
+4. 有可信预报时，温度必须是纯数字，不带 °C、℃ 等单位；
+5. null 表示“未知”，禁止使用 0 表示未知温度；
+6. 禁止自行编造或推断晴雨、温度、风力等具体天气信息；
+7. 当天气超出可信预报范围时，overall_suggestions 可以提醒用户
+   “出发前 3 天重新查询天气”，但不得在没有气候数据来源的情况下
+   声称“天气宜人”“昼夜温差大”“多雨”“炎热”等具体气候事实；
+8. 每天安排2-3个景点
+9. 考虑景点之间的距离和游览时间
+10. 每天必须包含早中晚三餐
+11. **餐饮推荐必须使用搜索结果中的真实餐厅**，不要编造餐厅名称和地址
+12. **source字段说明**: nearby=景点周边餐厅, popular=城市热门餐厅
+13. 早餐推荐景点或酒店附近的餐厅(source=nearby)，午餐推荐景点附近的餐厅(source=nearby)，晚餐推荐城市热门餐厅(source=popular)
+14. **每个景点和餐厅的location字段必须包含经纬度坐标**，从搜索结果中提取真实坐标，不要留空
+15. **每天必须包含route_segments路线段信息**，基于路线搜索结果和距离矩阵，为每天生成以下路线段:
+    - 酒店→当天第1个景点
+    - 景点1→景点2（如有多个景点）
+    - 最后一个景点→酒店
+    每段路线必须包含: from_name, to_name, distance, duration, mode, detail
+    detail字段要写明具体的乘车/步行指引（如地铁几号线、哪站上下车、公交几路等），参考路线搜索结果
+16. 提供实用的旅行建议
+17. **必须包含预算信息**:
+   - 景点门票价格(ticket_price)
+   - 餐饮预估费用(estimated_cost)
+   - 酒店预估费用(estimated_cost)
+   - 预算汇总(budget)包含各项总费用
+"""
+
+
+# ============ LangGraph 状态类 (State) ============
+
+class TripPlannerState(TypedDict):
+    """LangGraph 状态类：管理整个旅行规划流程中的数据流转"""
+    request: TripRequest
+    attractions_info: str
+    weather_info: str
+    hotels_info: str
+    food_info: str
+    cluster_info: str
+    route_info: str
+    trip_plan: Optional[TripPlan]
+    errors: List[str]
+    messages: Annotated[List[BaseMessage], operator.add]
+
+
+# ============ LangGraph 节点 (Nodes) ============
+
+async def search_poi_node(state: TripPlannerState) -> Dict[str, Any]:
+    print("📍 执行节点: search_poi_node")
+    request = state["request"]
+
+    keywords = (
+        request.preferences[0]
+        if request.preferences
+        else "景点"
+    )
+
+    service = get_langchain_amap_service()
+    search_tool = await service.get_tool(
+        "maps_text_search"
+    )
+
+    llm = get_llm()
+    llm_with_tools = llm.bind_tools(
+        [search_tool]
+    )
+
+    prompt = (
+        ATTRACTION_AGENT_PROMPT
+        + f"\n请搜索城市: {request.city}, 关键词: {keywords}"
+    )
+
+    response = await _invoke_llm_with_retry(
+        llm_with_tools,
+        [
+            SystemMessage(
+                content=ATTRACTION_AGENT_PROMPT
+            ),
+            HumanMessage(
+                content=prompt
+            ),
+        ],
+    )
+
+    if response.tool_calls:
+        results = []
+
+        for tool_call in response.tool_calls:
+            tool_result = await _invoke_mcp_tool(
+                search_tool,
+                tool_call["args"],
+            )
+            results.append(
+                str(tool_result)
+            )
+
+        return {
+            "attractions_info": "\n".join(
+                results
+            )
+        }
+
+    print(
+        "⚠️ search_poi_node: "
+        "LLM未调用工具"
+    )
+
+    return {"attractions_info": ""}
+
+
+
+
+async def search_weather_node(state: TripPlannerState) -> Dict[str, Any]:
+    """天气 Worker。
+
+    高德 Web Service 天气预报只覆盖：
+    当天 + 后续 3 天。
+
+    因此：
+    1. 旅行日期完全超出窗口时，不调用天气工具；
+    2. 只有旅行日期与高德 forecast.date 精确匹配时，才视为可信预报；
+    3. 部分日期超出窗口时，明确标记 PARTIAL_FORECAST；
+    4. 禁止把短期天气结果冒充远期旅行天气。
+    """
+    print("🌤️  执行节点: search_weather_node")
+    request = state["request"]
+
+    try:
+        trip_start = datetime.strptime(
+            request.start_date, "%Y-%m-%d"
+        ).date()
+        trip_end = datetime.strptime(
+            request.end_date, "%Y-%m-%d"
+        ).date()
+    except ValueError:
+        print(
+            f"⚠️ 天气节点收到非法日期: "
+            f"{request.start_date} ~ {request.end_date}"
+        )
+        return {
+            "weather_info": (
+                "WEATHER_STATUS=INVALID_DATE\n"
+                f"旅行日期：{request.start_date} ~ {request.end_date}\n"
+                "无法解析旅行日期，因此没有提供天气信息。\n"
+                "禁止推断或编造具体天气、气温和降雨情况。"
+            )
+        }
+
+    today = datetime.now().date()
+
+    # 高德官方 Web Service casts：
+    # 当天、第二天、第三天、第四天。
+    forecast_end = today + timedelta(days=3)
+
+    print(
+        f"🌤️ 天气可信窗口: {today} ~ {forecast_end}; "
+        f"旅行日期: {trip_start} ~ {trip_end}"
+    )
+
+    # ---------------------------------------------------------
+    # 1. 整段旅行已经是过去日期
+    # ---------------------------------------------------------
+    if trip_end < today:
+        print("⚠️ 旅行日期属于过去，高德当前天气接口不能提供历史天气")
+
+        return {
+            "weather_info": (
+                "WEATHER_STATUS=HISTORICAL_UNAVAILABLE\n"
+                f"城市：{request.city}\n"
+                f"旅行日期：{request.start_date} ~ {request.end_date}\n"
+                "当前天气接口不提供此次旅行日期的历史天气。\n"
+                "禁止根据当前天气推断历史天气。"
+            )
+        }
+
+    # ---------------------------------------------------------
+    # 2. 整段旅行都超出未来 4 天预报窗口
+    # ---------------------------------------------------------
+    if trip_start > forecast_end:
+        days_until_trip = (trip_start - today).days
+
+        print(
+            f"ℹ️ 旅行日期超出天气预报范围: "
+            f"还有 {days_until_trip} 天，跳过 maps_weather"
+        )
+
+        return {
+            "weather_info": (
+                "WEATHER_STATUS=OUT_OF_FORECAST_RANGE\n"
+                f"城市：{request.city}\n"
+                f"旅行日期：{request.start_date} ~ {request.end_date}\n"
+                f"当前日期：{today.isoformat()}\n"
+                f"可信预报窗口：{today.isoformat()} ~ "
+                f"{forecast_end.isoformat()}\n"
+                f"距离出发还有 {days_until_trip} 天。\n"
+                "旅行日期超出当前天气接口的可信预报范围，"
+                "因此没有查询或提供具体逐日天气。\n"
+                "禁止生成或推断具体的晴雨、温度、风力等天气数据。\n"
+                "只能给出非具体天气性质的准备建议，并建议出发前 3 天重新查询。"
+            )
+        }
+
+    # ---------------------------------------------------------
+    # 3. 至少有一部分旅行日期进入可信窗口
+    # ---------------------------------------------------------
+    service = get_langchain_amap_service()
+
+    try:
+        weather_data = await service.get_weather(request.city)
+    except Exception as exc:
+        print(f"⚠️ maps_weather 调用失败: {exc}")
+
+        return {
+            "weather_info": (
+                "WEATHER_STATUS=TOOL_ERROR\n"
+                f"城市：{request.city}\n"
+                f"旅行日期：{request.start_date} ~ {request.end_date}\n"
+                f"天气工具调用失败：{exc}\n"
+                "禁止编造具体天气信息。"
+            )
+        }
+
+    # ---------------------------------------------------------
+    # 4. 从高德结构化结果中提取 casts
+    # ---------------------------------------------------------
+    # ---------------------------------------------------------
+    # 4. 从高德 / MCP 返回结果中提取逐日天气
+    # ---------------------------------------------------------
+    casts = []
+
+    def extract_weather_casts(data):
+        """
+        兼容以下天气返回结构：
+
+        1. 高德原始结构：
+           {
+               "forecasts": [
+                   {
+                       "casts": [...]
+                   }
+               ]
+           }
+
+        2. MCP 当前实际结构：
+           {
+               "city": "北京市",
+               "forecasts": [
+                   {"date": "...", "dayweather": "..."},
+                   ...
+               ]
+           }
+
+        3. LangChain MCP content blocks：
+           [
+               {
+                   "type": "text",
+                   "text": "{...JSON...}"
+               }
+           ]
+
+        4. JSON 字符串。
+        """
+        result = []
+
+        if data is None:
+            return result
+
+        # LangChain / MCP content block list
+        if isinstance(data, list):
+            for item in data:
+                result.extend(extract_weather_casts(item))
+            return result
+
+        # MCP content block
+        if isinstance(data, dict) and "text" in data:
+            text = data.get("text")
+
+            if isinstance(text, str):
+                try:
+                    parsed = json.loads(text)
+                except json.JSONDecodeError:
+                    parsed = None
+
+                if parsed is not None:
+                    result.extend(extract_weather_casts(parsed))
+
+            return result
+
+        # JSON 字符串
+        if isinstance(data, str):
+            try:
+                parsed = json.loads(data)
+            except json.JSONDecodeError:
+                return result
+
+            return extract_weather_casts(parsed)
+
+        if not isinstance(data, dict):
+            return result
+
+        forecasts = data.get("forecasts", [])
+
+        if not isinstance(forecasts, list):
+            return result
+
+        for forecast in forecasts:
+            if not isinstance(forecast, dict):
+                continue
+
+            # 当前 MCP 实际返回：
+            # forecasts 本身就是逐日天气
+            if forecast.get("date"):
+                result.append(forecast)
+                continue
+
+            # 兼容高德标准结构：
+            # forecasts -> casts
+            forecast_casts = forecast.get("casts", [])
+
+            if isinstance(forecast_casts, list):
+                for cast in forecast_casts:
+                    if isinstance(cast, dict) and cast.get("date"):
+                        result.append(cast)
+
+        return result
+
+    casts = extract_weather_casts(weather_data)
+
+    print(
+        "🌤️ 高德实际返回天气日期:",
+        [cast.get("date") for cast in casts]
+    )
+
+    # ---------------------------------------------------------
+    # 5. 只保留“日期与旅行日期精确匹配”的天气
+    # ---------------------------------------------------------
+    matched_casts = []
+
+    for cast in casts:
+        cast_date_text = cast.get("date")
+
+        if not cast_date_text:
+            continue
+
+        try:
+            cast_date = datetime.strptime(
+                cast_date_text, "%Y-%m-%d"
+            ).date()
+        except (TypeError, ValueError):
+            continue
+
+        if trip_start <= cast_date <= trip_end:
+            matched_casts.append(cast)
+
+    # 计算整段旅行日期，用于判断是否只有部分日期有预报。
+    trip_dates = []
+    cursor = trip_start
+
+    while cursor <= trip_end:
+        trip_dates.append(cursor.isoformat())
+        cursor += timedelta(days=1)
+
+    trusted_dates = [
+        str(cast.get("date"))
+        for cast in matched_casts
+        if cast.get("date")
+    ]
+
+    missing_dates = [
+        day
+        for day in trip_dates
+        if day not in trusted_dates
+    ]
+
+    if matched_casts:
+        status = (
+            "FORECAST_AVAILABLE"
+            if not missing_dates
+            else "PARTIAL_FORECAST"
+        )
+
+        print(
+            f"✅ 天气日期匹配完成: "
+            f"status={status}, "
+            f"trusted_dates={trusted_dates}, "
+            f"missing_dates={missing_dates}"
+        )
+
+        return {
+            "weather_info": (
+                f"WEATHER_STATUS={status}\n"
+                f"城市：{request.city}\n"
+                f"旅行日期：{request.start_date} ~ {request.end_date}\n"
+                f"可信天气日期：{trusted_dates}\n"
+                f"无可信预报日期：{missing_dates}\n\n"
+                "【高德可信天气数据】\n"
+                f"{json.dumps(matched_casts, ensure_ascii=False)}\n\n"
+                "重要规则：\n"
+                "1. 只能把上面的可信天气数据用于对应 date；\n"
+                "2. missing_dates 没有可信天气预报；\n"
+                "3. 禁止把其他日期的天气复制、平移或推断到 missing_dates；\n"
+                "4. 禁止自行编造晴雨、温度、风力。"
+            )
+        }
+
+    # 工具成功了，但没有任何旅行日期可以匹配。
+    print("⚠️ 高德返回天气数据，但没有匹配到旅行日期")
+
+    return {
+        "weather_info": (
+            "WEATHER_STATUS=NO_MATCHING_FORECAST\n"
+            f"城市：{request.city}\n"
+            f"旅行日期：{request.start_date} ~ {request.end_date}\n"
+            f"当前可信窗口：{today.isoformat()} ~ "
+            f"{forecast_end.isoformat()}\n"
+            "天气工具没有返回与旅行日期精确匹配的 forecast.date。\n"
+            "禁止使用其他日期天气代替，也禁止编造具体天气。"
+        )
+    }
+
+
+
+async def search_hotel_node(state: TripPlannerState) -> Dict[str, Any]:
+    print("🏨 执行节点: search_hotel_node")
+    request = state["request"]
+
+    service = get_langchain_amap_service()
+    search_tool = await service.get_tool("maps_text_search")
+    llm = get_llm()
+    llm_with_tools = llm.bind_tools([search_tool])
+
+    prompt = HOTEL_AGENT_PROMPT + f"\n请搜索城市: {request.city}, 关键词: {request.accommodation} 酒店"
+    response = await _invoke_llm_with_retry(
+        llm_with_tools,
+        [
+            SystemMessage(content=HOTEL_AGENT_PROMPT),
+            HumanMessage(content=prompt)
+        ]
+    )
+
+    if response.tool_calls:
+        results = []
+        for tool_call in response.tool_calls:
+            tool_result = await _invoke_mcp_tool(
+                search_tool,
+                tool_call["args"]
+            )
+            results.append(str(tool_result))
+
+        return {
+            "hotels_info": "\n".join(results)
+        }
+
+    print("⚠️ search_hotel_node: LLM未调用工具")
+    return {"hotels_info": ""}
+
+
+
+async def gather_search_node(state: TripPlannerState) -> Dict[str, Any]:
+    print("🔗 执行节点: gather_search_node (搜索结果汇总)")
+    return {}
+
+
+CITY_FOOD_MAP = {
+    "北京": {"cuisine": "京菜", "keywords": ["烤鸭", "涮羊肉", "炸酱面", "京菜"]},
+    "上海": {"cuisine": "本帮菜", "keywords": ["本帮菜", "小笼包", "生煎", "上海菜"]},
+    "成都": {"cuisine": "川菜", "keywords": ["火锅", "川菜", "串串", "担担面"]},
+    "重庆": {"cuisine": "渝菜", "keywords": ["火锅", "小面", "渝菜", "酸辣粉"]},
+    "广州": {"cuisine": "粤菜", "keywords": ["早茶", "粤菜", "煲仔饭", "肠粉"]},
+    "深圳": {"cuisine": "粤菜", "keywords": ["粤菜", "潮汕菜", "海鲜", "早茶"]},
+    "西安": {"cuisine": "陕菜", "keywords": ["肉夹馍", "羊肉泡馍", "凉皮", "陕菜"]},
+    "杭州": {"cuisine": "杭帮菜", "keywords": ["杭帮菜", "西湖醋鱼", "龙井虾仁", "东坡肉"]},
+    "南京": {"cuisine": "金陵菜", "keywords": ["盐水鸭", "鸭血粉丝", "金陵菜", "小笼包"]},
+    "长沙": {"cuisine": "湘菜", "keywords": ["臭豆腐", "湘菜", "剁椒鱼头", "茶颜悦色"]},
+    "武汉": {"cuisine": "鄂菜", "keywords": ["热干面", "豆皮", "鄂菜", "武昌鱼"]},
+    "厦门": {"cuisine": "闽南菜", "keywords": ["沙茶面", "海蛎煎", "闽南菜", "海鲜"]},
+    "昆明": {"cuisine": "滇菜", "keywords": ["过桥米线", "滇菜", "汽锅鸡", "鲜花饼"]},
+    "大理": {"cuisine": "滇菜", "keywords": ["白族菜", "饵丝", "滇菜", "酸辣鱼"]},
+    "丽江": {"cuisine": "滇菜", "keywords": ["纳西菜", "滇菜", "腊排骨", "鸡豆凉粉"]},
+    "苏州": {"cuisine": "苏帮菜", "keywords": ["苏帮菜", "松鼠桂鱼", "阳春面", "苏式汤面"]},
+    "天津": {"cuisine": "津菜", "keywords": ["狗不理", "煎饼果子", "津菜", "麻花"]},
+    "青岛": {"cuisine": "鲁菜", "keywords": ["海鲜", "啤酒", "鲁菜", "烧烤"]},
+    "哈尔滨": {"cuisine": "东北菜", "keywords": ["锅包肉", "东北菜", "红肠", "杀猪菜"]},
+    "拉萨": {"cuisine": "藏餐", "keywords": ["酥油茶", "藏餐", "糌粑", "牦牛肉"]},
+    "乌鲁木齐": {"cuisine": "新疆菜", "keywords": ["大盘鸡", "烤羊肉", "新疆菜", "手抓饭"]},
+}
+
+
+def _get_food_keywords(city: str, food_preference: str) -> list:
+    city_info = CITY_FOOD_MAP.get(city, {"cuisine": "本地菜", "keywords": ["特色菜", "美食"]})
+    if food_preference == "本地特色" or food_preference == "无特殊要求":
+        return city_info["keywords"][:2]
+    preference_keywords = {
+        "川菜": ["川菜", "火锅", "麻辣"],
+        "粤菜": ["粤菜", "早茶", "海鲜"],
+        "日料": ["日料", "寿司", "拉面"],
+        "西餐": ["西餐", "牛排", "意面"],
+        "小吃": ["小吃", "特色小吃", "路边摊"],
+        "火锅": ["火锅", "涮锅"],
+        "烧烤": ["烧烤", "烤肉"],
+        "海鲜": ["海鲜", "大排档"],
+    }
+    return preference_keywords.get(food_preference, [food_preference])
+
+
+async def search_food_node(state: TripPlannerState) -> Dict[str, Any]:
+    print("🍜 执行节点: search_food_node")
+    request = state["request"]
+    attractions_info = state.get("attractions_info", "")
+
+    service = get_langchain_amap_service()
+    around_tool = await service.get_tool("maps_around_search")
+    search_tool = await service.get_tool("maps_text_search")
+    llm = get_llm()
+    llm_with_tools = llm.bind_tools([around_tool, search_tool])
+
+    food_keywords = _get_food_keywords(request.city, request.food_preference)
+    city_info = CITY_FOOD_MAP.get(request.city, {"cuisine": "本地菜"})
+
+    prompt = FOOD_AGENT_PROMPT + f"""
+请搜索城市: {request.city} 的餐厅信息。
+
+**用户美食偏好:** {request.food_preference}
+**城市特色菜系:** {city_info.get("cuisine", "本地菜")}
+**推荐搜索关键词:** {', '.join(food_keywords)}
+
+**景点信息（用于周边搜索）:**
+{attractions_info[:2000]}
+
+请执行以下搜索:
+1. 使用 maps_around_search 搜索景点周边的餐厅（从景点信息中提取坐标）
+2. 使用 maps_text_search 搜索城市热门餐厅（关键词: {food_keywords[0]})
+"""
+    response = await _invoke_llm_with_retry(llm_with_tools, [SystemMessage(content=FOOD_AGENT_PROMPT), HumanMessage(content=prompt)])
+
+    food_results = []
+    for tool_call in response.tool_calls:
+        tool_name = tool_call["name"]
+        tool_args = tool_call["args"]
+
+        tool = await service.get_tool(tool_name)
+        if tool:
+            tool_result = await _invoke_mcp_tool(tool, tool_args)
+            food_results.append(f"[{tool_name}]: {str(tool_result)}")
+
+    if food_results:
+        return {"food_info": "\n".join(food_results)}
+
+    print("⚠️ search_food_node: LLM未调用工具，返回空数据")
+    return {"food_info": ""}
+
+
+def _haversine_distance(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
+    R = 6371.0
+    dlat = math.radians(lat2 - lat1)
+    dlon = math.radians(lon2 - lon1)
+    a = math.sin(dlat / 2) ** 2 + math.cos(math.radians(lat1)) * math.cos(math.radians(lat2)) * math.sin(dlon / 2) ** 2
+    c = 2 * math.asin(math.sqrt(a))
+    return R * c
+
+
+def _cluster_attractions_by_proximity(attractions: List[Dict], num_days: int) -> List[List[Dict]]:
+    n = len(attractions)
+    if n == 0:
+        return []
+    if n <= num_days:
+        return [[a] for a in attractions]
+
+    dist_matrix = [[0.0] * n for _ in range(n)]
+    for i in range(n):
+        for j in range(i + 1, n):
+            d = _haversine_distance(
+                attractions[i]["latitude"], attractions[i]["longitude"],
+                attractions[j]["latitude"], attractions[j]["longitude"]
+            )
+            dist_matrix[i][j] = d
+            dist_matrix[j][i] = d
+
+    clusters = [[i] for i in range(n)]
+
+    while len(clusters) > num_days:
+        min_dist = float("inf")
+        merge_i, merge_j = 0, 1
+        for i in range(len(clusters)):
+            for j in range(i + 1, len(clusters)):
+                cluster_dist = min(
+                    dist_matrix[a][b]
+                    for a in clusters[i]
+                    for b in clusters[j]
+                )
+                if cluster_dist < min_dist:
+                    min_dist = cluster_dist
+                    merge_i, merge_j = i, j
+
+        clusters[merge_i] = clusters[merge_i] + clusters[merge_j]
+        clusters.pop(merge_j)
+
+    return [[attractions[i] for i in cluster] for cluster in clusters]
+
+
+def _order_cluster_by_tsp(cluster: List[Dict]) -> List[Dict]:
+    if len(cluster) <= 2:
+        return cluster
+
+    ordered = [cluster[0]]
+    remaining = list(cluster[1:])
+
+    while remaining:
+        last = ordered[-1]
+        nearest_idx = 0
+        nearest_dist = float("inf")
+        for i, attr in enumerate(remaining):
+            d = _haversine_distance(last["latitude"], last["longitude"], attr["latitude"], attr["longitude"])
+            if d < nearest_dist:
+                nearest_dist = d
+                nearest_idx = i
+        ordered.append(remaining.pop(nearest_idx))
+
+    return ordered
+
+
+def _select_top_attractions(clusters: List[List[Dict]], max_per_day: int = 3) -> List[List[Dict]]:
+    result = []
+    for cluster in clusters:
+        if len(cluster) <= max_per_day:
+            result.append(cluster)
+        else:
+            if len(cluster) > 1:
+                center_lat = sum(a["latitude"] for a in cluster) / len(cluster)
+                center_lon = sum(a["longitude"] for a in cluster) / len(cluster)
+                scored = []
+                for attr in cluster:
+                    d = _haversine_distance(center_lat, center_lon, attr["latitude"], attr["longitude"])
+                    scored.append((attr, d))
+                scored.sort(key=lambda x: x[1])
+                result.append([s[0] for s in scored[:max_per_day]])
+            else:
+                result.append(cluster[:max_per_day])
+    return result
+
+
+def _format_cluster_info(clusters: List[List[Dict]], all_attractions: List[Dict], dist_matrix: List[List[float]], trimmed: bool = False) -> str:
+    lines = ["=== 每日景点分组建议（基于地理位置聚类） ===", ""]
+
+    if trimmed:
+        lines.append("⚠️ 景点数量超过每天3个的上限，已按距离聚类中心最近的原则筛选，保留每天最多3个景点")
+        lines.append("")
+
+    for day_idx, cluster in enumerate(clusters):
+        lines.append(f"第{day_idx + 1}天建议景点:")
+        for order_idx, attr in enumerate(cluster):
+            lines.append(f"  {order_idx + 1}. {attr['name']} ({attr['longitude']:.4f}, {attr['latitude']:.4f})")
+
+        if len(cluster) > 1:
+            max_dist = 0
+            for i in range(len(cluster)):
+                for j in range(i + 1, len(cluster)):
+                    ci = all_attractions.index(cluster[i])
+                    cj = all_attractions.index(cluster[j])
+                    max_dist = max(max_dist, dist_matrix[ci][cj])
+            lines.append(f"  组内最大距离: {max_dist:.1f}km")
+        lines.append("")
+
+    selected_names = set()
+    for cluster in clusters:
+        for attr in cluster:
+            selected_names.add(attr["name"])
+
+    lines.append("=== 选中景点间距离矩阵 (km) ===")
+    lines.append("")
+
+    selected_attrs = [a for a in all_attractions if a["name"] in selected_names]
+    if len(selected_attrs) > 1:
+        name_col_width = max(len(a["name"]) for a in selected_attrs) + 2
+        header = " " * name_col_width
+        for attr in selected_attrs:
+            header += f"{attr['name'][:6]:>8}"
+        lines.append(header)
+
+        for i, attr in enumerate(selected_attrs):
+            ci = all_attractions.index(attr)
+            row = f"{attr['name'][:name_col_width - 1]:<{name_col_width}}"
+            for j, attr_j in enumerate(selected_attrs):
+                if i == j:
+                    row += f"{'--':>8}"
+                else:
+                    cj = all_attractions.index(attr_j)
+                    row += f"{dist_matrix[ci][cj]:>7.1f}"
+            lines.append(row)
+
+    return "\n".join(lines)
+
+
+def _extract_json_array(text: str) -> Optional[List[Dict]]:
+    if "```json" in text:
+        start = text.find("```json") + 7
+        end = text.find("```", start)
+        text = text[start:end].strip()
+    elif "```" in text:
+        start = text.find("```") + 3
+        end = text.find("```", start)
+        text = text[start:end].strip()
+    elif "[" in text:
+        start = text.find("[")
+        end = text.rfind("]") + 1
+        text = text[start:end]
+
+    try:
+        result = json.loads(text)
+        if isinstance(result, list):
+            return result
+    except json.JSONDecodeError:
+        pass
+
+    bracket_pattern = re.compile(r'\[[\s\S]*?\]', re.DOTALL)
+    for match in bracket_pattern.finditer(text):
+        try:
+            result = json.loads(match.group())
+            if isinstance(result, list):
+                return result
+        except json.JSONDecodeError:
+            continue
+
+    return None
+
+
+def _extract_coordinates_regex(text: str) -> List[Dict]:
+    attractions = []
+
+    amap_location_pattern = re.compile(
+        r'"?name"?\s*[:=]\s*["\']([^"\']+)["\'].*?'
+        r'"?location"?\s*[:=]\s*["\']([\d.]+)\s*,\s*([\d.]+)["\']',
+        re.DOTALL | re.IGNORECASE
+    )
+    for m in amap_location_pattern.finditer(text):
+        name = m.group(1).strip()
+        try:
+            lon = float(m.group(2))
+            lat = float(m.group(3))
+            if 73 < lon < 136 and 3 < lat < 54:
+                attractions.append({"name": name, "longitude": lon, "latitude": lat})
+        except ValueError:
+            continue
+
+    if attractions:
+        return attractions
+
+    name_lon_lat = re.compile(
+        r'"?name"?\s*[:=]\s*["\']([^"\']+)["\'].*?'
+        r'"?longitude"?\s*[:=]\s*["\']?([\d.]+)["\']?.*?'
+        r'"?latitude"?\s*[:=]\s*["\']?([\d.]+)["\']?',
+        re.DOTALL | re.IGNORECASE
+    )
+    for m in name_lon_lat.finditer(text):
+        name = m.group(1).strip()
+        try:
+            lon = float(m.group(2))
+            lat = float(m.group(3))
+            if 73 < lon < 136 and 3 < lat < 54:
+                attractions.append({"name": name, "longitude": lon, "latitude": lat})
+        except ValueError:
+            continue
+
+    if attractions:
+        return attractions
+
+    lon_lat_name = re.compile(
+        r'"?longitude"?\s*[:=]\s*["\']?([\d.]+)["\']?.*?'
+        r'"?latitude"?\s*[:=]\s*["\']?([\d.]+)["\']?.*?'
+        r'"?name"?\s*[:=]\s*["\']([^"\']+)["\']',
+        re.DOTALL | re.IGNORECASE
+    )
+    for m in lon_lat_name.finditer(text):
+        name = m.group(3).strip()
+        try:
+            lon = float(m.group(1))
+            lat = float(m.group(2))
+            if 73 < lon < 136 and 3 < lat < 54:
+                attractions.append({"name": name, "longitude": lon, "latitude": lat})
+        except ValueError:
+            continue
+
+    if attractions:
+        return attractions
+
+    location_pattern = re.compile(
+        r'"?(?:location|坐标)"?\s*[:=]\s*\{[^}]*?"?lon(?:gitude)?"?\s*[:=]\s*["\']?([\d.]+)["\']?\s*,\s*"?lat(?:itude)?"?\s*[:=]\s*["\']?([\d.]+)["\']?',
+        re.DOTALL | re.IGNORECASE
+    )
+    name_pattern = re.compile(r'"?name"?\s*[:=]\s*["\']([^"\']+)["\']', re.IGNORECASE)
+
+    locations = list(location_pattern.finditer(text))
+    names = name_pattern.findall(text)
+
+    for i, m in enumerate(locations):
+        try:
+            lon = float(m.group(1))
+            lat = float(m.group(2))
+            if 73 < lon < 136 and 3 < lat < 54:
+                name = names[i].strip() if i < len(names) else f"景点{i+1}"
+                attractions.append({"name": name, "longitude": lon, "latitude": lat})
+        except (ValueError, IndexError):
+            continue
+
+    return attractions
+
+
+async def cluster_attractions_node(state: TripPlannerState) -> Dict[str, Any]:
+    print("🗺️ 执行节点: cluster_attractions_node")
+
+    if state.get("cluster_info"):
+        print("  ⏭️ 聚类已完成，跳过重复执行")
+        return {}
+
+    attractions_info = state.get("attractions_info", "")
+    request = state["request"]
+
+    valid_attractions = _extract_coordinates_regex(attractions_info)
+    if valid_attractions:
+        print(f"📊 正则提取到 {len(valid_attractions)} 个景点坐标（跳过LLM提取）")
+    else:
+        print(f"📊 正则未提取到坐标，数据前500字符: {attractions_info[:500]}")
+        print("📊 尝试LLM提取...")
+        llm = get_llm()
+        extract_prompt = f"""从以下景点搜索结果中，提取所有景点的名称和经纬度坐标。
+请以JSON数组格式返回，每个元素包含 name, longitude, latitude 三个字段。longitude和latitude必须是浮点数。
+
+**重要**: 中国的经度范围约73-136，纬度范围约3-54。请确保提取的坐标在此范围内。
+
+搜索结果:
+{attractions_info[:4000]}
+
+请直接返回JSON数组，不要包含其他文字。示例:
+[{{"name": "故宫博物院", "longitude": 116.3974, "latitude": 39.9165}}]"""
+
+        try:
+            response = await _invoke_llm_with_retry(llm, [HumanMessage(content=extract_prompt)])
+            attractions_list = _extract_json_array(response.content)
+
+            if attractions_list:
+                valid_attractions = [
+                    a for a in attractions_list
+                    if isinstance(a.get("longitude"), (int, float)) and isinstance(a.get("latitude"), (int, float))
+                    and 73 < a["longitude"] < 136 and 3 < a["latitude"] < 54
+                ]
+
+            if not valid_attractions:
+                print("⚠️ LLM提取也失败，尝试从原始文本正则提取...")
+                valid_attractions = _extract_coordinates_regex(response.content)
+        except Exception as e:
+            print(f"⚠️ LLM坐标提取异常: {e}")
+
+    if not valid_attractions:
+        print("⚠️ 未能提取有效景点坐标，跳过聚类")
+        return {"cluster_info": "景点坐标提取失败，请根据景点信息自行合理分配每日行程。"}
+
+    print(f"📊 成功提取 {len(valid_attractions)} 个景点坐标")
+
+    n = len(valid_attractions)
+    dist_matrix = [[0.0] * n for _ in range(n)]
+    for i in range(n):
+        for j in range(i + 1, n):
+            d = _haversine_distance(
+                valid_attractions[i]["latitude"], valid_attractions[i]["longitude"],
+                valid_attractions[j]["latitude"], valid_attractions[j]["longitude"]
+            )
+            dist_matrix[i][j] = d
+            dist_matrix[j][i] = d
+
+    clusters = _cluster_attractions_by_proximity(valid_attractions, request.travel_days)
+
+    for i in range(len(clusters)):
+        clusters[i] = _order_cluster_by_tsp(clusters[i])
+
+    trimmed = False
+    total_attractions = sum(len(c) for c in clusters)
+    max_per_day = 3
+    if total_attractions > request.travel_days * max_per_day:
+        print(f"✂️ 景点数量({total_attractions})超过上限({request.travel_days * max_per_day})，开始筛选...")
+        clusters = _select_top_attractions(clusters, max_per_day)
+        trimmed = True
+
+    cluster_info = _format_cluster_info(clusters, valid_attractions, dist_matrix, trimmed)
+    final_count = sum(len(c) for c in clusters)
+    print(f"✅ 景点聚类完成: {len(valid_attractions)} 个景点 → 筛选后 {final_count} 个，分为 {len(clusters)} 组")
+
+    return {"cluster_info": cluster_info}
+
+
+async def plan_route_node(state: TripPlannerState) -> Dict[str, Any]:
+    print("🗺️ 执行节点: plan_route_node")
+    request = state["request"]
+    hotels = state.get("hotels_info", "")
+    cluster_info = state.get("cluster_info", "")
+
+    if not hotels:
+        print("⚠️ 酒店数据尚未就绪，路线规划可能不完整")
+    if not state.get("weather_info"):
+        print("⚠️ 天气数据尚未就绪")
+
+    if not cluster_info or "失败" in cluster_info:
+        print("⚠️ 聚类信息不可用，使用原始景点信息进行路线规划")
+        cluster_info = f"（聚类不可用，请根据以下景点信息自行分组规划路线）\n景点搜索结果: {state.get('attractions_info', '')[:2000]}"
+
+    service = get_langchain_amap_service()
+    try:
+        direction_tools = [
+            await service.get_tool("maps_direction_walking"),
+            await service.get_tool("maps_direction_driving"),
+            await service.get_tool("maps_direction_transit_integrated")
+        ]
+    except Exception as e:
+        print(f"⚠️ 路线工具加载失败: {e}")
+        return {"route_info": f"路线工具加载失败，请根据距离矩阵自行估算交通时间。"}
+
+    llm = get_llm()
+    llm_with_tools = llm.bind_tools(direction_tools)
+
+    prompt = f"""
+请根据以下每日景点分组和酒店信息，为用户在 {request.city} 规划每天的交通路线。
+用户偏好的交通方式是：{request.transportation}。
+
+【每日景点分组（基于地理位置聚类）】：
+{cluster_info}
+
+【酒店信息】：
+{hotels}
+
+**重要：你必须调用路线规划工具来获取实际的路线数据！**
+
+请执行以下操作：
+1. 从景点分组中提取每天的起点和终点坐标
+2. 根据用户交通偏好选择合适的工具：
+   - 步行: maps_direction_walking
+   - 驾车: maps_direction_driving  
+   - 公交: maps_direction_transit_integrated
+3. 调用工具时参数格式：
+   - origin: "经度,纬度"（如 "116.3974,39.9165"）
+   - destination: "经度,纬度"
+   - city: "{request.city}"（公交必填）
+
+请至少调用1次路线规划工具，为最长路段查询路线信息。
+"""
+    try:
+        response = await _invoke_llm_with_retry(llm_with_tools, [SystemMessage(content=ROUTE_AGENT_PROMPT), HumanMessage(content=prompt)])
+    except Exception as e:
+        print(f"⚠️ LLM路线规划调用失败: {e}")
+        return {"route_info": f"路线规划LLM调用失败: {str(e)[:200]}，请根据距离矩阵自行估算交通时间。"}
+
+    route_results = []
+    direction_count = 0
+    for tool_call in response.tool_calls:
+        tool_name = tool_call["name"]
+        tool_args = tool_call["args"]
+
+        try:
+            tool = await service.get_tool(tool_name)
+            if tool:
+                tool_result = await _invoke_mcp_tool(tool, tool_args)
+                route_results.append(f"[{tool_name}]: {str(tool_result)}")
+            else:
+                route_results.append(f"未知工具: {tool_name}")
+        except Exception as e:
+            print(f"⚠️ 路线工具[{tool_name}]调用失败: {e}")
+            route_results.append(f"[{tool_name}] 调用失败: {str(e)[:100]}")
+
+        if tool_name.startswith("maps_direction"):
+            direction_count += 1
+            if direction_count >= 3:
+                break
+
+    if route_results:
+        return {"route_info": "\n".join(route_results)}
+
+    print("⚠️ plan_route_node: LLM未调用路线规划工具，尝试直接调用")
+    try:
+        coords = _extract_coordinates_regex(cluster_info)
+        if not coords:
+            coords = _extract_coordinates_regex(state.get("attractions_info", ""))
+    except Exception:
+        coords = []
+
+    if len(coords) >= 2:
+        try:
+            tool_name = "maps_direction_transit_integrated" if request.transportation in ["公共交通", "公交"] else "maps_direction_driving"
+            direct_tool = await service.get_tool(tool_name)
+            origin = f"{coords[0]['longitude']},{coords[0]['latitude']}"
+            destination = f"{coords[-1]['longitude']},{coords[-1]['latitude']}"
+            tool_args = {"origin": origin, "destination": destination, "city": request.city}
+            print(f"  直接调用 {tool_name}: {origin} → {destination}")
+            tool_result = await _invoke_mcp_tool(direct_tool, tool_args)
+            return {"route_info": f"[{tool_name}]: {str(tool_result)}"}
+        except Exception as e:
+            print(f"⚠️ 直接调用路线工具也失败: {e}")
+
+    return {"route_info": ""}
+
+def _weather_field(item, name, default=None):
+    """兼容 Pydantic model 和 dict。"""
+    if isinstance(item, dict):
+        return item.get(name, default)
+    return getattr(item, name, default)
+
+
+def _format_weather_date(date_str: str) -> str:
+    """2026-08-30 -> 8月30日"""
+    try:
+        dt = datetime.strptime(date_str, "%Y-%m-%d")
+        return f"{dt.month}月{dt.day}日"
+    except Exception:
+        return str(date_str)
+
+
+def _format_weather_temp(value):
+    if value is None:
+        return None
+
+    try:
+        number = float(value)
+        if number.is_integer():
+            return str(int(number))
+        return f"{number:g}"
+    except (TypeError, ValueError):
+        return str(value)
+
+
+def _is_known_weather_value(value) -> bool:
+    return value not in (None, "", "待查询", "未知")
+
+
+def _build_grounded_weather_note(trip_plan: TripPlan) -> str:
+    """
+    只根据最终结构化 weather_info 生成天气文字，
+    不允许模型常识补充气候事实。
+    """
+    weather_items = getattr(trip_plan, "weather_info", None) or []
+
+    trusted_parts = []
+    missing_dates = []
+    hot_dates = []
+
+    for item in weather_items:
+        date = _weather_field(item, "date")
+        label = _format_weather_date(date)
+
+        day_weather = _weather_field(item, "day_weather")
+        night_weather = _weather_field(item, "night_weather")
+        day_temp = _weather_field(item, "day_temp")
+        night_temp = _weather_field(item, "night_temp")
+        wind_direction = _weather_field(item, "wind_direction")
+        wind_power = _weather_field(item, "wind_power")
+
+        has_trusted_data = any(
+            [
+                _is_known_weather_value(day_weather),
+                _is_known_weather_value(night_weather),
+                day_temp is not None,
+                night_temp is not None,
+            ]
+        )
+
+        if not has_trusted_data:
+            missing_dates.append(label)
+            continue
+
+        details = []
+
+        if _is_known_weather_value(day_weather):
+            text = f"白天{day_weather}"
+
+            temp = _format_weather_temp(day_temp)
+            if temp is not None:
+                text += f"，约{temp}℃"
+
+            details.append(text)
+
+        if _is_known_weather_value(night_weather):
+            text = f"夜间{night_weather}"
+
+            temp = _format_weather_temp(night_temp)
+            if temp is not None:
+                text += f"，约{temp}℃"
+
+            details.append(text)
+
+        if (
+            _is_known_weather_value(wind_direction)
+            and _is_known_weather_value(wind_power)
+        ):
+            details.append(f"{wind_direction}风{wind_power}级")
+
+        if details:
+            trusted_parts.append(
+                f"{label}" + "，".join(details)
+            )
+
+        # 只有真实温度 >= 30℃ 时才生成“防晒补水”建议
+        try:
+            if day_temp is not None and float(day_temp) >= 30:
+                hot_dates.append(label)
+        except (TypeError, ValueError):
+            pass
+
+    notes = []
+
+    if trusted_parts:
+        notes.append(
+            "已获取的可信天气预报显示：" +
+            "；".join(trusted_parts)
+        )
+
+    if hot_dates:
+        if len(hot_dates) == 1:
+            notes.append(
+                f"{hot_dates[0]}白天气温较高，建议注意防晒补水"
+            )
+        else:
+            notes.append(
+                f"{'、'.join(hot_dates)}白天气温较高，建议注意防晒补水"
+            )
+
+    if missing_dates:
+        notes.append(
+            f"{'、'.join(missing_dates)}暂无可信天气预报，"
+            "建议出发前3天重新查询天气"
+        )
+
+    return "；".join(notes)
+
+
+def _ground_overall_weather_suggestions(
+    trip_plan: TripPlan,
+) -> TripPlan:
+    """
+    清理 LLM 自由生成的天气/气候事实，
+    但尽量保留景点、交通、预约、体力、预算等非天气建议。
+
+    最后再根据结构化 weather_info
+    确定性生成可信天气建议。
+
+    设计目标：
+    1. 不依赖 LLM 是否使用分号；
+    2. 支持 1. / 1． / 1、 / 1） / 1) 等编号；
+    3. 不误伤 8月30日、31℃ 等日期和温度；
+    4. 多次执行仍保持稳定。
+    """
+    text = getattr(
+        trip_plan,
+        "overall_suggestions",
+        "",
+    ) or ""
+
+    weather_keywords = (
+        "天气",
+        "气温",
+        "温度",
+        "炎热",
+        "高温",
+        "凉爽",
+
+        "晴",
+        "晴朗",
+        "晴天",
+        "阴",
+        "阴天",
+        "多云",
+
+        "阵雨",
+        "雷阵雨",
+        "小雨",
+        "中雨",
+        "大雨",
+        "暴雨",
+        "降雨",
+        "下雨",
+        "雨天",
+
+        "雨夹雪",
+        "小雪",
+        "中雪",
+        "大雪",
+        "降雪",
+        "下雪",
+
+        "雾",
+        "霾",
+
+        "温差",
+        "风力",
+        "风向",
+        "防晒",
+        "补水",
+        "遮阳",
+        "带伞",
+        "雨伞",
+        "天气预报",
+
+        "较凉",
+        "偏凉",
+        "早晚较凉",
+        "凉意",
+        "降温",
+        "昼夜温差",
+        "薄外套",
+        "外套",
+        "闷热",
+        "干燥",
+        "湿度",
+        "紫外线",
+    )
+
+    def contains_weather_fact(value: str) -> bool:
+        return any(
+            keyword in value
+            for keyword in weather_keywords
+        )
+
+    def strip_weather_sentences(value: str) -> str:
+        """
+        按句子/分号进一步拆分，
+        只删除真正包含天气内容的小片段，
+        避免因为一个天气词删掉整段总体建议。
+        """
+        if not value:
+            return ""
+
+        pieces = re.split(
+            r"(?<=[。！？!?；;])",
+            value,
+        )
+
+        kept = []
+
+        for piece in pieces:
+            piece = piece.strip()
+
+            if not piece:
+                continue
+
+            if contains_weather_fact(piece):
+                continue
+
+            kept.append(piece)
+
+        return "".join(kept).strip()
+
+    # ---------------------------------------------------------
+    # 优先识别编号列表：
+    # 1. xxx
+    # 2．xxx
+    # 3、xxx
+    # 4）xxx
+    # 5) xxx
+    #
+    # 不会匹配：
+    # 8月30日
+    # 31℃
+    # 2026-08-30
+    # ---------------------------------------------------------
+    marker_pattern = re.compile(
+        #r"(?<!\d)(\d+)\s*[.．、）)]\s*"
+        r"(?<![\d\-/年月])(\d+)\s*[.．、）)]\s*"
+    )
+
+    matches = list(
+        marker_pattern.finditer(text)
+    )
+
+    cleaned = ""
+
+    if matches:
+        # 第一条编号前面的总体介绍
+        prefix = text[:matches[0].start()].strip()
+
+        prefix = strip_weather_sentences(prefix)
+
+        kept_items = []
+
+        for index, match in enumerate(matches):
+            body_start = match.end()
+
+            if index + 1 < len(matches):
+                body_end = matches[index + 1].start()
+            else:
+                body_end = len(text)
+
+            body = text[
+                body_start:body_end
+            ].strip()
+
+            # 在每个编号项内部继续按句子过滤，
+            # 而不是因为出现一个天气词就整项粗暴删除。
+            body = strip_weather_sentences(body)
+
+            body = body.strip(
+                " \t\r\n；;"
+            )
+
+            if body:
+                kept_items.append(body)
+
+        numbered_text = "；".join(
+            f"{index}. {body}"
+            for index, body
+            in enumerate(
+                kept_items,
+                start=1,
+            )
+        )
+
+        if prefix:
+            cleaned = prefix
+
+            if numbered_text:
+                if cleaned.endswith(
+                    ("：", ":")
+                ):
+                    cleaned += numbered_text
+                else:
+                    cleaned += " " + numbered_text
+
+        else:
+            cleaned = numbered_text
+
+    else:
+        # 没有编号时，退化成句子级过滤。
+        # 不再以整个 overall_suggestions 为删除单位。
+        cleaned = strip_weather_sentences(text)
+
+    cleaned = cleaned.strip()
+
+    # 清除可能残留的多余分隔符
+    cleaned = re.sub(
+        r"[；;]{2,}",
+        "；",
+        cleaned,
+    )
+
+    cleaned = cleaned.strip(
+        " \t\r\n；;"
+    )
+
+    # ---------------------------------------------------------
+    # 根据结构化天气重新生成唯一可信天气段
+    # ---------------------------------------------------------
+    weather_note = _build_grounded_weather_note(
+        trip_plan
+    )
+
+    if weather_note:
+        if cleaned:
+            if not cleaned.endswith(
+                ("。", "！", "？", ".", "!", "?")
+            ):
+                cleaned += "。"
+
+            cleaned += " "
+
+        cleaned += (
+            f"天气方面：{weather_note}。"
+        )
+
+    trip_plan.overall_suggestions = cleaned
+
+    return trip_plan
+
+
+
+async def generate_plan_node(state: TripPlannerState) -> Dict[str, Any]:
+    print("📋 执行节点: generate_plan_node")
+    request = state["request"]
+    attractions = state.get("attractions_info", "")
+    weather = state.get("weather_info", "")
+    hotels = state.get("hotels_info", "")
+    food = state.get("food_info", "")
+    cluster = state.get("cluster_info", "")
+    routes = state.get("route_info", "")
+
+    prompt = f"""请根据以下信息生成{request.city}的{request.travel_days}天旅行计划:
+
+**基本信息:**
+- 城市: {request.city}
+- 日期: {request.start_date} 至 {request.end_date}
+- 交通方式: {request.transportation}
+- 住宿: {request.accommodation}
+- 美食偏好: {request.food_preference}
+
+**收集到的信息:**
+[景点]: {attractions}
+[天气]: {weather}
+[酒店]: {hotels}
+[美食]: {food}
+[景点聚类分组]: {cluster}
+[路线]: {routes if routes else "路线搜索数据不可用，请根据景点间距离和交通方式自行估算路线信息"}
+
+**关键要求:**
+1. **严格按照[景点聚类分组]的建议安排每日景点**，将同一组的景点安排在同一天，不要随意打散
+2. 每组内的景点按照聚类给出的顺序安排游览（已按最近邻排序）
+3. 如果聚类分组中某天景点过多或过少，可以适当调整，但必须保持地理位置相近的景点在同一天
+4. 每天的餐饮推荐要结合当天的景点位置（早餐和午餐选景点周边，晚餐可选城市热门）
+5. **每个景点的location字段必须包含经纬度坐标**，从[景点]搜索结果中提取，不要留空或编造
+6. **每天必须包含route_segments路线段**，即使路线搜索数据不可用，也要根据景点位置和交通方式估算距离和时间
+7. **返回的JSON必须严格合法**：属性名用双引号，不要有尾随逗号，不要有注释
+8. **天气事实必须严格以[天气]中的日期级数据为准**：
+   - 只能描述[天气]中明确提供的天气、温度、风向和风力；
+   - 对于标记为“待查询”或无可信预报的日期，只能说明“暂无可信天气预报”并建议临近出发重新查询；
+   - 禁止使用模型常识补充“某月通常炎热”“当地天气宜人”“一般多雨”“昼夜温差大”等未由本次天气数据支持的气候判断；
+   - 不得把某一天的可信天气推广到其他日期或整个旅行期间。
+"""
+    if request.free_text_input:
+        prompt += f"\n**额外要求:** {request.free_text_input}"
+
+    llm = get_llm()
+    messages = [SystemMessage(content=PLANNER_AGENT_PROMPT), HumanMessage(content=prompt)]
+
+    structured_llm = None
+    try:
+        structured_llm = llm.with_structured_output(TripPlan, method="function_calling")
+        print("🔧 使用 Structured Output (function_calling) 模式生成计划")
+    except Exception as e:
+        print(f"⚠️ Structured Output 不可用，使用手动JSON解析: {e}")
+
+    max_attempts = 3
+    for attempt in range(max_attempts):
+        try:
+            if structured_llm is not None:
+                try:
+                    trip_plan = await structured_llm.ainvoke(messages)
+                    if trip_plan is not None:
+                        trip_plan = _validate_plan_coordinates(trip_plan)
+                        trip_plan = _ground_overall_weather_suggestions(trip_plan)
+                        return {"trip_plan": trip_plan}
+
+                    print("⚠️ Structured Output 返回空结果，降级到手动解析")
+                except Exception as e:
+                    err_msg = str(e)
+                    if "response_format" in err_msg or "unavailable" in err_msg or "400" in err_msg:
+                        print(f"⚠️ Structured Output 不受API支持，降级到手动解析: {err_msg[:100]}")
+                    else:
+                        print(f"⚠️ Structured Output 调用失败，降级到手动解析: {err_msg[:100]}")
+                structured_llm = None
+
+            response = await _invoke_llm_with_retry(llm, messages)
+            trip_plan = _parse_response(response.content, request)
+            trip_plan = _ground_overall_weather_suggestions(trip_plan)
+            return {"trip_plan": trip_plan}
+
+        except Exception as e:
+            print(f"⚠️ 解析计划失败 (尝试 {attempt + 1}/{max_attempts}): {str(e)[:200]}")
+            if attempt < max_attempts - 1:
+                prompt = f"""上一次生成的JSON格式有误，解析失败。请重新生成，确保：
+1. 所有属性名用双引号包裹
+2. 不要有尾随逗号（如 "a": 1, }} 或 [1, ]）
+3. 不要有注释
+4. 确保JSON完整，不要截断
+
+错误信息: {str(e)[:100]}
+
+请根据以下信息重新生成{request.city}的{request.travel_days}天旅行计划:
+
+**基本信息:**
+- 城市: {request.city}
+- 日期: {request.start_date} 至 {request.end_date}
+- 交通方式: {request.transportation}
+- 住宿: {request.accommodation}
+- 美食偏好: {request.food_preference}
+
+**收集到的信息:**
+[景点]: {attractions}
+[天气]: {weather}
+[酒店]: {hotels}
+[美食]: {food}
+[景点聚类分组]: {cluster}
+[路线]: {routes if routes else "路线搜索数据不可用，请根据景点间距离和交通方式自行估算路线信息"}
+
+**关键要求:**
+1. 严格按照[景点聚类分组]的建议安排每日景点
+2. 每个景点的location字段必须包含经纬度坐标
+3. 每天必须包含route_segments路线段
+4. 返回的JSON必须严格合法
+5. 天气事实只能引用[天气]中的可信日期级数据；“待查询”日期不得推断天气，也不得使用月份或城市气候常识补充天气事实。"""
+                if request.free_text_input:
+                    prompt += f"\n**额外要求:** {request.free_text_input}"
+                messages = [SystemMessage(content=PLANNER_AGENT_PROMPT), HumanMessage(content=prompt)]
+            else:
+                print(f"❌ 解析计划最终失败，使用备用方案")
+                return {"trip_plan": None, "errors": [str(e)]}
+
+
+def _repair_json(json_str: str) -> str:
+    json_str = re.sub(r'//.*?$', '', json_str, flags=re.MULTILINE)
+    json_str = re.sub(r'/\*.*?\*/', '', json_str, flags=re.DOTALL)
+    json_str = re.sub(r',\s*([}\]])', r'\1', json_str)
+    json_str = re.sub(r"'", '"', json_str)
+    json_str = re.sub(r'\bNaN\b', 'null', json_str)
+    json_str = re.sub(r'\bInfinity\b', 'null', json_str)
+    json_str = re.sub(r'\b-infinity\b', 'null', json_str, flags=re.IGNORECASE)
+    json_str = re.sub(r'(\{|,)\s*([a-zA-Z_]\w*)\s*:', r'\1"\2":', json_str)
+    return json_str
+
+
+def _validate_plan_coordinates(trip_plan: TripPlan) -> TripPlan:
+    for day in trip_plan.days:
+        for attr in day.attractions:
+            if attr.location is not None:
+                lon = attr.location.longitude
+                lat = attr.location.latitude
+                if not (73 < lon < 136 and 3 < lat < 54):
+                    attr.location = None
+        for meal in day.meals:
+            if meal.location is not None:
+                lon = meal.location.longitude
+                lat = meal.location.latitude
+                if not (73 < lon < 136 and 3 < lat < 54):
+                    meal.location = None
+    return trip_plan
+
+
+def _parse_response(response_text: str, request: TripRequest) -> TripPlan:
+    try:
+        if "```json" in response_text:
+            json_start = response_text.find("```json") + 7
+            json_end = response_text.find("```", json_start)
+            json_str = response_text[json_start:json_end].strip()
+        elif "```" in response_text:
+            json_start = response_text.find("```") + 3
+            json_end = response_text.find("```", json_start)
+            json_str = response_text[json_start:json_end].strip()
+        elif "{" in response_text and "}" in response_text:
+            json_start = response_text.find("{")
+            json_end = response_text.rfind("}") + 1
+            json_str = response_text[json_start:json_end]
+        else:
+            raise ValueError("响应中未找到JSON数据")
+
+        try:
+            data = json.loads(json_str)
+        except json.JSONDecodeError:
+            print("⚠️ JSON解析失败，尝试修复...")
+            repaired = _repair_json(json_str)
+            try:
+                data = json.loads(repaired)
+            except json.JSONDecodeError:
+                print("⚠️ JSON修复后仍解析失败，尝试逐步截断...")
+                data = None
+                for end_offset in range(len(json_str) - 1, max(len(json_str) // 2, 100), -1):
+                    if json_str[end_offset] == '}':
+                        try:
+                            candidate = json_str[:end_offset + 1] + "]}" if '"days"' in json_str[:end_offset] else json_str[:end_offset + 1]
+                            data = json.loads(_repair_json(candidate))
+                            break
+                        except json.JSONDecodeError:
+                            continue
+                if data is None:
+                    raise ValueError("JSON截断修复也失败")
+
+        trip_plan = TripPlan(**data)
+        return _validate_plan_coordinates(trip_plan)
+    except Exception as e:
+        raise ValueError(f"解析 JSON 失败: {str(e)}")
+
+
+def _create_fallback_plan(request: TripRequest) -> TripPlan:
+    from datetime import datetime, timedelta
+
+    start_date = datetime.strptime(request.start_date, "%Y-%m-%d")
+
+    days = []
+    for i in range(request.travel_days):
+        current_date = start_date + timedelta(days=i)
+
+        day_plan = DayPlan(
+            date=current_date.strftime("%Y-%m-%d"),
+            day_index=i,
+            description=f"第{i+1}天行程",
+            transportation=request.transportation,
+            accommodation=request.accommodation,
+            attractions=[
+                Attraction(
+                    name=f"{request.city}景点{j+1}",
+                    address=f"{request.city}市",
+                    location=Location(longitude=116.4 + i*0.01 + j*0.005, latitude=39.9 + i*0.01 + j*0.005),
+                    visit_duration=120,
+                    description=f"这是{request.city}的著名景点",
+                    category="景点"
+                )
+                for j in range(2)
+            ],
+            meals=[
+                Meal(type="breakfast", name=f"当地特色早餐", description="当地特色早餐", cuisine="本地菜", source="nearby"),
+                Meal(type="lunch", name=f"午餐推荐", description="午餐推荐", cuisine="本地菜", source="nearby"),
+                Meal(type="dinner", name=f"晚餐推荐", description="晚餐推荐", cuisine="本地菜", source="popular")
+            ]
+        )
+        days.append(day_plan)
+
+    return TripPlan(
+        city=request.city,
+        start_date=request.start_date,
+        end_date=request.end_date,
+        days=days,
+        weather_info=[],
+        overall_suggestions=f"这是为您规划的{request.city}{request.travel_days}日游行程,建议提前查看各景点的开放时间。"
+    )
+
+
+# ============ 图构建逻辑 (Graph Builder) ============
+
+def create_trip_planner_graph() -> StateGraph:
+    workflow = StateGraph(TripPlannerState)
+
+    workflow.add_node("search_poi", search_poi_node)
+    workflow.add_node("search_weather", search_weather_node)
+    workflow.add_node("search_hotel", search_hotel_node)
+    workflow.add_node("gather_search", gather_search_node)
+    workflow.add_node("cluster_attractions", cluster_attractions_node)
+    workflow.add_node("search_food", search_food_node)
+    workflow.add_node("plan_route", plan_route_node)
+    workflow.add_node("generate_plan", generate_plan_node)
+
+    workflow.add_edge(START, "search_poi")
+    workflow.add_edge(START, "search_weather")
+    workflow.add_edge(START, "search_hotel")
+
+    # workflow.add_edge("search_poi", "gather_search")
+    # workflow.add_edge("search_weather", "gather_search")
+    # workflow.add_edge("search_hotel", "gather_search")
+
+    workflow.add_edge(["search_poi", "search_weather", "search_hotel"], "gather_search")
+
+    workflow.add_edge("gather_search", "cluster_attractions")
+    workflow.add_edge("cluster_attractions", "search_food")
+    workflow.add_edge("search_food", "plan_route")
+    workflow.add_edge("plan_route", "generate_plan")
+    workflow.add_edge("generate_plan", END)
+
+    app = workflow.compile()
+    return app
+
+
+# ============ 主入口类 ============
+
+class LangGraphTripPlanner:
+    """基于 LangGraph 的旅行规划系统封装类"""
+
+    def __init__(self):
+        print("🔄 初始化 LangGraph 旅行规划系统...")
+        self.app = create_trip_planner_graph()
+
+    async def plan_trip(self, request: TripRequest) -> TripPlan:
+        print(f"\n{'='*60}")
+        print(f"🚀 开始 LangGraph 协作规划旅行...")
+        print(f"目的地: {request.city} | 日期: {request.start_date} 至 {request.end_date}")
+        print(f"{'='*60}\n")
+
+        try:
+            print("⏳ 预初始化 LLM 和 MCP 服务...")
+            get_llm()
+            await get_mcp_tools()
+            print("✅ 服务预初始化完成")
+        except Exception as e:
+            print(f"⚠️ 服务预初始化失败: {e}")
+
+        initial_state = {
+            "request": request,
+            "attractions_info": "",
+            "weather_info": "",
+            "hotels_info": "",
+            "food_info": "",
+            "cluster_info": "",
+            "route_info": "",
+            "trip_plan": None,
+            "errors": [],
+            "messages": []
+        }
+
+        try:
+            final_state = await self.app.ainvoke(initial_state)
+            trip_plan = final_state.get("trip_plan")
+
+            if not trip_plan:
+                print("⚠️ 警告：生成的计划为空，可能大模型解析失败。将使用备用方案生成计划。")
+                return _create_fallback_plan(request)
+
+            print(f"{'='*60}")
+            print(f"✅ LangGraph 旅行计划生成完成!")
+            print(f"{'='*60}\n")
+
+            return trip_plan
+
+        except Exception as e:
+            print(f"❌ 生成旅行计划失败: {str(e)}")
+            import traceback
+            traceback.print_exc()
+            return _create_fallback_plan(request)
+
+
+    async def plan_trip_stream(self, request: TripRequest):
+        """流式生成旅行计划，通过 async generator 产出进度事件
+
+        使用 LangGraph 的 astream 方法，每完成一个节点就产出进度事件，
+        同时收集最终状态，无需额外调用 ainvoke。
+        """
+        print(f"\n{'='*60}")
+        print(f"🚀 开始 LangGraph 流式协作规划旅行...")
+        print(f"目的地: {request.city} | 日期: {request.start_date} 至 {request.end_date}")
+        print(f"{'='*60}\n")
+
+        try:
+            print("⏳ 预初始化 LLM 和 MCP 服务...")
+            get_llm()
+            await get_mcp_tools()
+            print("✅ 服务预初始化完成")
+        except Exception as e:
+            print(f"⚠️ 服务预初始化失败: {e}")
+
+        yield {"type": "init", "message": "正在初始化服务...", "progress": 5}
+
+        initial_state = {
+            "request": request,
+            "attractions_info": "",
+            "weather_info": "",
+            "hotels_info": "",
+            "food_info": "",
+            "cluster_info": "",
+            "route_info": "",
+            "trip_plan": None,
+            "errors": [],
+            "messages": []
+        }
+
+        NODE_INFO = {
+            "search_poi": {"message": "🔍 正在搜索景点...", "progress": 10, "done_msg": "✅ 景点搜索完成"},
+            "search_weather": {"message": "🌤️ 正在查询天气...", "progress": 10, "done_msg": "✅ 天气查询完成"},
+            "search_hotel": {"message": "🏨 正在推荐酒店...", "progress": 10, "done_msg": "✅ 酒店推荐完成"},
+            "gather_search": {"message": "🔗 汇总搜索结果...", "progress": 15, "done_msg": "✅ 搜索结果汇总完成"},
+            "cluster_attractions": {"message": "📊 正在聚类分析景点...", "progress": 30, "done_msg": "✅ 景点聚类完成"},
+            "search_food": {"message": "🍜 正在搜索美食...", "progress": 45, "done_msg": "✅ 美食搜索完成"},
+            "plan_route": {"message": "🗺️ 正在规划路线...", "progress": 60, "done_msg": "✅ 路线规划完成"},
+            "generate_plan": {"message": "📋 正在生成行程计划...", "progress": 80, "done_msg": "✅ 行程计划生成完成"},
+        }
+
+        completed_nodes = set()
+        final_state = dict(initial_state)
+
+        try:
+            async for chunk in self.app.astream(initial_state, stream_mode="updates"):
+                for node_name, node_output in chunk.items():
+                    if isinstance(node_output, dict):
+                        for key, value in node_output.items():
+                            if key in final_state:
+                                existing = final_state[key]
+                                if isinstance(existing, list) and isinstance(value, list):
+                                    existing.extend(value)
+                                else:
+                                    final_state[key] = value
+                            else:
+                                final_state[key] = value
+
+                    if node_name in NODE_INFO and node_name not in completed_nodes:
+                        completed_nodes.add(node_name)
+                        info = NODE_INFO[node_name]
+                        yield {
+                            "type": "node_complete",
+                            "node": node_name,
+                            "message": info["done_msg"],
+                            "progress": info["progress"],
+                        }
+
+            trip_plan = final_state.get("trip_plan")
+
+            if not trip_plan:
+                print("⚠️ 警告：生成的计划为空，使用备用方案")
+                trip_plan = _create_fallback_plan(request)
+
+            plan_dict = trip_plan.model_dump() if hasattr(trip_plan, 'model_dump') else trip_plan.dict()
+            yield {"type": "complete", "message": "✅ 旅行计划生成完成!", "progress": 100, "data": plan_dict}
+
+            print(f"{'='*60}")
+            print(f"✅ LangGraph 流式旅行计划生成完成!")
+            print(f"{'='*60}\n")
+
+        except Exception as e:
+            print(f"❌ 流式生成旅行计划失败: {str(e)}")
+            import traceback
+            traceback.print_exc()
+            yield {"type": "error", "message": f"生成失败: {str(e)}", "progress": 0}
+
+
+_langgraph_planner = None
+
+def get_trip_planner_agent() -> LangGraphTripPlanner:
+    global _langgraph_planner
+    if _langgraph_planner is None:
+        _langgraph_planner = LangGraphTripPlanner()
+    return _langgraph_planner
